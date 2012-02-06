@@ -1,0 +1,10 @@
+The make file expects libvpx.a to be located in x64/
+
+The following configure parameters are known working:
+../libvpx/configure --enable-pic --disable-mmx --disable-sse --disable-sse2 --disable-sse3 --disable-ssse3 --disable-sse4_1 --disable-runtime-cpu-detect
+
+make
+make run
+make display #(show single frame using imagemagick)
+make play    #(use mplayer to play output)
+

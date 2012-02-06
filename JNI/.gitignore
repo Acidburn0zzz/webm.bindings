@@ -1,0 +1,7 @@
+*.class
+input/
+output/
+obj/
+x64/
+Application.h
+*.so
