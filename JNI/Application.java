@@ -41,14 +41,9 @@ public class Application {
     LibVpxEnc encoder = null;
 
     try {
-      Rational frameRate = y4mReader.getFrameRate();
       encoderConfig = new LibVpxEncConfig(y4mReader.getWidth(),
                                           y4mReader.getHeight());
-      int framesIn = 1;
       encoder = new LibVpxEnc(encoderConfig);
-
-      long timebaseDen = 100;
-      long timebaseNum = 1;
 
       ivfWriter = new IVFWriter(ivfFileName,
                                 encoderConfig.getFourcc(),
@@ -57,17 +52,17 @@ public class Application {
                                 encoderConfig.getTimebase());
 
       byte[] uncompressedFrame;
+      Rational timeBase = encoderConfig.getTimebase();
+      Rational timeMultiplier = timeBase.multiply(y4mReader.getFrameRate()).reciprocal();
+      int framesIn = 1;
+
       while ((uncompressedFrame = y4mReader.getUncompressedFrame()) != null &&
               framesIn < maxFramesToDecode) {
-        ArrayList<VpxCodecCxPkt> encPkt;
-        long frameStart = (timebaseDen * (framesIn - 1)
-                        * frameRate.den()) / timebaseNum / frameRate.num();
-        long nextFrameStart = (timebaseDen * framesIn
-                            * frameRate.den())
-                            / timebaseNum / frameRate.num();
+        long frameStart = timeMultiplier.multiply(framesIn - 1).toLong();
+        long nextFrameStart = timeMultiplier.multiply(framesIn).toLong();
 
-        encPkt = encoder.encodeFrame(uncompressedFrame, frameStart,
-                                     nextFrameStart - frameStart);
+        ArrayList<VpxCodecCxPkt> encPkt = encoder.encodeFrame(
+            uncompressedFrame, frameStart, nextFrameStart - frameStart);
 
         for (int i = 0; i < encPkt.size(); i++) {
           VpxCodecCxPkt pkt = encPkt.get(i);

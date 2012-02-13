@@ -88,6 +88,11 @@ public class LibVpxEncConfig extends LibVpxCom {
 
     setWidth(width);
     setHeight(height);
+
+    /* Change the default timebase to a high enough value so that the encoder
+     * will always create strictly increasing timestamps.
+     */
+    setTimebase(1, 1000);
   }
 
   public void close() {

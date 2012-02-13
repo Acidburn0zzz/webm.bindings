@@ -7,15 +7,15 @@ package com.google.libvpx;
  *
  */
 public class Rational {
-  private final int num;
-  private final int den;
+  private final long num;
+  private final long den;
 
   public Rational() {
     num = 0;
     den = 1;
   }
 
-  public Rational(int num, int den) {
+  public Rational(long num, long den) {
     this.num = num;
     this.den = den;
   }
@@ -33,11 +33,24 @@ public class Rational {
     return new Rational(num * b, den);
   }
 
-  public int num() {
+  public Rational reciprocal() {
+    return new Rational(den, num);
+  }
+
+  public float toFloat() {
+    return (float) num / (float) den;
+  }
+
+  public long toLong() {
+    // TODO(frkoenig) : consider adding rounding to the divide.
+    return num / den;
+  }
+
+  public long num() {
     return num;
   }
 
-  public int den() {
+  public long den() {
     return den;
   }
 

@@ -16,8 +16,8 @@ public class IVFWriter {
   private int fourcc;
   private int width;
   private int height;
-  private int rate;
-  private int scale;
+  private long rate;
+  private long scale;
   private int frameCount;
 
   public IVFWriter(File file,

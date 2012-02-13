@@ -78,7 +78,7 @@ FUNC(jobject, vpxCodecEncGetTimebase, jlong jcfg) {
   assert(rational != NULL);
 
   jmethodID rationalInitMethodId =
-      env->GetMethodID(rational, "<init>", "(II)V");
+      env->GetMethodID(rational, "<init>", "(JJ)V");
   assert(rationalInitMethodId != NULL);
 
   jobject rationalNumber = env->NewObject(rational,
