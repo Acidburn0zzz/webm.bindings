@@ -21,8 +21,7 @@ public class IVFReader {
   private int fourcc;
   private int width;
   private int height;
-  private int fpsNum;
-  private int fpsDen;
+  private Rational fps;
   private int frameCount;
   private int currentFrame;
   private static byte[] cDKIF = {'D', 'K', 'I', 'F'};
@@ -60,6 +59,10 @@ public class IVFReader {
     return height;
   }
 
+  public Rational getFps() {
+    return fps;
+  }
+
   private byte[] readHeader() throws IOException {
     byte[] headerBuffer = readBuffer(32);
 
@@ -79,8 +82,7 @@ public class IVFReader {
     fourcc = buf.getInt(8);
     width = buf.getShort(12);
     height = buf.getShort(14);
-    fpsNum = buf.getInt(16);
-    fpsDen = buf.getInt(20);
+    fps = new Rational(buf.getInt(16), buf.getInt(20));
     frameCount = buf.getInt(24);
 
     return headerBuffer;

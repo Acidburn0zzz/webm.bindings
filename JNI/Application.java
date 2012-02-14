@@ -10,6 +10,7 @@ import com.google.libvpx.Rational;
 import com.google.libvpx.VpxCodecCxPkt;
 import com.google.libvpx.WebmWriter;
 import com.google.libvpx.Y4MReader;
+import com.google.libvpx.Y4MWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,23 +101,35 @@ public class Application {
       }
     }
 
+    File y4mOutputFileName = new File("output/foreman_cif.y4m");
     LibVpxDec decoder = null;
+    Y4MWriter y4mWriter = null;
     try {
       IVFReader ivfReader = new IVFReader(ivfFileName);
       decoder = new LibVpxDec();
 
+      y4mWriter = new Y4MWriter(y4mOutputFileName,
+          ivfReader.getWidth(), ivfReader.getHeight(), y4mReader.getFrameRate());
+
       byte[] compressedFrame;
       while ((compressedFrame = ivfReader.readNextFrame()) != null) {
-        decoder.decodeFrame(compressedFrame);
-        // TODO(frkoenig) : Write decoded frame to disk.
+        byte[] uncompressedFrame = decoder.decodeFrameToBuffer(compressedFrame);
+        if (uncompressedFrame != null) {
+          y4mWriter.writeFrame(uncompressedFrame);
+        }
       }
 
       System.out.println("vpx version: " + decoder.versionString());
     } catch (IOException e) {
       System.err.println("Error reading " + ivfFileName + " : " + e);
+    } catch (LibVpxException e) {
+      System.err.println("Decoder error : " + e);
     } finally {
       if (decoder != null) {
         decoder.close();
+      }
+      if (y4mWriter != null) {
+        y4mWriter.close();
       }
     }
   }

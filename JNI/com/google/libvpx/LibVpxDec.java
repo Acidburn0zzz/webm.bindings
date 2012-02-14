@@ -23,6 +23,7 @@ public class LibVpxDec extends LibVpxCom {
   private native int vpxCodecDecInit(long decoder, long cfg,
                                      boolean postproc, boolean ecEnabled);
   private native int vpxCodecDecDecode(long decoder, byte[] buf, int bufSize);
+  private native byte[] vpxCodecDecGetFrame(long decoder);
 
   public LibVpxDec(int width, int height, int threads,
                    boolean postProcEnabled, boolean errorConcealmentEnabled) {
@@ -56,8 +57,12 @@ public class LibVpxDec extends LibVpxCom {
     this(0, 0, 0, false, false);
   }
 
-  public int decodeFrame(byte[] rawFrame) {
-    return vpxCodecDecDecode(vpxCodecIface, rawFrame, rawFrame.length);
+  public byte[] decodeFrameToBuffer(byte[] rawFrame) throws LibVpxException {
+    if (vpxCodecDecDecode(vpxCodecIface, rawFrame, rawFrame.length) != 0) {
+      throw new LibVpxException(vpxCodecErrorDetail(vpxCodecIface));
+    }
+
+    return vpxCodecDecGetFrame(vpxCodecIface);
   }
 
   public void close() {

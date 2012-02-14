@@ -61,4 +61,8 @@ public class Rational {
       return new String(num + "/" + den);
     }
   }
+
+  public String toColonSeparatedString() {
+    return new String(num + ":" + den);
+  }
 }

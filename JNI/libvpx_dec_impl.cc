@@ -150,3 +150,45 @@ FUNC(jint, vpxCodecDecDecode, jlong jctx, jbyteArray jbuf, jint buf_sz) {
 
   return ret;
 }
+
+FUNC(jbyteArray, vpxCodecDecGetFrame, jlong jctx) {
+  printf("vpxCodecDecGetFrame");
+  vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);
+  vpx_codec_iter_t iter = NULL;
+  vpx_image_t *img = vpx_codec_get_frame(ctx, &iter);
+
+  if (img == NULL)
+    return NULL;
+
+  unsigned int start = 0;
+  unsigned int frameSize = (img->d_w * img->d_h)
+                            + 2 * (((1 + img->d_w) / 2)
+                                * ((1 + img->d_h) / 2));
+
+  jbyteArray jb = env->NewByteArray(frameSize);
+
+  uint8_t *buf = img->planes[VPX_PLANE_Y];
+  unsigned int length = img->d_w;
+  for (int y = 0; y < img->d_h; ++y) {
+    env->SetByteArrayRegion(jb, start, length, reinterpret_cast<jbyte*>(buf));
+    buf += img->stride[VPX_PLANE_Y];
+    start += length;
+  }
+
+  buf = img->planes[VPX_PLANE_U];
+  length = (1 + img->d_w) / 2;
+  for (int y = 0; y < (1 + img->d_h) / 2; ++y) {
+    env->SetByteArrayRegion(jb, start, length, reinterpret_cast<jbyte*>(buf));
+    buf += img->stride[VPX_PLANE_U];
+    start += length;
+  }
+
+  buf = img->planes[VPX_PLANE_V];
+  for (int y = 0; y < (1 + img->d_h) / 2; ++y) {
+    env->SetByteArrayRegion(jb, start, length, reinterpret_cast<jbyte*>(buf));
+    buf += img->stride[VPX_PLANE_V];
+    start += length;
+  }
+
+  return jb;
+}
