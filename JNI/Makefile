@@ -1,12 +1,14 @@
 JAVA_HOME=/usr/local/buildtools/java/jdk6
 
 CXXFLAGS := -m64 -fPIC -Ilibvpx -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+CFLAGS := -Ilibvpx -fPIC
 
 quiet?=true
 quiet:=$(if $(verbose),,true)
 qexec=$(if $(quiet), @)
 
 objects := $(patsubst %.cc,obj/%.o,$(wildcard *.cc))
+objects += libvpx/libmkv/EbmlWriter.o
 
 final_class := Application
 

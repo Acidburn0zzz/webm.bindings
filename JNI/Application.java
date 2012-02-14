@@ -8,6 +8,7 @@ import com.google.libvpx.LibVpxEncConfig;
 import com.google.libvpx.LibVpxException;
 import com.google.libvpx.Rational;
 import com.google.libvpx.VpxCodecCxPkt;
+import com.google.libvpx.WebmWriter;
 import com.google.libvpx.Y4MReader;
 
 import java.io.File;
@@ -24,6 +25,7 @@ public class Application {
   public static void main(String[] args) {
     File y4mFileName = new File("input/foreman_cif.y4m");
     File ivfFileName = new File("output/foreman_cif_420p_352x288.ivf");
+    File webmFileName = new File("output/foreman_cif_420p_352x288.webm");
     Y4MReader y4mReader;
 
     try {
@@ -39,6 +41,7 @@ public class Application {
     LibVpxEncConfig encoderConfig = null;
     IVFWriter ivfWriter = null;
     LibVpxEnc encoder = null;
+    WebmWriter webmWriter = null;
 
     try {
       encoderConfig = new LibVpxEncConfig(y4mReader.getWidth(),
@@ -55,6 +58,11 @@ public class Application {
       Rational timeBase = encoderConfig.getTimebase();
       Rational timeMultiplier = timeBase.multiply(y4mReader.getFrameRate()).reciprocal();
       int framesIn = 1;
+      webmWriter = new WebmWriter(webmFileName,
+                                  encoderConfig.getWidth(),
+                                  encoderConfig.getHeight(),
+                                  encoderConfig.getTimebase(),
+                                  y4mReader.getFrameRate());
 
       while ((uncompressedFrame = y4mReader.getUncompressedFrame()) != null &&
               framesIn < maxFramesToDecode) {
@@ -67,6 +75,7 @@ public class Application {
         for (int i = 0; i < encPkt.size(); i++) {
           VpxCodecCxPkt pkt = encPkt.get(i);
           ivfWriter.writeFrame(pkt, 0L);
+          webmWriter.writeFrame(pkt);
         }
 
         ++framesIn;
@@ -85,6 +94,9 @@ public class Application {
       }
       if (ivfWriter != null) {
         ivfWriter.close();
+      }
+      if (webmWriter != null) {
+        webmWriter.close();
       }
     }
 
