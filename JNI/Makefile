@@ -1,32 +1,42 @@
 JAVA_HOME=/usr/local/buildtools/java/jdk6
 
-CXXFLAGS := -m64 -fPIC -Ilibvpx -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
-CFLAGS := -Ilibvpx -fPIC
+CXXFLAGS := -O2 -DNDEBUG -m64 -fPIC -Ilibvpx
+CXXFLAGS += -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+CFLAGS := -O2 -DNDEBUG -m64 -Ilibvpx -fPIC
 
 quiet?=true
 quiet:=$(if $(verbose),,true)
 qexec=$(if $(quiet), @)
 
-objects := $(patsubst %.cc,obj/%.o,$(wildcard *.cc))
-objects += libvpx/libmkv/EbmlWriter.o
-
 final_class := Application
 
-$(final_class): libvpxJNI.so $(final_class).class
+objects := $(patsubst %.cc,obj/%.o,$(wildcard *.cc))
+objects += $(patsubst %.c,obj/%.o,libvpx/libmkv/EbmlWriter.c)
 
-libvpxJNI.so: $(objects) x64/libvpx.a
-	$(qexec)$(CXX) $(CXXFLAGS) -shared $^ -o $@
+java_files = $(shell find com/ -type f -name '*.java')
+classes := $(patsubst %.java,%.class,$(java_files))
+classes += $(final_class).class
 
-%.class : %.java $(shell find com/ -type f -name '*.java')
-	$(qexec)javac -Xlint:unchecked $<
+$(final_class): libvpxJNI.so $(classes)
+
+libvpxJNI.so: $(objects) x64/libvpx.so
+	$(qexec)$(CXX) $(CXXFLAGS) -shared $(objects) -o $@ \
+		-lvpx -Lx64 -Wl,-rpath,x64
+
+%.class : %.java $(java_files)
+	$(qexec)javac $<
 
 obj/%.o : %.cc
 	$(qexec)mkdir -p $(dir $@)
 	$(qexec)$(CXX) $(CXXFLAGS) -c $< -o $@
 
+obj/%.o : %.c
+	$(qexec)mkdir -p $(dir $@)
+	$(qexec)$(CC) $(CFLAGS) -c $< -o $@
+
 .PHONY: clean
 clean:
-	$(qexec)$(RM) $(shell find . -type f -name '*.class') libvpxJNI.so $(objects)
+	$(qexec)$(RM) libvpxJNI.so $(objects) $(classes)
 
 .PHONY: run
 run: $(final_class)

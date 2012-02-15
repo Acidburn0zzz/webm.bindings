@@ -1,7 +1,7 @@
-The make file expects libvpx.a to be located in x64/
+The make file expects libvpx.so to be located in x64/
 
 The following configure parameters are known working:
-../libvpx/configure --enable-pic --disable-mmx --disable-sse --disable-sse2 --disable-sse3 --disable-ssse3 --disable-sse4_1 --disable-runtime-cpu-detect
+../libvpx/configure --enable-pic --enable-shared
 
 make
 make run
