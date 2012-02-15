@@ -94,9 +94,8 @@ FUNC(jlong, vpxCodecWebmAllocCfg) {
   EbmlGlobal *glob = new (std::nothrow) EbmlGlobal;
 
   if (glob) {
+    memset(glob, 0, sizeof(*glob));
     glob->last_pts_ms = -1;
-    glob->cue_list = 0;
-    glob->cues = 0;
   }
 
   return (intptr_t)glob;
