@@ -73,14 +73,32 @@ FUNC(void, vpxCodecEncInit, jlong jctx, jlong jcfg) {
   vpx_codec_enc_init(ctx, codec->iface, cfg, 0);
 }
 
-FUNC(void, vpxCodecEncode, jlong jctx, jlong jimg,
-                           jlong pts, jlong duration,
-                           jlong flags, jlong deadline) {
+FUNC(jboolean, vpxCodecEncode, jlong jctx, jbyteArray jframe,
+                               jlong pts, jlong duration,
+                               jlong flags, jlong deadline) {
   printf("vpxCodecEncode");
-  vpx_image_t *img = reinterpret_cast<vpx_image_t*>(jimg);
+  jboolean isCopy;
+  jboolean err = false;
+  jbyte *frame = env->GetByteArrayElements(jframe, &isCopy);
   vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);
+  vpx_image_t *img = vpx_img_wrap(NULL,
+                                  IMG_FMT_I420,
+                                  ctx->config.enc->g_w,
+                                  ctx->config.enc->g_h,
+                                  0,
+                                  reinterpret_cast<unsigned char *>(frame));
 
-  vpx_codec_encode(ctx, img, pts, duration, flags, deadline);
+  if (img) {
+    vpx_codec_encode(ctx, img, pts, duration, flags, deadline);
+    vpx_img_free(img);
+  } else {
+    err = true;
+  }
+
+  if (isCopy == JNI_TRUE)
+    env->ReleaseByteArrayElements(jframe, frame, 0);
+
+  return err;
 }
 
 FUNC(jobject, vpxCodecEncGetCxData, jlong jctx) {

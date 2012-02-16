@@ -25,10 +25,6 @@ public class LibVpxCom {
   protected native long vpxCodecAllocCodec();
   protected native void vpxCodecFreeCodec(long cfg);
 
-  protected native long vpxCodecAllocVpxImageI420(int width, int height);
-  protected native void vpxCodecFreeVpxImage(long img);
-  protected native void vpxCodecFillVpxImage(long img, byte[] frame);
-
   protected native void vpxCodecDestroy(long ctx);
 
   public String versionString() {

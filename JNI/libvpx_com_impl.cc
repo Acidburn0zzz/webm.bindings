@@ -97,64 +97,6 @@ FUNC(void, vpxCodecFreeCodec, jlong jcodec) {
   delete codec;
 }
 
-FUNC(jlong, vpxCodecAllocVpxImageI420, jint width, jint height) {
-  printf("vpxCodecAllocVpxImageI420");
-  vpx_image_t *img = new (std::nothrow) vpx_image_t;
-  vpx_img_alloc(img, VPX_IMG_FMT_I420, width, height, 1);
-
-  return (intptr_t)img;
-}
-
-FUNC(void, vpxCodecFreeVpxImage, jlong jimg) {
-  printf("vpxCodecFreeVpxImage");
-  vpx_image_t *img = reinterpret_cast<vpx_image_t*>(jimg);
-
-  if (img != 0) {
-    vpx_img_free(img);
-    delete img;
-  }
-}
-
-FUNC(void, vpxCodecFillVpxImage, jlong jimg, jbyteArray jframe) {
-  printf("vpxCodecFillVpxImage");
-  const vpx_image_t *img = reinterpret_cast<vpx_image_t*>(jimg);
-  jboolean isCopy;
-  jbyte *frame = env->GetByteArrayElements(jframe, &isCopy);
-  jbyte *framePtr = frame;
-
-  for (int plane = 0; plane < 3; plane++) {
-    unsigned char *ptr;
-    const int w = (plane ? (1 + img->d_w) / 2 : img->d_w);
-    const int h = (plane ? (1 + img->d_h) / 2 : img->d_h);
-
-    /* Determine the correct plane based on the image format. The for-loop
-      * always counts in Y,U,V order, but this may not match the order of
-      * the data on disk.
-      */
-    switch (plane) {
-      case 1:
-        ptr = img->planes[(img->fmt == VPX_IMG_FMT_YV12) ?
-                                      VPX_PLANE_V : VPX_PLANE_U];
-        break;
-      case 2:
-        ptr = img->planes[(img->fmt == VPX_IMG_FMT_YV12) ?
-                                      VPX_PLANE_U : VPX_PLANE_V];
-        break;
-      default:
-        ptr = img->planes[plane];
-    }
-
-    for (int r = 0; r < h; r++) {
-      memcpy(ptr, framePtr, w);
-      ptr += img->stride[plane];
-      framePtr += w;
-    }
-  }
-
-  if (isCopy == JNI_TRUE)
-    env->ReleaseByteArrayElements(jframe, frame, 0);
-}
-
 FUNC(jint, vpxCodecDestroy, jlong jctx) {
   printf("vpxCodecDestroy");
   vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);

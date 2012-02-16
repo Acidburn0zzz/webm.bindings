@@ -8,8 +8,6 @@ import java.util.ArrayList;
  * libvpx JNI wrapper for encoding functions.
  */
 public class LibVpxEnc extends LibVpxCom {
-  private long imageObj;
-
   private native void vpxCodecEncInit(long encoder, long cfg);
 
   private native int vpxCodecEncCtlSetCpuUsed(long ctx, int value);
@@ -25,9 +23,9 @@ public class LibVpxEnc extends LibVpxCom {
   private native int vpxCodecEncCtlSetCQLevel(long ctx, int value);
   private native int vpxCodecEncCtlSetMaxIntraBitratePct(long ctx, int value);
 
-  private native void vpxCodecEncode(long ctx, long img,
-                                     long pts, long duration,
-                                     long flags, long deadline);
+  private native boolean vpxCodecEncode(long ctx, byte[] frame,
+                                        long pts, long duration,
+                                        long flags, long deadline);
 
   private native ArrayList<VpxCodecCxPkt> vpxCodecEncGetCxData(long ctx);
 
@@ -42,12 +40,6 @@ public class LibVpxEnc extends LibVpxCom {
       String errorMsg = vpxCodecErrorDetail(vpxCodecIface);
       vpxCodecFreeCodec(vpxCodecIface);
       throw new LibVpxException(errorMsg);
-    }
-
-    imageObj = vpxCodecAllocVpxImageI420(cfg.getWidth(), cfg.getHeight());
-    if (imageObj == 0) {
-      vpxCodecFreeCodec(vpxCodecIface);
-      throw new LibVpxException("Can not allocate JNI image object");
     }
   }
 
@@ -64,8 +56,9 @@ public class LibVpxEnc extends LibVpxCom {
   public ArrayList<VpxCodecCxPkt> encodeFrame(byte[] frame,
                                               long frameStart,
                                               long frameDuration) throws LibVpxException {
-    vpxCodecFillVpxImage(imageObj, frame);
-    vpxCodecEncode(vpxCodecIface, imageObj, frameStart, frameDuration, 0L, 0L);
+    if (vpxCodecEncode(vpxCodecIface, frame, frameStart, frameDuration, 0L, 0L)) {
+      throw new LibVpxException("Unable to allocate space to wrap image buffer");
+    }
     throwOnError();
     return vpxCodecEncGetCxData(vpxCodecIface);
   }
@@ -73,7 +66,6 @@ public class LibVpxEnc extends LibVpxCom {
   public void close() {
     vpxCodecDestroy(vpxCodecIface);
     vpxCodecFreeCodec(vpxCodecIface);
-    vpxCodecFreeVpxImage(imageObj);
   }
 
   public void setCpuUsed(int value) throws LibVpxException {
