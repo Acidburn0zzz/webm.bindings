@@ -1,10 +1,19 @@
 The make file expects libvpx.so to be located in x64/
 
-The following configure parameters are known working:
-../libvpx/configure --enable-pic --enable-shared
+Need to clone libvpx :
+git clone http://git.chromium.org/webm/libvpx.git
 
+and build it for x64 :
+mkdir x64
+cd x64
+../libvpx/configure --enable-pic --enable-shared
 make
+
+
+To run Application.class :
 make run
 make display #(show single frame using imagemagick)
 make play    #(use mplayer to play output)
 
+Application.class expects to find foreman_cif.y4m in input.
+It can be downloaded from http://media.xiph.org/video/derf/
