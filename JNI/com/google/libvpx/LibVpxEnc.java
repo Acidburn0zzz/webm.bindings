@@ -56,7 +56,7 @@ public class LibVpxEnc extends LibVpxCom {
   public ArrayList<VpxCodecCxPkt> encodeFrame(byte[] frame,
                                               long frameStart,
                                               long frameDuration) throws LibVpxException {
-    if (vpxCodecEncode(vpxCodecIface, frame, frameStart, frameDuration, 0L, 0L)) {
+    if (!vpxCodecEncode(vpxCodecIface, frame, frameStart, frameDuration, 0L, 0L)) {
       throw new LibVpxException("Unable to allocate space to wrap image buffer");
     }
     throwOnError();
