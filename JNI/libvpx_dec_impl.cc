@@ -38,8 +38,11 @@ static const struct codec_item {
 
 FUNC(jlong, vpxCodecDecAllocCfg) {
   printf("vpxCodecDecAllocCfg");
-  const vpx_codec_dec_cfg_t *cfg = new (std::nothrow) vpx_codec_dec_cfg_t;
+  vpx_codec_dec_cfg_t *cfg = new (std::nothrow) vpx_codec_dec_cfg_t;
 
+  if (cfg) {
+    memset(cfg, 0, sizeof(*cfg));
+  }
   return (intptr_t)cfg;
 }
 
@@ -53,7 +56,11 @@ FUNC(void, vpxCodecDecFreeCfg, jlong jcfg) {
 
 FUNC(jlong, vpxCodecDecAllocPostProcCfg) {
   printf("vpxCodecDecAllocPostProcCfg");
-  const vp8_postproc_cfg_t *cfg = new (std::nothrow) vp8_postproc_cfg_t;
+  vp8_postproc_cfg_t *cfg = new (std::nothrow) vp8_postproc_cfg_t;
+
+  if (cfg) {
+    memset(cfg, 0, sizeof(*cfg));
+  }
 
   return (intptr_t)cfg;
 }
@@ -65,8 +72,8 @@ FUNC(void, vpxCodecDecFreePostProcCfg, jlong jcfg) {
   delete cfg;
 }
 
-FUNC(jint, vpxCodecDecInit, jlong jctx, jlong jcfg,
-                            jboolean jpostproc, jboolean jec_enabled) {
+FUNC(jboolean, vpxCodecDecInit, jlong jctx, jlong jcfg,
+                                jboolean jpostproc, jboolean jec_enabled) {
   printf("vpxCodecDecInit");
 
   vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);
@@ -79,7 +86,11 @@ FUNC(jint, vpxCodecDecInit, jlong jctx, jlong jcfg,
   const int dec_flags = (postproc ? VPX_CODEC_USE_POSTPROC : 0) |
                         (ec_enabled ? VPX_CODEC_USE_ERROR_CONCEALMENT : 0);
 
-  return (vpx_codec_dec_init(ctx, codec->iface, cfg, dec_flags));
+  if (vpx_codec_dec_init(ctx, codec->iface, cfg, dec_flags) != VPX_CODEC_OK) {
+    return false;
+  }
+
+  return true;
 }
 
 #define SET_DEC_CTL_PARAM(JNI_NAME, CTL_NAME, TYPE) \

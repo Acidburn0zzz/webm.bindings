@@ -7,8 +7,6 @@ package com.google.libvpx;
  */
 public class LibVpxDec extends LibVpxCom {
   private long decCfgObj;
-  private boolean postProcEnabled;
-  private boolean errorConcealmentEnabled;
 
   private native long vpxCodecDecAllocCfg();
   private native void vpxCodecDecFreeCfg(long cfg);
@@ -20,17 +18,17 @@ public class LibVpxDec extends LibVpxCom {
   private native int vpxCodecDecGetWidth(long cfg);
   private native int vpxCodecDecGetHeight(long cfg);
 
-  private native int vpxCodecDecInit(long decoder, long cfg,
-                                     boolean postproc, boolean ecEnabled);
+  private native boolean vpxCodecDecInit(long decoder, long cfg,
+                                         boolean postproc, boolean ecEnabled);
   private native int vpxCodecDecDecode(long decoder, byte[] buf, int bufSize);
   private native byte[] vpxCodecDecGetFrame(long decoder);
 
-  public LibVpxDec(int width, int height, int threads,
-                   boolean postProcEnabled, boolean errorConcealmentEnabled) {
+  public LibVpxDec(int width, int height,
+                   int threads,
+                   boolean postProcEnabled,
+                   boolean errorConcealmentEnabled) throws LibVpxException {
     decCfgObj = vpxCodecDecAllocCfg();
     vpxCodecIface = vpxCodecAllocCodec();
-    postProcEnabled = false;
-    errorConcealmentEnabled = false;
 
     if (width > 0) {
       vpxCodecDecSetWidth(decCfgObj, width);
@@ -44,16 +42,18 @@ public class LibVpxDec extends LibVpxCom {
       vpxCodecDecSetThreads(decCfgObj, threads);
     }
 
-    // TODO(frkoenig): need to check this return value.
-    vpxCodecDecInit(vpxCodecIface, decCfgObj,
-                    postProcEnabled, errorConcealmentEnabled);
+    if (!vpxCodecDecInit(vpxCodecIface, decCfgObj,
+                         postProcEnabled, errorConcealmentEnabled)) {
+        throw new LibVpxException(vpxCodecError(vpxCodecIface));
+    }
   }
 
-  public LibVpxDec(boolean postProcEnabled, boolean errorConcealmentEnabled) {
+  public LibVpxDec(boolean postProcEnabled,
+                   boolean errorConcealmentEnabled) throws LibVpxException {
     this(0, 0, 0, postProcEnabled, errorConcealmentEnabled);
   }
 
-  public LibVpxDec() {
+  public LibVpxDec() throws LibVpxException {
     this(0, 0, 0, false, false);
   }
 
