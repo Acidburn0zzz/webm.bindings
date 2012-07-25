@@ -1,4 +1,6 @@
-JAVA_HOME=/usr/local/buildtools/java/jdk6
+JAVA_HOME=/usr/local/buildtools/java/jdk6-64
+JAVA := $(JAVA_HOME)/bin/java
+JAVAC := $(JAVA_HOME)/bin/javac
 
 CXXFLAGS := -O2 -DNDEBUG -m64 -fPIC -Ilibvpx
 CXXFLAGS += -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -Ix64
@@ -24,7 +26,7 @@ libvpxJNI.so: $(objects) x64/libvpx.so
 		-lvpx -Lx64 -Wl,-rpath,x64
 
 %.class : %.java $(java_files)
-	$(qexec)javac $<
+	$(qexec)$(JAVAC) $<
 
 obj/%.o : %.cc
 	$(qexec)mkdir -p $(dir $@)
@@ -40,7 +42,7 @@ clean:
 
 .PHONY: run
 run: $(final_class)
-	$(qexec)java -Djava.library.path=`pwd` $<
+	$(qexec)$(JAVA) -Djava.library.path=`pwd` $<
 
 .PHONY: display
 display: output/foreman_cif_420p_352x288.ivf
