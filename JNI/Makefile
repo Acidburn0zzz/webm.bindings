@@ -1,7 +1,7 @@
 JAVA_HOME=/usr/local/buildtools/java/jdk6
 
 CXXFLAGS := -O2 -DNDEBUG -m64 -fPIC -Ilibvpx
-CXXFLAGS += -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+CXXFLAGS += -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -Ix64
 CFLAGS := -O2 -DNDEBUG -m64 -Ilibvpx -fPIC
 
 quiet?=true
