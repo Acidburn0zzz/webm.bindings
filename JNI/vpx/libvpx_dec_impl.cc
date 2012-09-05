@@ -150,14 +150,12 @@ DEC_CFG_FIELD(Height, h, unsigned int)
 FUNC(jint, vpxCodecDecDecode, jlong jctx, jbyteArray jbuf, jint buf_sz) {
   printf("vpxCodecDecDecode");
   vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);
-  jboolean isCopy;
-  jbyte *buf = env->GetByteArrayElements(jbuf, &isCopy);
+  jbyte *buf = env->GetByteArrayElements(jbuf, 0);
 
   int ret = vpx_codec_decode(
       ctx, reinterpret_cast<const uint8_t*>(buf), buf_sz, NULL, 0);
 
-  if (isCopy == JNI_TRUE)
-    env->ReleaseByteArrayElements(jbuf, buf, 0);
+  env->ReleaseByteArrayElements(jbuf, buf, 0);
 
   return ret;
 }

@@ -121,9 +121,8 @@ FUNC(void, vpxCodecWebmFreeCfg, jlong jglob) {
 FUNC(jboolean, vpxCodecWebmOpenFile, jlong jglob, jstring fileName) {
   printf("vpxCodecWebmOpenFile");
 
-  jboolean iscopy;
   EbmlGlobal *glob = reinterpret_cast<EbmlGlobal*>(jglob);
-  const char *mfile = env->GetStringUTFChars(fileName, &iscopy);
+  const char *mfile = env->GetStringUTFChars(fileName, 0);
 
   glob->stream = fopen(mfile, "wb");
 
@@ -438,13 +437,11 @@ FUNC(void, vpxCodecWebmWriteWebmBlock, jlong jglob, jobject jpkt, jlong jpts) {
     flags |= 0x08;
   Ebml_Write(glob, &flags, 1);
 
-  jboolean isCopy;
-  jbyte *frameBuf = env->GetByteArrayElements((jbyteArray)jba, &isCopy);
+  jbyte *frameBuf = env->GetByteArrayElements((jbyteArray)jba, 0);
 
   Ebml_Write(glob, frameBuf, frameSz);
 
-  if (isCopy == JNI_TRUE)
-    env->ReleaseByteArrayElements((jbyteArray)jba, frameBuf, 0);
+  env->ReleaseByteArrayElements((jbyteArray)jba, frameBuf, 0);
 }
 
 FUNC(void, vpxCodecWebmWriteWebmFileFooter, jlong jglob, jlong hash) {

@@ -1,16 +1,23 @@
-The make file expects libvpx.so to be located in x64/
+This project requies the following shared libraries to be installed:
 
-Need to clone libvpx :
-git clone http://git.chromium.org/webm/libvpx.git
+- libvpx
+Download from https://code.google.com/p/webm/downloads/detail?name=libvpx-v1.1.0.tar.bz2
+Unzip into JNI/libvpx
+Follow the README to install, but make sure to configure with --enable-pic and --enable-shared.
 
-and build it for x64 :
-mkdir x64
-cd x64
-../libvpx/configure --enable-pic --enable-shared
-make
+- libogg (required by libvorbis)
+Download from http://xiph.org/downloads/
+Unzip into JNI/libogg
+Follow the README to install.
+
+- libvorbis
+Download from http://xiph.org/downloads/
+Unzip into JNI/libvorbis
+Follow the README to install.
 
 
-To run Application.class :
+
+To run Application.class:
 make run
 make display #(show single frame using imagemagick)
 make play    #(use mplayer to play output)

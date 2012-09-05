@@ -77,9 +77,8 @@ FUNC(jboolean, vpxCodecEncode, jlong jctx, jbyteArray jframe,
                                jlong pts, jlong duration,
                                jlong flags, jlong deadline) {
   printf("vpxCodecEncode");
-  jboolean isCopy;
   jboolean success = true;
-  jbyte *frame = env->GetByteArrayElements(jframe, &isCopy);
+  jbyte *frame = env->GetByteArrayElements(jframe, 0);
   vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);
   vpx_image_t *img = vpx_img_wrap(NULL,
                                   IMG_FMT_I420,
@@ -95,8 +94,7 @@ FUNC(jboolean, vpxCodecEncode, jlong jctx, jbyteArray jframe,
     success = false;
   }
 
-  if (isCopy == JNI_TRUE)
-    env->ReleaseByteArrayElements(jframe, frame, 0);
+  env->ReleaseByteArrayElements(jframe, frame, 0);
 
   return success;
 }
