@@ -15,6 +15,11 @@ Download from http://xiph.org/downloads/
 Unzip into JNI/libvorbis
 Follow the README to install.
 
+- libwebm
+From the JNI directory: git clone http://git.chromium.org/webm/libwebm.git
+cd libwebm
+make shared
+
 
 
 To run Application.class:
