@@ -99,8 +99,9 @@ public class Track extends Common {
     return new Segment(pointer);
   }
 
-  public long getType() {
-    return GetType(nativePointer);
+  public Type getType() {
+    int ordinal = (int) GetType(nativePointer);
+    return Type.values()[ordinal];
   }
 
   public long getUid() {

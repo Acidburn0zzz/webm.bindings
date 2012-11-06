@@ -3,10 +3,10 @@
 #include <jni.h>
 
 #include "common.h"
-#include "mkvreader.hpp"
+#include "mkvparser.hpp"
 
 #define FUNCTION(returnType, functionName, ...) \
-    FUNC(returnType, mkvparser, mkvparser, functionName, ##__VA_ARGS__)
+    FUNC(returnType, mkvparser, MkvParser, functionName, ##__VA_ARGS__)
 
 FUNCTION(jlong, GetUIntLength, jlong jMkvReader, jlong position,
                                jlongArray jLength) {

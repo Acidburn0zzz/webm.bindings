@@ -1,9 +1,12 @@
 // Author: mszal@google.com (Michael Szal)
 
+import com.google.libwebm.mkvmuxer.MkvWriter;
+import com.google.libwebm.mkvmuxer.Segment;
+import com.google.libwebm.mkvmuxer.SegmentInfo;
 import com.google.libwebm.mkvparser.EbmlHeader;
 import com.google.libwebm.mkvparser.MkvReader;
-import com.google.libwebm.mkvparser.Segment;
-import com.google.libwebm.mkvparser.SegmentInfo;
+import com.google.libwebm.mkvparser.Track;
+import com.google.libwebm.mkvparser.Tracks;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +37,7 @@ public class SampleMultiplexer {
 
     MkvReader mkvReader = new MkvReader();
     if (mkvReader.open(inputFileName) != 0) {
-      System.out.println("\nFilename is invalid or error while opening.");
+      System.out.println("\nFile name is invalid or error while opening.");
       System.exit(1);
     }
 
@@ -43,9 +46,10 @@ public class SampleMultiplexer {
     ebmlHeader.parse(mkvReader, outputPosition);
     long position = outputPosition[0];
 
-    Segment[] outputParserSegment = {null};
-    long result = Segment.createInstance(mkvReader, position, outputParserSegment);
-    Segment parserSegment = outputParserSegment[0];
+    com.google.libwebm.mkvparser.Segment[] outputParserSegment = {null};
+    long result = com.google.libwebm.mkvparser.Segment.createInstance(mkvReader, position,
+        outputParserSegment);
+    com.google.libwebm.mkvparser.Segment parserSegment = outputParserSegment[0];
     if (result != 0) {
       System.out.println("\nSegment.createInstance() failed.");
       System.exit(1);
@@ -57,8 +61,20 @@ public class SampleMultiplexer {
       System.exit(1);
     }
 
-    SegmentInfo segmentInfo = parserSegment.getInfo();
-    long timeCodeScale = segmentInfo.getTimeCodeScale();
+    com.google.libwebm.mkvparser.SegmentInfo parserSegmentInfo = parserSegment.getInfo();
+    long timeCodeScale = parserSegmentInfo.getTimeCodeScale();
+
+    MkvWriter mkvWriter = new MkvWriter();
+    if (!mkvWriter.open(outputFileName)) {
+      System.out.println("\nFile name is invalid or error while opening.");
+      System.exit(1);
+    }
+
+    Segment muxerSegment = new Segment();
+    if (!muxerSegment.init(mkvWriter)) {
+      System.out.println("\nCould not initialize muxer segment.");
+      System.exit(1);
+    }
   }
 
   private static void PrintUsage() {

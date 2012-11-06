@@ -15,19 +15,7 @@ FUNCTION(jboolean, EOS, jlong jBlockEntry) {
   return blockEntry->EOS();
 }
 
-FUNCTION(jlong, GetCluster, jlong jBlockEntry) {
-  mkvparser::BlockEntry* blockEntry =
-      reinterpret_cast<mkvparser::BlockEntry*>(jBlockEntry);
-  return reinterpret_cast<jlong>(blockEntry->GetCluster());
-}
-
-FUNCTION(jlong, GetIndex, jlong jBlockEntry) {
-  mkvparser::BlockEntry* blockEntry =
-      reinterpret_cast<mkvparser::BlockEntry*>(jBlockEntry);
-  return blockEntry->GetIndex();
-}
-
-FUNCTION(jint, getType, jlong jBlockEntry) {
+FUNCTION(jint, getClassType, jlong jBlockEntry) {
   mkvparser::BlockEntry* blockEntry =
       reinterpret_cast<mkvparser::BlockEntry*>(jBlockEntry);
   const std::type_info& typeInfo = typeid(*blockEntry);
@@ -38,4 +26,16 @@ FUNCTION(jint, getType, jlong jBlockEntry) {
     type = 2;
   }
   return type;
+}
+
+FUNCTION(jlong, GetCluster, jlong jBlockEntry) {
+  mkvparser::BlockEntry* blockEntry =
+      reinterpret_cast<mkvparser::BlockEntry*>(jBlockEntry);
+  return reinterpret_cast<jlong>(blockEntry->GetCluster());
+}
+
+FUNCTION(jlong, GetIndex, jlong jBlockEntry) {
+  mkvparser::BlockEntry* blockEntry =
+      reinterpret_cast<mkvparser::BlockEntry*>(jBlockEntry);
+  return blockEntry->GetIndex();
 }

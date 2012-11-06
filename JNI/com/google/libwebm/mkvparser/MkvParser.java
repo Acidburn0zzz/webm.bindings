@@ -6,7 +6,7 @@ import com.google.libwebm.Common;
 
 public abstract class MkvParser extends Common {
 
-  public static long getUIntLength(IMkvReader mkvReader, long position, long[] length) {
+  public static long getUintLength(IMkvReader mkvReader, long position, long[] length) {
     return GetUIntLength(mkvReader.getNativePointer(), position, length);
   }
 
@@ -28,7 +28,7 @@ public abstract class MkvParser extends Common {
     return ParseElementHeader(mkvReader.getNativePointer(), position, stop, id, size);
   }
 
-  public static long readUInt(IMkvReader mkvReader, long position, long[] length) {
+  public static long readUint(IMkvReader mkvReader, long position, long[] length) {
     return ReadUInt(mkvReader.getNativePointer(), position, length);
   }
 
@@ -47,7 +47,7 @@ public abstract class MkvParser extends Common {
     return UnserializeString(mkvReader.getNativePointer(), position, size, str);
   }
 
-  public static long unserializeUInt(IMkvReader mkvReader, long position, long size) {
+  public static long unserializeUint(IMkvReader mkvReader, long position, long size) {
     return UnserializeUInt(mkvReader.getNativePointer(), position, size);
   }
 

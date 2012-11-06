@@ -14,7 +14,7 @@ public abstract class BlockEntry extends Common {
 
   public static BlockEntry newBlockEntry(long nativePointer) {
     BlockEntry blockEntry = null;
-    int type = getType(nativePointer);
+    int type = getClassType(nativePointer);
     if (type == 1) {
       blockEntry = new BlockGroup(nativePointer);
     } else if (type == 2) {
@@ -48,7 +48,7 @@ public abstract class BlockEntry extends Common {
     super(nativePointer);
   }
 
-  private static native int getType(long jBlockEntry);
+  private static native int getClassType(long jBlockEntry);
 
   private native boolean EOS(long jBlockEntry);
   private native long GetCluster(long jBlockEntry);
