@@ -9,13 +9,13 @@
 #define FUNCTION(returnType, functionName, ...) \
     FUNC(returnType, mkvmuxer, CuePoint, functionName, ##__VA_ARGS__)
 
-FUNCTION(jlong, block_number, jlong jCuePoint) {
+FUNCTION(jlong, blockNumber, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->block_number();
 }
 
-FUNCTION(jlong, cluster_pos, jlong jCuePoint) {
+FUNCTION(jlong, clusterPos, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->cluster_pos();
@@ -33,38 +33,38 @@ FUNCTION(jlong, newCuePoint) {
   return jCuePoint;
 }
 
-FUNCTION(jlong, output_block_number, jlong jCuePoint) {
+FUNCTION(jlong, outputBlockNumber, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->output_block_number();
 }
 
-FUNCTION(void, set_block_number, jlong jCuePoint, jlong block_number) {
+FUNCTION(void, setBlockNumber, jlong jCuePoint, jlong block_number) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->set_block_number(block_number);
 }
 
-FUNCTION(void, set_cluster_pos, jlong jCuePoint, jlong cluster_pos) {
+FUNCTION(void, setClusterPos, jlong jCuePoint, jlong cluster_pos) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->set_cluster_pos(cluster_pos);
 }
 
-FUNCTION(void, set_output_block_number, jlong jCuePoint,
-                                        jlong output_block_number) {
+FUNCTION(void, setOutputBlockNumber, jlong jCuePoint,
+                                     jlong output_block_number) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->set_output_block_number(output_block_number);
 }
 
-FUNCTION(void, set_time, jlong jCuePoint, jlong time) {
+FUNCTION(void, setTime, jlong jCuePoint, jlong time) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->set_time(time);
 }
 
-FUNCTION(void, set_track, jlong jCuePoint, jlong track) {
+FUNCTION(void, setTrack, jlong jCuePoint, jlong track) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->set_track(track);

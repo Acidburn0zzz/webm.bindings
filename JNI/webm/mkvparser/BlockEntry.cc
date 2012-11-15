@@ -18,8 +18,11 @@ FUNCTION(jboolean, EOS, jlong jBlockEntry) {
 FUNCTION(jint, getClassType, jlong jBlockEntry) {
   mkvparser::BlockEntry* blockEntry =
       reinterpret_cast<mkvparser::BlockEntry*>(jBlockEntry);
-  const std::type_info& typeInfo = typeid(*blockEntry);
   int type = 0;
+  if (!blockEntry) {
+    return type;
+  }
+  const std::type_info& typeInfo = typeid(*blockEntry);
   if (typeInfo == typeid(mkvparser::BlockGroup)) {
     type = 1;
   } else if (typeInfo == typeid(mkvparser::SimpleBlock)) {

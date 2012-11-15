@@ -47,7 +47,7 @@ FUNCTION(void, AddPayloadSize, jlong jCluster, jlong size) {
   cluster->AddPayloadSize(size);
 }
 
-FUNCTION(jint, blocks_added, jlong jCluster) {
+FUNCTION(jint, blocksAdded, jlong jCluster) {
   mkvmuxer::Cluster* cluster = reinterpret_cast<mkvmuxer::Cluster*>(jCluster);
   return cluster->blocks_added();
 }
@@ -75,12 +75,12 @@ FUNCTION(jlong, newCluster, jlong timecode, jlong cues_pos) {
   return jCluster;
 }
 
-FUNCTION(jlong, payload_size, jlong jCluster) {
+FUNCTION(jlong, payloadSize, jlong jCluster) {
   mkvmuxer::Cluster* cluster = reinterpret_cast<mkvmuxer::Cluster*>(jCluster);
   return cluster->payload_size();
 }
 
-FUNCTION(jlong, position_for_cues, jlong jCluster) {
+FUNCTION(jlong, positionForCues, jlong jCluster) {
   mkvmuxer::Cluster* cluster = reinterpret_cast<mkvmuxer::Cluster*>(jCluster);
   return cluster->position_for_cues();
 }

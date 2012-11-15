@@ -8,8 +8,8 @@
 #define FUNCTION(returnType, functionName, ...) \
     FUNC(returnType, mkvmuxer, Chapter, functionName, ##__VA_ARGS__)
 
-FUNCTION(jboolean, add_string, jlong jChapter, jstring jTitle,
-                               jstring jLanguage, jstring jCountry) {
+FUNCTION(jboolean, addString, jlong jChapter, jstring jTitle,
+                              jstring jLanguage, jstring jCountry) {
   mkvmuxer::Chapter* chapter = reinterpret_cast<mkvmuxer::Chapter*>(jChapter);
   const char* country = env->GetStringUTFChars(jCountry, 0);
   const char* language = env->GetStringUTFChars(jLanguage, 0);
@@ -21,7 +21,7 @@ FUNCTION(jboolean, add_string, jlong jChapter, jstring jTitle,
   return result;
 }
 
-FUNCTION(jboolean, set_id, jlong jChapter, jstring jId) {
+FUNCTION(jboolean, setId, jlong jChapter, jstring jId) {
   mkvmuxer::Chapter* chapter = reinterpret_cast<mkvmuxer::Chapter*>(jChapter);
   const char* id = env->GetStringUTFChars(jId, 0);
   bool result = chapter->set_id(id);
@@ -29,8 +29,8 @@ FUNCTION(jboolean, set_id, jlong jChapter, jstring jId) {
   return result;
 }
 
-FUNCTION(void, set_time, jlong jChapter, jlong jSegment, jlong start_time_ns,
-                         jlong end_time_ns) {
+FUNCTION(void, setTime, jlong jChapter, jlong jSegment, jlong start_time_ns,
+                        jlong end_time_ns) {
   mkvmuxer::Chapter* chapter = reinterpret_cast<mkvmuxer::Chapter*>(jChapter);
   const mkvmuxer::Segment& segment =
       *reinterpret_cast<mkvmuxer::Segment*>(jSegment);

@@ -18,7 +18,7 @@ public class Frame extends Common {
     return getPos(nativePointer);
   }
 
-  public long Read(IMkvReader mkvReader, byte[][] buffer) {
+  public long read(IMkvReader mkvReader, byte[][] buffer) {
     return Read(nativePointer, mkvReader.getNativePointer(), buffer);
   }
 

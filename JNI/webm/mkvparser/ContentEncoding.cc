@@ -15,19 +15,19 @@ FUNCTION(void, deleteContentEncoding, jlong jContentEncoding) {
   delete contentEncoding;
 }
 
-FUNCTION(jlong, encoding_order, jlong jContentEncoding) {
+FUNCTION(jlong, encodingOrder, jlong jContentEncoding) {
   mkvparser::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvparser::ContentEncoding*>(jContentEncoding);
   return contentEncoding->encoding_order();
 }
 
-FUNCTION(jlong, encoding_scope, jlong jContentEncoding) {
+FUNCTION(jlong, encodingScope, jlong jContentEncoding) {
   mkvparser::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvparser::ContentEncoding*>(jContentEncoding);
   return contentEncoding->encoding_scope();
 }
 
-FUNCTION(jlong, encoding_type, jlong jContentEncoding) {
+FUNCTION(jlong, encodingType, jlong jContentEncoding) {
   mkvparser::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvparser::ContentEncoding*>(jContentEncoding);
   return contentEncoding->encoding_type();

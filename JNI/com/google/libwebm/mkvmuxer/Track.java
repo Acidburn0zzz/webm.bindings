@@ -28,19 +28,19 @@ public class Track extends Common {
   }
 
   public String codecId() {
-    return codec_id(nativePointer);
+    return codecId(nativePointer);
   }
 
   public byte[] codecPrivate() {
-    return codec_private(nativePointer);
+    return codecPrivate(nativePointer);
   }
 
   public long codecPrivateLength() {
-    return codec_private_length(nativePointer);
+    return codecPrivateLength(nativePointer);
   }
 
   public int contentEncodingEntriesSize() {
-    return content_encoding_entries_size(nativePointer);
+    return contentEncodingEntriesSize(nativePointer);
   }
 
   public ContentEncoding getContentEncodingByIndex(int index) {
@@ -65,7 +65,7 @@ public class Track extends Common {
   }
 
   public void setCodecId(String codecId) {
-    set_codec_id(nativePointer, codecId);
+    setCodecId(nativePointer, codecId);
   }
 
   public boolean setCodecPrivate(byte[] codecPrivate) {
@@ -73,19 +73,19 @@ public class Track extends Common {
   }
 
   public void setLanguage(String language) {
-    set_language(nativePointer, language);
+    setLanguage(nativePointer, language);
   }
 
   public void setName(String name) {
-    set_name(nativePointer, name);
+    setName(nativePointer, name);
   }
 
   public void setNumber(long number) {
-    set_number(nativePointer, number);
+    setNumber(nativePointer, number);
   }
 
   public void setType(long type) {
-    set_type(nativePointer, type);
+    setType(nativePointer, type);
   }
 
   public long size() {
@@ -118,10 +118,10 @@ public class Track extends Common {
   private static native int getClassType(long jTrack);
 
   private native boolean AddContentEncoding(long jTrack);
-  private native int content_encoding_entries_size(long jTrack);
-  private native String codec_id(long jTrack);
-  private native byte[] codec_private(long jTrack);
-  private native long codec_private_length(long jTrack);
+  private native int contentEncodingEntriesSize(long jTrack);
+  private native String codecId(long jTrack);
+  private native byte[] codecPrivate(long jTrack);
+  private native long codecPrivateLength(long jTrack);
   private native void deleteTrack(long jTrack);
   private native long GetContentEncodingByIndex(long jTrack, int index);
   private native String language(long jTrack);
@@ -129,11 +129,11 @@ public class Track extends Common {
   private native long newTrack(int jSeed);
   private native long number(long jTrack);
   private native long PayloadSize(long jTrack);
-  private native void set_codec_id(long jTrack, String jCodecId);
-  private native void set_language(long jTrack, String jLanguage);
-  private native void set_name(long jTrack, String jName);
-  private native void set_number(long jTrack, long number);
-  private native void set_type(long jTrack, long type);
+  private native void setCodecId(long jTrack, String jCodecId);
+  private native void setLanguage(long jTrack, String jLanguage);
+  private native void setName(long jTrack, String jName);
+  private native void setNumber(long jTrack, long number);
+  private native void setType(long jTrack, long type);
   private native boolean SetCodecPrivate(long jTrack, byte[] jCodecPrivate, long length);
   private native long Size(long jTrack);
   private native long type(long jTrack);

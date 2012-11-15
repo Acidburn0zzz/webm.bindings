@@ -39,6 +39,12 @@ FUNCTION(jlong, getStart, jlong jBlock) {
   return block->m_start;
 }
 
+FUNCTION(jlong, GetTime, jlong jBlock, jlong jCluster) {
+  mkvparser::Block* block = reinterpret_cast<mkvparser::Block*>(jBlock);
+  mkvparser::Cluster* cluster = reinterpret_cast<mkvparser::Cluster*>(jCluster);
+  return block->GetTime(cluster);
+}
+
 FUNCTION(jlong, GetTimeCode, jlong jBlock, jlong jCluster) {
   mkvparser::Block* block = reinterpret_cast<mkvparser::Block*>(jBlock);
   mkvparser::Cluster* cluster = reinterpret_cast<mkvparser::Cluster*>(jCluster);

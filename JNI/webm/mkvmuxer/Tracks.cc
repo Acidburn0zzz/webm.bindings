@@ -35,7 +35,7 @@ FUNCTION(jlong, newTracks) {
   return jTracks;
 }
 
-FUNCTION(jint, track_entries_size, jlong jTracks) {
+FUNCTION(jint, trackEntriesSize, jlong jTracks) {
   mkvmuxer::Tracks* tracks = reinterpret_cast<mkvmuxer::Tracks*>(jTracks);
   return tracks->track_entries_size();
 }

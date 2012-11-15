@@ -16,23 +16,23 @@ FUNCTION(jboolean, AddContentEncoding, jlong jTrack) {
   return track->AddContentEncoding();
 }
 
-FUNCTION(jstring, codec_id, jlong jTrack) {
+FUNCTION(jstring, codecId, jlong jTrack) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   return env->NewStringUTF(track->codec_id());
 }
 
-FUNCTION(jbyteArray, codec_private, jlong jTrack) {
+FUNCTION(jbyteArray, codecPrivate, jlong jTrack) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   return newByteArray(env, track->codec_private(),
                       track->codec_private_length());
 }
 
-FUNCTION(jlong, codec_private_length, jlong jTrack) {
+FUNCTION(jlong, codecPrivateLength, jlong jTrack) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   return track->codec_private_length();
 }
 
-FUNCTION(jint, content_encoding_entries_size, jlong jTrack) {
+FUNCTION(jint, contentEncodingEntriesSize, jlong jTrack) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   return track->content_encoding_entries_size();
 }
@@ -44,8 +44,11 @@ FUNCTION(void, deleteTrack, jlong jTrack) {
 
 FUNCTION(jint, getClassType, jlong jTrack) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
-  const std::type_info& typeInfo = typeid(*track);
   int type = 0;
+  if (!track) {
+    return type;
+  }
+  const std::type_info& typeInfo = typeid(*track);
   if (typeInfo == typeid(mkvmuxer::AudioTrack)) {
     type = 1;
   } else if (typeInfo == typeid(mkvmuxer::Track)) {
@@ -88,33 +91,33 @@ FUNCTION(jlong, PayloadSize, jlong jTrack) {
   return track->PayloadSize();
 }
 
-FUNCTION(void, set_codec_id, jlong jTrack, jstring jCodecId) {
+FUNCTION(void, setCodecId, jlong jTrack, jstring jCodecId) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   const char* codecId = env->GetStringUTFChars(jCodecId, 0);
   track->set_codec_id(codecId);
   env->ReleaseStringUTFChars(jCodecId, codecId);
 }
 
-FUNCTION(void, set_language, jlong jTrack, jstring jLanguage) {
+FUNCTION(void, setLanguage, jlong jTrack, jstring jLanguage) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   const char* language = env->GetStringUTFChars(jLanguage, 0);
   track->set_language(language);
   env->ReleaseStringUTFChars(jLanguage, language);
 }
 
-FUNCTION(void, set_name, jlong jTrack, jstring jName) {
+FUNCTION(void, setName, jlong jTrack, jstring jName) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   const char* name = env->GetStringUTFChars(jName, 0);
   track->set_name(name);
   env->ReleaseStringUTFChars(jName, name);
 }
 
-FUNCTION(void, set_number, jlong jTrack, jlong number) {
+FUNCTION(void, setNumber, jlong jTrack, jlong number) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   track->set_number(number);
 }
 
-FUNCTION(void, set_type, jlong jTrack, jlong type) {
+FUNCTION(void, setType, jlong jTrack, jlong type) {
   mkvmuxer::Track* track = reinterpret_cast<mkvmuxer::Track*>(jTrack);
   track->set_type(type);
 }

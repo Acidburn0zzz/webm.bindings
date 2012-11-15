@@ -1,80 +1,92 @@
-JAVA_HOME=/usr/local/buildtools/java/jdk6-64
+JAVA_HOME := /usr/local/buildtools/java/jdk6-64
+CFLAGS := -DNDEBUG -fPIC -O2 -m64
+CXXFLAGS := -DNDEBUG -fPIC -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux \
+	-O2 -m64
 JAVA := $(JAVA_HOME)/bin/java
+JAVA_ARGS := -cp class -Djava.library.path=.
 JAVAC := $(JAVA_HOME)/bin/javac
+JAVAC_COMPILERARGS := -d class
+LDFLAGS := -fPIC -shared
 
-CXXFLAGS := -O2 -DNDEBUG -m64 -fPIC -Ilibvpx -Ilibwebm -Iwebm -Llibwebm
-CXXFLAGS += -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
-CFLAGS := -O2 -DNDEBUG -m64 -Ilibvpx -fPIC
+vorbis_c_sources := $(wildcard vorbis/*.cc)
+vorbis_c_objects := $(patsubst %.cc,obj/%.o,$(vorbis_c_sources))
+vorbis_java_sources := $(wildcard com/google/libvorbis/*.java)
+vorbis_java_classes := $(patsubst %.java,class/%.class,$(vorbis_java_sources))
 
-export LD_LIBRARY_PATH += /usr/local/lib:libwebm
+vpx_c_sources := $(wildcard vpx/*.cc)
+vpx_c_objects := $(patsubst %.cc,obj/%.o,$(vpx_c_sources))
+vpx_java_sources := $(wildcard com/google/libvpx/*.java)
+vpx_java_classes := $(patsubst %.java,class/%.class,$(vpx_java_sources))
 
-# Comment out the following line to see more information during a build.
-quiet=true
-qexec=$(if $(quiet), @)
+webm_c_sources := $(shell find webm/ -name "*.cc" -type f)
+webm_c_objects := $(patsubst %.cc,obj/%.o,$(webm_c_sources))
+webm_java_sources := $(shell find com/google/libwebm/ -name "*.java" -type f)
+webm_java_classes := $(patsubst %.java,class/%.class,$(webm_java_sources))
+ebml_writer := obj/libvpx/libmkv/EbmlWriter.o
 
-final_class := Application
+classes := $(vorbis_java_classes) $(vpx_java_classes) $(webm_java_classes)
+libraries := libvorbisJNI.so libvpxJNI.so libwebmJNI.so
+deps := $(classes) $(libraries)
 
-vpx_objects := $(patsubst %.cc,obj/%.o,$(wildcard vpx/*.cc))
-vpx_objects += $(patsubst %.c,obj/%.o,libvpx/libmkv/EbmlWriter.c)
+export LD_LIBRARY_PATH += libwebm
 
-vorbis_objects := $(patsubst %.cc,obj/%.o,$(wildcard vorbis/*.cc))
+.PHONY: run_app
+run_app: Application $(deps)
+	$(JAVA) $(JAVA_ARGS) $<
 
-webm_source_files = $(shell find webm/ -type f -name '*.cc')
-webm_objects := $(patsubst %.cc,obj/%.o,$(wildcard $(webm_source_files)))
-
-objects := $(vpx_objects) $(vorbis_objects) $(webm_objects)
-
-java_files = $(shell find com/ -type f -name '*.java')
-classes := $(patsubst %.java,%.class,$(java_files))
-classes += $(final_class).class
-
-$(final_class): libvpxJNI.so libvorbisJNI.so libwebmJNI.so $(classes)
-
-SampleMultiplexer.class: libvpxJNI.so libvorbisJNI.so libwebmJNI.so $(classes)
-
-libvpxJNI.so: $(vpx_objects)
-	$(qexec)$(CXX) $(CXXFLAGS) -shared $(vpx_objects) -o $@ -lvpx
-
-libvorbisJNI.so: $(vorbis_objects)
-	$(qexec)$(CXX) $(CXXFLAGS) -shared $(vorbis_objects) -o $@ -lvorbis
-
-libwebmJNI.so: $(webm_objects)
-	$(qexec)$(CXX) $(CXXFLAGS) -shared $(webm_objects) -o $@ -lwebm
-
-%.class : %.java $(java_files)
-	$(qexec)$(JAVAC) $<
-
-obj/%.o : %.cc
-	$(qexec)mkdir -p $(dir $@)
-	$(qexec)$(CXX) $(CXXFLAGS) -c $< -o $@
-
-obj/%.o : %.c
-	$(qexec)mkdir -p $(dir $@)
-	$(qexec)$(CC) $(CFLAGS) -c $< -o $@
-
-.PHONY: clean
-clean:
-	$(qexec)$(RM) libvpxJNI.so libvorbisJNI.so libwebmJNI.so $(objects) $(classes)
-
-.PHONY: run
-run: $(final_class)
-	$(qexec)$(JAVA) -Djava.library.path=`pwd` $<
-
-.PHONY: run_sample
-run_sample: SampleMultiplexer.class
-	$(qexec)$(JAVA) -Djava.library.path=`pwd` SampleMultiplexer -i input/small.webm -o output/small_out.webm
+.PHONY: run_muxer
+run_muxer: SampleMultiplexer $(deps)
+	$(JAVA) $(JAVA_ARGS) $< -i input/small.webm -o output/small_out.webm
 
 .PHONY: display
 display: output/foreman_cif_420p_352x288.ivf
-	$(qexec)libvpx/vpxdec --i420 --limit=1 \
+	libvpx/vpxdec --i420 --limit=1 \
 		--output=output/foreman_cif_420p_352x288.yuv \
 		output/foreman_cif_420p_352x288.ivf
-	$(qexec)display -size 352x288 -depth 8 \
+	display -size 352x288 -depth 8 \
 		-colorspace RGB output/foreman_cif_420p_352x288.yuv
 
 .PHONY: play
 play: output/foreman_cif_420p_352x288.ivf
-	$(qexec)libvpx/vpxdec  \
+	libvpx/vpxdec \
 		--output=output/foreman_cif_420p_352x288.y4m \
 		output/foreman_cif_420p_352x288.ivf
-	$(qexec)mplayer output/foreman_cif_420p_352x288.y4m
+	mplayer output/foreman_cif_420p_352x288.y4m
+
+Application: class/Application.class
+
+SampleMultiplexer: class/SampleMultiplexer.class
+
+libvorbisJNI.so: $(vorbis_c_objects)
+	$(CXX) $(LDFLAGS) -lvorbis -o $@ $(vorbis_c_objects)
+
+libvpxJNI.so: $(vpx_c_objects) $(ebml_writer)
+	$(CXX) $(LDFLAGS) -lvpx -o $@ $(vpx_c_objects) $(ebml_writer)
+
+libwebmJNI.so: $(webm_c_objects)
+	$(CXX) $(LDFLAGS) -lwebm -Llibwebm -o $@ $(webm_c_objects)
+
+$(vorbis_c_objects): obj/%.o: %.cc
+	mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c -Ilibogg/include -Ilibvorbis/include -o $@ $<
+
+$(vpx_c_objects): obj/%.o: %.cc
+	mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c -Ilibvpx -o $@ $<
+
+$(webm_c_objects): obj/%.o: %.cc
+	mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c -Ilibwebm -Iwebm -o $@ $<
+
+class/%.class: %.java
+	mkdir -p $(dir $@)
+	$(JAVAC) $(JAVAC_COMPILERARGS) $<
+
+$(ebml_writer): obj/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -Ilibvpx -o $@ $<
+
+.PHONY: clean
+clean:
+	$(RM) $(libraries)
+	$(RM) -r class obj

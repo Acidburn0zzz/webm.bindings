@@ -16,31 +16,31 @@ FUNCTION(void, deleteContentEncoding, jlong jContentEncoding) {
   delete contentEncoding;
 }
 
-FUNCTION(jlong, enc_aes_settings, jlong jContentEncoding) {
+FUNCTION(jlong, encAesSettings, jlong jContentEncoding) {
   mkvmuxer::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvmuxer::ContentEncoding*>(jContentEncoding);
   return reinterpret_cast<jlong>(contentEncoding->enc_aes_settings());
 }
 
-FUNCTION(jlong, enc_algo, jlong jContentEncoding) {
+FUNCTION(jlong, encAlgo, jlong jContentEncoding) {
   mkvmuxer::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvmuxer::ContentEncoding*>(jContentEncoding);
   return contentEncoding->enc_algo();
 }
 
-FUNCTION(jlong, encoding_order, jlong jContentEncoding) {
+FUNCTION(jlong, encodingOrder, jlong jContentEncoding) {
   mkvmuxer::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvmuxer::ContentEncoding*>(jContentEncoding);
   return contentEncoding->encoding_order();
 }
 
-FUNCTION(jlong, encoding_scope, jlong jContentEncoding) {
+FUNCTION(jlong, encodingScope, jlong jContentEncoding) {
   mkvmuxer::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvmuxer::ContentEncoding*>(jContentEncoding);
   return contentEncoding->encoding_scope();
 }
 
-FUNCTION(jlong, encoding_type, jlong jContentEncoding) {
+FUNCTION(jlong, encodingType, jlong jContentEncoding) {
   mkvmuxer::ContentEncoding* contentEncoding =
       reinterpret_cast<mkvmuxer::ContentEncoding*>(jContentEncoding);
   return contentEncoding->encoding_type();

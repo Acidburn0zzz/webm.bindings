@@ -73,16 +73,6 @@ FUNCTION(jboolean, chunking, jlong jSegment) {
   return segment->chunking();
 }
 
-FUNCTION(jlong, cues_track, jlong jSegment) {
-  mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
-  return segment->cues_track();
-}
-
-FUNCTION(jboolean, CuesTrack, jlong jSegment, jlong track_number) {
-  mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
-  return segment->CuesTrack(track_number);
-}
-
 FUNCTION(void, deleteSegment, jlong jSegment) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   delete segment;
@@ -103,6 +93,11 @@ FUNCTION(jlong, GetCues, jlong jSegment) {
   return reinterpret_cast<jlong>(segment->GetCues());
 }
 
+FUNCTION(jlong, getCuesTrack, jlong jSegment) {
+  mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
+  return segment->cues_track();
+}
+
 FUNCTION(jlong, GetSegmentInfo, jlong jSegment) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   return reinterpret_cast<jlong>(segment->GetSegmentInfo());
@@ -120,19 +115,19 @@ FUNCTION(jboolean, Init, jlong jSegment, jlong jWriter) {
   return segment->Init(writer);
 }
 
-FUNCTION(jlong, max_cluster_duration, jlong jSegment) {
+FUNCTION(jlong, maxClusterDuration, jlong jSegment) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   return segment->max_cluster_duration();
 }
 
-FUNCTION(jlong, max_cluster_size, jlong jSegment) {
+FUNCTION(jlong, maxClusterSize, jlong jSegment) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   return segment->max_cluster_size();
 }
 
-FUNCTION(jboolean, output_cues, jlong jSegment) {
+FUNCTION(jint, mode, jlong jSegment) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
-  return segment->output_cues();
+  return segment->mode();
 }
 
 FUNCTION(jlong, newSegment) {
@@ -141,9 +136,9 @@ FUNCTION(jlong, newSegment) {
   return jSegment;
 }
 
-FUNCTION(jint, mode, jlong jSegment) {
+FUNCTION(jboolean, outputCues, jlong jSegment) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
-  return segment->mode();
+  return segment->output_cues();
 }
 
 FUNCTION(void, OutputCues, jlong jSegment, jboolean output_cues) {
@@ -151,23 +146,28 @@ FUNCTION(void, OutputCues, jlong jSegment, jboolean output_cues) {
   segment->OutputCues(output_cues);
 }
 
-FUNCTION(jlong, segment_info, jlong jSegment) {
+FUNCTION(jlong, segmentInfo, jlong jSegment) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   return reinterpret_cast<jlong>(segment->segment_info());
 }
 
-FUNCTION(void, set_max_cluster_duration, jlong jSegment,
-                                         jlong max_cluster_duration) {
+FUNCTION(jboolean, setCuesTrack, jlong jSegment, jlong track_number) {
+  mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
+  return segment->CuesTrack(track_number);
+}
+
+FUNCTION(void, setMaxClusterDuration, jlong jSegment,
+                                      jlong max_cluster_duration) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   segment->set_max_cluster_duration(max_cluster_duration);
 }
 
-FUNCTION(void, set_max_cluster_size, jlong jSegment, jlong max_cluster_size) {
+FUNCTION(void, setMaxClusterSize, jlong jSegment, jlong max_cluster_size) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   segment->set_max_cluster_size(max_cluster_size);
 }
 
-FUNCTION(void, set_mode, jlong jSegment, jint mode) {
+FUNCTION(void, setMode, jlong jSegment, jint mode) {
   mkvmuxer::Segment* segment = reinterpret_cast<mkvmuxer::Segment*>(jSegment);
   segment->set_mode(static_cast<mkvmuxer::Segment::Mode>(mode));
 }

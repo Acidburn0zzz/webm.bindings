@@ -35,7 +35,7 @@ FUNCTION(jboolean, Init, jlong jSegmentInfo) {
   return segmentInfo->Init();
 }
 
-FUNCTION(jstring, muxing_app, jlong jSegmentInfo) {
+FUNCTION(jstring, muxingApp, jlong jSegmentInfo) {
   mkvmuxer::SegmentInfo* segmentInfo =
       reinterpret_cast<mkvmuxer::SegmentInfo*>(jSegmentInfo);
   return env->NewStringUTF(segmentInfo->muxing_app());
@@ -47,13 +47,13 @@ FUNCTION(jlong, newSegmentInfo) {
   return jSegmentInfo;
 }
 
-FUNCTION(void, set_duration, jlong jSegmentInfo, jdouble duration) {
+FUNCTION(void, setDuration, jlong jSegmentInfo, jdouble duration) {
   mkvmuxer::SegmentInfo* segmentInfo =
       reinterpret_cast<mkvmuxer::SegmentInfo*>(jSegmentInfo);
   segmentInfo->set_duration(duration);
 }
 
-FUNCTION(void, set_muxing_app, jlong jSegmentInfo, jstring jApp) {
+FUNCTION(void, setMuxingApp, jlong jSegmentInfo, jstring jApp) {
   mkvmuxer::SegmentInfo* segmentInfo =
       reinterpret_cast<mkvmuxer::SegmentInfo*>(jSegmentInfo);
   const char* app = env->GetStringUTFChars(jApp, 0);
@@ -61,13 +61,13 @@ FUNCTION(void, set_muxing_app, jlong jSegmentInfo, jstring jApp) {
   env->ReleaseStringUTFChars(jApp, app);
 }
 
-FUNCTION(void, set_timecode_scale, jlong jSegmentInfo, jlong scale) {
+FUNCTION(void, setTimecodeScale, jlong jSegmentInfo, jlong scale) {
   mkvmuxer::SegmentInfo* segmentInfo =
       reinterpret_cast<mkvmuxer::SegmentInfo*>(jSegmentInfo);
   segmentInfo->set_timecode_scale(scale);
 }
 
-FUNCTION(void, set_writing_app, jlong jSegmentInfo, jstring jApp) {
+FUNCTION(void, setWritingApp, jlong jSegmentInfo, jstring jApp) {
   mkvmuxer::SegmentInfo* segmentInfo =
       reinterpret_cast<mkvmuxer::SegmentInfo*>(jSegmentInfo);
   const char* app = env->GetStringUTFChars(jApp, 0);
@@ -75,7 +75,7 @@ FUNCTION(void, set_writing_app, jlong jSegmentInfo, jstring jApp) {
   env->ReleaseStringUTFChars(jApp, app);
 }
 
-FUNCTION(jlong, timecode_scale, jlong jSegmentInfo) {
+FUNCTION(jlong, timecodeScale, jlong jSegmentInfo) {
   mkvmuxer::SegmentInfo* segmentInfo =
       reinterpret_cast<mkvmuxer::SegmentInfo*>(jSegmentInfo);
   return segmentInfo->timecode_scale();
@@ -89,7 +89,7 @@ FUNCTION(jboolean, Write, jlong jSegmentInfo, jlong jWriter) {
   return segmentInfo->Write(writer);
 }
 
-FUNCTION(jstring, writing_app, jlong jSegmentInfo) {
+FUNCTION(jstring, writingApp, jlong jSegmentInfo) {
   mkvmuxer::SegmentInfo* segmentInfo =
       reinterpret_cast<mkvmuxer::SegmentInfo*>(jSegmentInfo);
   return env->NewStringUTF(segmentInfo->writing_app());

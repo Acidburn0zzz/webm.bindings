@@ -15,6 +15,18 @@ public class ContentEncoding extends Common {
     nativePointer = newContentEncoding();
   }
 
+  public long encodingOrder() {
+    return encodingOrder(nativePointer);
+  }
+
+  public long encodingScope() {
+    return encodingScope(nativePointer);
+  }
+
+  public long encodingType() {
+    return encodingType(nativePointer);
+  }
+
   public ContentCompression getCompressionByIndex(long index) {
     long pointer = GetCompressionByIndex(nativePointer, index);
     return new ContentCompression(pointer);
@@ -22,18 +34,6 @@ public class ContentEncoding extends Common {
 
   public long getCompressionCount() {
     return GetCompressionCount(nativePointer);
-  }
-
-  public long getEncodingOrder() {
-    return encoding_order(nativePointer);
-  }
-
-  public long getEncodingScope() {
-    return encoding_scope(nativePointer);
-  }
-
-  public long getEncodingType() {
-    return encoding_type(nativePointer);
   }
 
   public ContentEncryption getEncryptionByIndex(long index) {
@@ -71,9 +71,9 @@ public class ContentEncoding extends Common {
 
 
   private native void deleteContentEncoding(long jContentEncoding);
-  private native long encoding_order(long jContentEncoding);
-  private native long encoding_scope(long jContentEncoding);
-  private native long encoding_type(long jContentEncoding);
+  private native long encodingOrder(long jContentEncoding);
+  private native long encodingScope(long jContentEncoding);
+  private native long encodingType(long jContentEncoding);
   private native long GetCompressionByIndex(long jContentEncoding, long idx);
   private native long GetCompressionCount(long jContentEncoding);
   private native long GetEncryptionByIndex(long jContentEncoding, long idx);

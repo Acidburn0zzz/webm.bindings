@@ -11,35 +11,35 @@ public class CuePoint extends Common {
   }
 
   public long blockNumber() {
-    return block_number(nativePointer);
+    return blockNumber(nativePointer);
   }
 
   public long clusterPos() {
-    return cluster_pos(nativePointer);
+    return clusterPos(nativePointer);
   }
 
   public long outputBlockNumber() {
-    return output_block_number(nativePointer);
+    return outputBlockNumber(nativePointer);
   }
 
   public void setBlockNumber(long blockNumber) {
-    set_block_number(nativePointer, blockNumber);
+    setBlockNumber(nativePointer, blockNumber);
   }
 
   public void setClusterPos(long clusterPos) {
-    set_cluster_pos(nativePointer, clusterPos);
+    setClusterPos(nativePointer, clusterPos);
   }
 
   public void setOutputBlockNumber(long outputBlockNumber) {
-    set_output_block_number(nativePointer, outputBlockNumber);
+    setOutputBlockNumber(nativePointer, outputBlockNumber);
   }
 
   public void setTime(long time) {
-    set_time(nativePointer, time);
+    setTime(nativePointer, time);
   }
 
   public void setTrack(long track) {
-    set_track(nativePointer, track);
+    setTrack(nativePointer, track);
   }
 
   public long size() {
@@ -66,16 +66,16 @@ public class CuePoint extends Common {
     deleteCuePoint(nativePointer);
   }
 
-  private native long block_number(long jCuePoint);
-  private native long cluster_pos(long jCuePoint);
+  private native long blockNumber(long jCuePoint);
+  private native long clusterPos(long jCuePoint);
   private native void deleteCuePoint(long jCuePoint);
   private native long newCuePoint();
-  private native long output_block_number(long jCuePoint);
-  private native void set_block_number(long jCuePoint, long block_number);
-  private native void set_cluster_pos(long jCuePoint, long cluster_pos);
-  private native void set_output_block_number(long jCuePoint, long output_block_number);
-  private native void set_time(long jCuePoint, long time);
-  private native void set_track(long jCuePoint, long track);
+  private native long outputBlockNumber(long jCuePoint);
+  private native void setBlockNumber(long jCuePoint, long block_number);
+  private native void setClusterPos(long jCuePoint, long cluster_pos);
+  private native void setOutputBlockNumber(long jCuePoint, long output_block_number);
+  private native void setTime(long jCuePoint, long time);
+  private native void setTrack(long jCuePoint, long track);
   private native long Size(long jCuePoint);
   private native long time(long jCuePoint);
   private native long track(long jCuePoint);

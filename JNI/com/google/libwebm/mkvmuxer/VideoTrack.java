@@ -43,15 +43,15 @@ public class VideoTrack extends Track {
   }
 
   public long displayHeight() {
-    return display_height(nativePointer);
+    return displayHeight(nativePointer);
   }
 
   public long displayWidth() {
-    return display_width(nativePointer);
+    return displayWidth(nativePointer);
   }
 
   public double frameRate() {
-    return frame_rate(nativePointer);
+    return frameRate(nativePointer);
   }
 
   public long height() {
@@ -63,19 +63,19 @@ public class VideoTrack extends Track {
   }
 
   public void setDisplayHeight(long height) {
-    set_display_height(nativePointer, height);
+    setDisplayHeight(nativePointer, height);
   }
 
   public void setDisplayWidth(long width) {
-    set_display_width(nativePointer, width);
+    setDisplayWidth(nativePointer, width);
   }
 
   public void setFrameRate(double frameRate) {
-    set_frame_rate(nativePointer, frameRate);
+    setFrameRate(nativePointer, frameRate);
   }
 
   public void setHeight(long height) {
-    set_height(nativePointer, height);
+    setHeight(nativePointer, height);
   }
 
   public void setStereoMode(StereoMode stereoMode) {
@@ -83,11 +83,11 @@ public class VideoTrack extends Track {
   }
 
   public void setWidth(long width) {
-    set_width(nativePointer, width);
+    setWidth(nativePointer, width);
   }
 
   public StereoMode stereoMode() {
-    return StereoMode.toStereoMode((int) stereo_mode(nativePointer));
+    return StereoMode.toStereoMode((int) stereoMode(nativePointer));
   }
 
   public long width() {
@@ -107,19 +107,19 @@ public class VideoTrack extends Track {
   }
 
   private native void deleteVideoTrack(long jVideoTrack);
-  private native long display_height(long jVideoTrack);
-  private native long display_width(long jVideoTrack);
-  private native double frame_rate(long jVideoTrack);
+  private native long displayHeight(long jVideoTrack);
+  private native long displayWidth(long jVideoTrack);
+  private native double frameRate(long jVideoTrack);
   private native long height(long jVideoTrack);
   private native long newVideoTrack(int jSeed);
   private native long PayloadSize(long jVideoTrack);
-  private native void set_display_height(long jVideoTrack, long height);
-  private native void set_display_width(long jVideoTrack, long width);
-  private native void set_frame_rate(long jVideoTrack, double frame_rate);
-  private native void set_height(long jVideoTrack, long height);
-  private native void set_width(long jVideoTrack, long width);
+  private native void setDisplayHeight(long jVideoTrack, long height);
+  private native void setDisplayWidth(long jVideoTrack, long width);
+  private native void setFrameRate(long jVideoTrack, double frame_rate);
+  private native void setHeight(long jVideoTrack, long height);
+  private native void setWidth(long jVideoTrack, long width);
   private native void SetStereoMode(long jVideoTrack, long stereo_mode);
-  private native long stereo_mode(long jVideoTrack);
+  private native long stereoMode(long jVideoTrack);
   private native long width(long jVideoTrack);
   private native boolean Write(long jVideoTrack, long jWriter);
 }

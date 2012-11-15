@@ -15,8 +15,8 @@ public class ContentEncAesSettings extends Common {
     nativePointer = newContentEncAesSettings();
   }
 
-  public long cipher_mode() {
-    return cipher_mode(nativePointer);
+  public long cipherMode() {
+    return cipherMode(nativePointer);
   }
 
   public long size() {
@@ -35,7 +35,7 @@ public class ContentEncAesSettings extends Common {
     deleteContentEncAesSettings(nativePointer);
   }
 
-  private native long cipher_mode(long jContentEncAesSettings);
+  private native long cipherMode(long jContentEncAesSettings);
   private native void deleteContentEncAesSettings(long jContentEncAesSettings);
   private native long newContentEncAesSettings();
   private native long Size(long jContentEncAesSettings);

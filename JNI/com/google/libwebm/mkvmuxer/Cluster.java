@@ -23,7 +23,7 @@ public class Cluster extends Common {
   }
 
   public int blocksAdded() {
-    return blocks_added(nativePointer);
+    return blocksAdded(nativePointer);
   }
 
   public boolean finalizeCluster() {
@@ -35,11 +35,11 @@ public class Cluster extends Common {
   }
 
   public long payloadSize() {
-    return payload_size(nativePointer);
+    return payloadSize(nativePointer);
   }
 
   public long positionForCues() {
-    return position_for_cues(nativePointer);
+    return positionForCues(nativePointer);
   }
 
   public long size() {
@@ -63,13 +63,13 @@ public class Cluster extends Common {
   private native boolean AddMetadata(long jCluster, byte[] jFrame, long length, long track_number,
       long timecode, long duration);
   private native void AddPayloadSize(long jCluster, long size);
-  private native int blocks_added(long jCluster);
+  private native int blocksAdded(long jCluster);
   private native void deleteCluster(long jCluster);
   private native boolean Finalize(long jCluster);
   private native boolean Init(long jCluster, long jWriter);
   private native long newCluster(long timecode, long cues_pos);
-  private native long payload_size(long jCluster);
-  private native long position_for_cues(long jCluster);
+  private native long payloadSize(long jCluster);
+  private native long positionForCues(long jCluster);
   private native long Size(long jCluster);
   private native long timecode(long jCluster);
 }

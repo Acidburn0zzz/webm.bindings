@@ -19,7 +19,7 @@ public class Frame extends Common {
   }
 
   public boolean isKey() {
-    return is_key(nativePointer);
+    return isKey(nativePointer);
   }
 
   public long length() {
@@ -27,15 +27,15 @@ public class Frame extends Common {
   }
 
   public void setIsKey(boolean key) {
-    set_is_key(nativePointer, key);
+    setIsKey(nativePointer, key);
   }
 
   public void setTimestamp(long timestamp) {
-    set_timestamp(nativePointer, timestamp);
+    setTimestamp(nativePointer, timestamp);
   }
 
   public void setTrackNumber(long trackNumber) {
-    set_track_number(nativePointer, trackNumber);
+    setTrackNumber(nativePointer, trackNumber);
   }
 
   public long timestamp() {
@@ -43,7 +43,7 @@ public class Frame extends Common {
   }
 
   public long trackNumber() {
-    return track_number(nativePointer);
+    return trackNumber(nativePointer);
   }
 
   protected Frame(long nativePointer) {
@@ -57,12 +57,12 @@ public class Frame extends Common {
   private native void deleteFrame(long jFrame);
   private native byte[] frame(long jFrame);
   private native boolean Init(long jFrame, byte[] jFrameBuffer, long length);
-  private native boolean is_key(long jFrame);
+  private native boolean isKey(long jFrame);
   private native long length(long jFrame);
   private native long newFrame();
-  private native void set_is_key(long jFrame, boolean key);
-  private native void set_timestamp(long jFrame, long timestamp);
-  private native void set_track_number(long jFrame, long track_number);
+  private native void setIsKey(long jFrame, boolean key);
+  private native void setTimestamp(long jFrame, long timestamp);
+  private native void setTrackNumber(long jFrame, long track_number);
   private native long timestamp(long jFrame);
-  private native long track_number(long jFrame);
+  private native long trackNumber(long jFrame);
 }

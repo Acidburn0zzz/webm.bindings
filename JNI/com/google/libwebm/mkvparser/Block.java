@@ -39,6 +39,10 @@ public class Block extends Common {
     return getStart(nativePointer);
   }
 
+  public long getTime(Cluster cluster) {
+    return GetTime(nativePointer, cluster.getNativePointer());
+  }
+
   public long getTimeCode(Cluster cluster) {
     return GetTimeCode(nativePointer, cluster.getNativePointer());
   }
@@ -77,6 +81,7 @@ public class Block extends Common {
   private native int GetLacing(long jBlock);
   private native long getSize(long jBlock);
   private native long getStart(long jBlock);
+  private native long GetTime(long jBlock, long jCluster);
   private native long GetTimeCode(long jBlock, long jCluster);
   private native long GetTrackNumber(long jBlock);
   private native boolean IsInvisible(long jBlock);

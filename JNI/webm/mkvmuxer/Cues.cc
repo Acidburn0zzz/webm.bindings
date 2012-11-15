@@ -15,7 +15,7 @@ FUNCTION(jboolean, AddCue, jlong jCues, jlong jCue) {
   return cues->AddCue(cue);
 }
 
-FUNCTION(jint, cue_entries_size, jlong jCues) {
+FUNCTION(jint, cueEntriesSize, jlong jCues) {
   mkvmuxer::Cues* cues = reinterpret_cast<mkvmuxer::Cues*>(jCues);
   return cues->cue_entries_size();
 }
@@ -35,13 +35,13 @@ FUNCTION(jlong, newCues) {
   return jCues;
 }
 
-FUNCTION(jboolean, output_block_number, jlong jCues) {
+FUNCTION(jboolean, outputBlockNumber, jlong jCues) {
   mkvmuxer::Cues* cues = reinterpret_cast<mkvmuxer::Cues*>(jCues);
   return cues->output_block_number();
 }
 
-FUNCTION(void, set_output_block_number, jlong jCues,
-                                        jboolean output_block_number) {
+FUNCTION(void, setOutputBlockNumber, jlong jCues,
+                                     jboolean output_block_number) {
   mkvmuxer::Cues* cues = reinterpret_cast<mkvmuxer::Cues*>(jCues);
   cues->set_output_block_number(output_block_number);
 }

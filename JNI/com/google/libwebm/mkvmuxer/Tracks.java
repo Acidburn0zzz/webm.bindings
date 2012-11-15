@@ -34,7 +34,7 @@ public class Tracks extends Common {
   }
 
   public int trackEntriesSize() {
-    return track_entries_size(nativePointer);
+    return trackEntriesSize(nativePointer);
   }
 
   public boolean trackIsAudio(long trackNumber) {
@@ -62,7 +62,7 @@ public class Tracks extends Common {
   private native long GetTrackByIndex(long jTracks, int idx);
   private native long GetTrackByNumber(long jTracks, long track_number);
   private native long newTracks();
-  private native int track_entries_size(long jTracks);
+  private native int trackEntriesSize(long jTracks);
   private native boolean TrackIsAudio(long jTracks, long track_number);
   private native boolean TrackIsVideo(long jTracks, long track_number);
   private native boolean Write(long jTracks, long jWriter);

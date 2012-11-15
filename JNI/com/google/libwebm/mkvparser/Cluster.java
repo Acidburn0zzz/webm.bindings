@@ -53,8 +53,11 @@ public class Cluster extends Common {
     return BlockEntry.newBlockEntry(pointer);
   }
 
-  public long getFirst(BlockEntry blockEntry) {
-    return GetFirst(nativePointer, blockEntry.getNativePointer());
+  public long getFirst(BlockEntry[] blockEntry) {
+    long[] jBlockEntry = {0};
+    long result = GetFirst(nativePointer, jBlockEntry);
+    blockEntry[0] = BlockEntry.newBlockEntry(jBlockEntry[0]);
+    return result;
   }
 
   public long getFirstTime() {
@@ -123,7 +126,7 @@ public class Cluster extends Common {
   private native long GetEntryCuePoint(long jCluster, long jCuePoint, long jTrackPosition);
   private native long GetEntryIndex(long jCluster, long index, long[] jBlockEntry);
   private native long GetEntryTrack(long jCluster, long jTrack, long ns);
-  private native long GetFirst(long jCluster, long jBlockEntry);
+  private native long GetFirst(long jCluster, long[] jBlockEntry);
   private native long GetFirstTime(long jCluster);
   private native long GetIndex(long jCluster);
   private native long GetLast(long jCluster, long[] jBlockEntry);

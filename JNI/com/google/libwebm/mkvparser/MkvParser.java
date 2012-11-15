@@ -6,6 +6,9 @@ import com.google.libwebm.Common;
 
 public abstract class MkvParser extends Common {
 
+  public static final int E_BUFFER_NOT_FULL = -3;
+  public static final int E_FILE_FORMAT_INVALID = -2;
+
   public static long getUintLength(IMkvReader mkvReader, long position, long[] length) {
     return GetUIntLength(mkvReader.getNativePointer(), position, length);
   }

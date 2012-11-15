@@ -13,7 +13,7 @@ public class AudioTrack extends Track {
   }
 
   public long bitDepth() {
-    return bit_depth(nativePointer);
+    return bitDepth(nativePointer);
   }
 
   public long channels() {
@@ -25,19 +25,19 @@ public class AudioTrack extends Track {
   }
 
   public double sampleRate() {
-    return sample_rate(nativePointer);
+    return sampleRate(nativePointer);
   }
 
   public void setBitDepth(long bitDepth) {
-    set_bit_depth(nativePointer, bitDepth);
+    setBitDepth(nativePointer, bitDepth);
   }
 
   public void setChannels(long channels) {
-    set_channels(nativePointer, channels);
+    setChannels(nativePointer, channels);
   }
 
   public void setSampleRate(double sampleRate) {
-    set_sample_rate(nativePointer, sampleRate);
+    setSampleRate(nativePointer, sampleRate);
   }
 
   public boolean write(IMkvWriter writer) {
@@ -52,14 +52,14 @@ public class AudioTrack extends Track {
     deleteAudioTrack(nativePointer);
   }
 
-  private native long bit_depth(long jAudioTrack);
+  private native long bitDepth(long jAudioTrack);
   private native long channels(long jAudioTrack);
   private native void deleteAudioTrack(long jAudioTrack);
   private native long newAudioTrack(int jSeed);
   private native long PayloadSize(long jAudioTrack);
-  private native double sample_rate(long jAudioTrack);
-  private native void set_bit_depth(long jAudioTrack, long bit_depth);
-  private native void set_channels(long jAudioTrack, long channels);
-  private native void set_sample_rate(long jAudioTrack, double sample_rate);
+  private native double sampleRate(long jAudioTrack);
+  private native void setBitDepth(long jAudioTrack, long bit_depth);
+  private native void setChannels(long jAudioTrack, long channels);
+  private native void setSampleRate(long jAudioTrack, double sample_rate);
   private native boolean Write(long jAudioTrack, long jWriter);
 }

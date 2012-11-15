@@ -23,27 +23,27 @@ public class SegmentInfo extends Common {
   }
 
   public String muxingApp() {
-    return muxing_app(nativePointer);
+    return muxingApp(nativePointer);
   }
 
   public void setDuration(double duration) {
-    set_duration(nativePointer, duration);
+    setDuration(nativePointer, duration);
   }
 
   public void setMuxingApp(String app) {
-    set_muxing_app(nativePointer, app);
+    setMuxingApp(nativePointer, app);
   }
 
   public void setTimecodeScale(long scale) {
-    set_timecode_scale(nativePointer, scale);
+    setTimecodeScale(nativePointer, scale);
   }
 
   public void setWritingApp(String app) {
-    set_writing_app(nativePointer, app);
+    setWritingApp(nativePointer, app);
   }
 
   public long timecodeScale() {
-    return timecode_scale(nativePointer);
+    return timecodeScale(nativePointer);
   }
 
   public boolean write(IMkvWriter writer) {
@@ -51,7 +51,7 @@ public class SegmentInfo extends Common {
   }
 
   public String writingApp() {
-    return writing_app(nativePointer);
+    return writingApp(nativePointer);
   }
 
   protected SegmentInfo(long nativePointer) {
@@ -66,13 +66,13 @@ public class SegmentInfo extends Common {
   private native double duration(long jSegmentInfo);
   private native boolean Finalize(long jSegmentInfo, long jWriter);
   private native boolean Init(long jSegmentInfo);
-  private native String muxing_app(long jSegmentInfo);
+  private native String muxingApp(long jSegmentInfo);
   private native long newSegmentInfo();
-  private native void set_duration(long jSegmentInfo, double duration);
-  private native void set_muxing_app(long jSegmentInfo, String jApp);
-  private native void set_timecode_scale(long jSegmentInfo, long scale);
-  private native void set_writing_app(long jSegmentInfo, String jApp);
-  private native long timecode_scale(long jSegmentInfo);
+  private native void setDuration(long jSegmentInfo, double duration);
+  private native void setMuxingApp(long jSegmentInfo, String jApp);
+  private native void setTimecodeScale(long jSegmentInfo, long scale);
+  private native void setWritingApp(long jSegmentInfo, String jApp);
+  private native long timecodeScale(long jSegmentInfo);
   private native boolean Write(long jSegmentInfo, long jWriter);
-  private native String writing_app(long jSegmentInfo);
+  private native String writingApp(long jSegmentInfo);
 }

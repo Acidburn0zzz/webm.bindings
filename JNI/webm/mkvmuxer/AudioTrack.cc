@@ -9,7 +9,7 @@
 #define FUNCTION(returnType, functionName, ...) \
     FUNC(returnType, mkvmuxer, AudioTrack, functionName, ##__VA_ARGS__)
 
-FUNCTION(jlong, bit_depth, jlong jAudioTrack) {
+FUNCTION(jlong, bitDepth, jlong jAudioTrack) {
   mkvmuxer::AudioTrack* audioTrack =
       reinterpret_cast<mkvmuxer::AudioTrack*>(jAudioTrack);
   return audioTrack->bit_depth();
@@ -40,25 +40,25 @@ FUNCTION(jlong, PayloadSize, jlong jAudioTrack) {
   return audioTrack->PayloadSize();
 }
 
-FUNCTION(jdouble, sample_rate, jlong jAudioTrack) {
+FUNCTION(jdouble, sampleRate, jlong jAudioTrack) {
   mkvmuxer::AudioTrack* audioTrack =
       reinterpret_cast<mkvmuxer::AudioTrack*>(jAudioTrack);
   return audioTrack->sample_rate();
 }
 
-FUNCTION(void, set_bit_depth, jlong jAudioTrack, jlong bit_depth) {
+FUNCTION(void, setBitDepth, jlong jAudioTrack, jlong bit_depth) {
   mkvmuxer::AudioTrack* audioTrack =
       reinterpret_cast<mkvmuxer::AudioTrack*>(jAudioTrack);
   audioTrack->set_bit_depth(bit_depth);
 }
 
-FUNCTION(void, set_channels, jlong jAudioTrack, jlong channels) {
+FUNCTION(void, setChannels, jlong jAudioTrack, jlong channels) {
   mkvmuxer::AudioTrack* audioTrack =
       reinterpret_cast<mkvmuxer::AudioTrack*>(jAudioTrack);
   audioTrack->set_channels(channels);
 }
 
-FUNCTION(void, set_sample_rate, jlong jAudioTrack, jdouble sample_rate) {
+FUNCTION(void, setSampleRate, jlong jAudioTrack, jdouble sample_rate) {
   mkvmuxer::AudioTrack* audioTrack =
       reinterpret_cast<mkvmuxer::AudioTrack*>(jAudioTrack);
   audioTrack->set_sample_rate(sample_rate);

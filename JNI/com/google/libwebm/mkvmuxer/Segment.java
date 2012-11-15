@@ -53,11 +53,11 @@ public class Segment extends Common {
   }
 
   public long cuesTrack() {
-    return cues_track(nativePointer);
+    return getCuesTrack(nativePointer);
   }
 
   public boolean cuesTrack(long trackNumber) {
-    return CuesTrack(nativePointer, trackNumber);
+    return setCuesTrack(nativePointer, trackNumber);
   }
 
   public boolean finalizeSegment() {
@@ -88,11 +88,11 @@ public class Segment extends Common {
   }
 
   public long maxClusterDuration() {
-    return max_cluster_duration(nativePointer);
+    return maxClusterDuration(nativePointer);
   }
 
   public long maxClusterSize() {
-    return max_cluster_size(nativePointer);
+    return maxClusterSize(nativePointer);
   }
 
   public Mode mode() {
@@ -101,7 +101,7 @@ public class Segment extends Common {
   }
 
   public boolean outputCues() {
-    return output_cues(nativePointer);
+    return outputCues(nativePointer);
   }
 
   public void outputCues(boolean outputCues) {
@@ -109,20 +109,20 @@ public class Segment extends Common {
   }
 
   public SegmentInfo segmentInfo() {
-    long pointer = segment_info(nativePointer);
+    long pointer = segmentInfo(nativePointer);
     return new SegmentInfo(pointer);
   }
 
   public void setMaxClusterDuration(long maxClusterDuration) {
-    set_max_cluster_duration(nativePointer, maxClusterDuration);
+    setMaxClusterDuration(nativePointer, maxClusterDuration);
   }
 
   public void setMaxClusterSize(long maxClusterSize) {
-    set_max_cluster_size(nativePointer, maxClusterSize);
+    setMaxClusterSize(nativePointer, maxClusterSize);
   }
 
   public void setMode(Mode mode) {
-    set_mode(nativePointer, mode.ordinal());
+    setMode(nativePointer, mode.ordinal());
   }
 
   public boolean setChunking(boolean chunking, String filename) {
@@ -147,24 +147,24 @@ public class Segment extends Common {
   private native long AddTrack(long jSegment, int number);
   private native long AddVideoTrack(long jSegment, int width, int height, int number);
   private native boolean chunking(long jSegment);
-  private native long cues_track(long jSegment);
-  private native boolean CuesTrack(long jSegment, long track_number);
   private native void deleteSegment(long jSegment);
   private native boolean Finalize(long jSegment);
   private native void ForceNewClusterOnNextFrame(long jSegment);
   private native long GetCues(long jSegment);
+  private native long getCuesTrack(long jSegment);
   private native long GetSegmentInfo(long jSegment);
   private native long GetTrackByNumber(long jSegment, long track_number);
   private native boolean Init(long jSegment, long jWriter);
-  private native long max_cluster_duration(long jSegment);
-  private native long max_cluster_size(long jSegment);
+  private native long maxClusterDuration(long jSegment);
+  private native long maxClusterSize(long jSegment);
   private native int mode(long jSegment);
   private native long newSegment();
-  private native boolean output_cues(long jSegment);
+  private native boolean outputCues(long jSegment);
   private native void OutputCues(long jSegment, boolean output_cues);
-  private native long segment_info(long jSegment);
-  private native void set_max_cluster_duration(long jSegment, long max_cluster_duration);
-  private native void set_max_cluster_size(long jSegment, long max_cluster_size);
-  private native void set_mode(long jSegment, int mode);
+  private native long segmentInfo(long jSegment);
+  private native boolean setCuesTrack(long jSegment, long track_number);
+  private native void setMaxClusterDuration(long jSegment, long max_cluster_duration);
+  private native void setMaxClusterSize(long jSegment, long max_cluster_size);
+  private native void setMode(long jSegment, int mode);
   private native boolean SetChunking(long jSegment, boolean chunking, String jFilename);
 }

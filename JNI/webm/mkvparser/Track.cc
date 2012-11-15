@@ -29,8 +29,11 @@ FUNCTION(void, deleteTrack, jlong jTrack) {
 
 FUNCTION(jint, getClassType, jlong jTrack) {
   mkvparser::Track* track = reinterpret_cast<mkvparser::Track*>(jTrack);
-  const std::type_info& typeInfo = typeid(*track);
   int type = 0;
+  if (!track) {
+    return type;
+  }
+  const std::type_info& typeInfo = typeid(*track);
   if (typeInfo == typeid(mkvparser::AudioTrack)) {
     type = 1;
   } else if (typeInfo == typeid(mkvparser::Track)) {

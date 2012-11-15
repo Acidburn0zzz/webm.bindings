@@ -9,7 +9,7 @@
 #define FUNCTION(returnType, functionName, ...) FUNC(returnType, mkvmuxer, \
     ContentEncAesSettings, functionName, ##__VA_ARGS__)
 
-FUNCTION(jlong, cipher_mode, jlong jContentEncAesSettings) {
+FUNCTION(jlong, cipherMode, jlong jContentEncAesSettings) {
   mkvmuxer::ContentEncAESSettings* contentEncAesSettings =
       reinterpret_cast<mkvmuxer::ContentEncAESSettings*>(
           jContentEncAesSettings);

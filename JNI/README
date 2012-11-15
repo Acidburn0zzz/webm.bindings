@@ -1,9 +1,11 @@
 This project requies the following shared libraries to be installed:
 
 - libvpx
-Download from https://code.google.com/p/webm/downloads/detail?name=libvpx-v1.1.0.tar.bz2
+Download from
+https://code.google.com/p/webm/downloads/detail?name=libvpx-v1.1.0.tar.bz2
 Unzip into JNI/libvpx
-Follow the README to install, but make sure to configure with --enable-pic and --enable-shared.
+Follow the README to install, but make sure to configure with --enable-pic and
+--enable-shared.
 
 - libogg (required by libvorbis)
 Download from http://xiph.org/downloads/
@@ -23,9 +25,20 @@ make shared
 
 
 To run Application.class:
-make run
+make run_app
 make display #(show single frame using imagemagick)
 make play    #(use mplayer to play output)
 
 Application.class expects to find foreman_cif.y4m in input.
 It can be downloaded from http://media.xiph.org/video/derf/
+
+
+
+To run SampleMultiplexer:
+make run_muxer
+
+The SampleMultiplexer expects to find a file called input/small.webm.  It
+decodes that file and then re-encodes it as output/small_out.webm.  Example WebM
+files can be found at:
+http://www.808.dk/pics/video/gizmo.webm
+http://www.webmfiles.org/demo-files/

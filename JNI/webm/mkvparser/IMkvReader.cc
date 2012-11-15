@@ -13,8 +13,11 @@
 FUNCTION(jint, getClassType, jlong jMkvReader) {
   mkvparser::IMkvReader* mkvReader =
       reinterpret_cast<mkvparser::IMkvReader*>(jMkvReader);
-  const std::type_info& typeInfo = typeid(*mkvReader);
   int type = 0;
+  if (!mkvReader) {
+    return type;
+  }
+  const std::type_info& typeInfo = typeid(*mkvReader);
   if (typeInfo == typeid(mkvparser::MkvReader)) {
     type = 1;
   }

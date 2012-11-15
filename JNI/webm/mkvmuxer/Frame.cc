@@ -31,7 +31,7 @@ FUNCTION(jboolean, Init, jlong jFrame, jbyteArray jFrameBuffer, jlong length) {
   return result;
 }
 
-FUNCTION(jboolean, is_key, jlong jFrame) {
+FUNCTION(jboolean, isKey, jlong jFrame) {
   mkvmuxer::Frame* frame = reinterpret_cast<mkvmuxer::Frame*>(jFrame);
   return frame->is_key();
 }
@@ -46,17 +46,17 @@ FUNCTION(jlong, newFrame) {
   return jFrame;
 }
 
-FUNCTION(void, set_is_key, jlong jFrame, jboolean key) {
+FUNCTION(void, setIsKey, jlong jFrame, jboolean key) {
   mkvmuxer::Frame* frame = reinterpret_cast<mkvmuxer::Frame*>(jFrame);
   frame->set_is_key(key);
 }
 
-FUNCTION(void, set_timestamp, jlong jFrame, jlong timestamp) {
+FUNCTION(void, setTimestamp, jlong jFrame, jlong timestamp) {
   mkvmuxer::Frame* frame = reinterpret_cast<mkvmuxer::Frame*>(jFrame);
   frame->set_timestamp(timestamp);
 }
 
-FUNCTION(void, set_track_number, jlong jFrame, jlong track_number) {
+FUNCTION(void, setTrackNumber, jlong jFrame, jlong track_number) {
   mkvmuxer::Frame* frame = reinterpret_cast<mkvmuxer::Frame*>(jFrame);
   frame->set_track_number(track_number);
 }
@@ -66,7 +66,7 @@ FUNCTION(jlong, timestamp, jlong jFrame) {
   return frame->timestamp();
 }
 
-FUNCTION(jlong, track_number, jlong jFrame) {
+FUNCTION(jlong, trackNumber, jlong jFrame) {
   mkvmuxer::Frame* frame = reinterpret_cast<mkvmuxer::Frame*>(jFrame);
   return frame->track_number();
 }
