@@ -9,11 +9,6 @@
 #define FUNCTION(returnType, functionName, ...) \
     FUNC(returnType, mkvparser, Segment, functionName, ##__VA_ARGS__)
 
-FUNCTION(void, deleteSegment, jlong jSegment) {
-  mkvparser::Segment* segment = reinterpret_cast<mkvparser::Segment*>(jSegment);
-  delete segment;
-}
-
 FUNCTION(jlong, CreateInstance, jlong jMkvReader, jlong position,
                                 jlongArray jSegment) {
   mkvparser::IMkvReader* mkvReader =
@@ -24,6 +19,11 @@ FUNCTION(jlong, CreateInstance, jlong jMkvReader, jlong position,
   jlong outputSegment = reinterpret_cast<jlong>(segment);
   env->SetLongArrayRegion(jSegment, 0, 1, &outputSegment);
   return result;
+}
+
+FUNCTION(void, deleteSegment, jlong jSegment) {
+  mkvparser::Segment* segment = reinterpret_cast<mkvparser::Segment*>(jSegment);
+  delete segment;
 }
 
 FUNCTION(jboolean, DoneParsing, jlong jSegment) {
@@ -41,7 +41,12 @@ FUNCTION(jlong, FindOrPreloadCluster, jlong jSegment, jlong position) {
   return reinterpret_cast<jlong>(segment->FindOrPreloadCluster(position));
 }
 
-FUNCTION(jlong, getCount, jlong jSegment) {
+FUNCTION(jlong, GetChapters, jlong jSegment) {
+  mkvparser::Segment* segment = reinterpret_cast<mkvparser::Segment*>(jSegment);
+  return reinterpret_cast<jlong>(segment->GetChapters());
+}
+
+FUNCTION(jlong, GetCount, jlong jSegment) {
   mkvparser::Segment* segment = reinterpret_cast<mkvparser::Segment*>(jSegment);
   return segment->GetCount();
 }

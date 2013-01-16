@@ -25,6 +25,7 @@ public class AudioTrack extends Track {
     return GetSamplingRate(nativePointer);
   }
 
+  @Override
   public long seek(long time_ns, BlockEntry[] result) {
     long[] jResult = {0};
     long output = Seek(nativePointer, time_ns, jResult);
@@ -36,11 +37,10 @@ public class AudioTrack extends Track {
     super(nativePointer);
   }
 
+  private static native long GetBitDepth(long jAudioTrack);
+  private static native long GetChannels(long jAudioTrack);
+  private static native double GetSamplingRate(long jAudioTrack);
   private static native long Parse(long jSegment, long jInfo, long element_start, long element_size,
       long[] jAudioTrack);
-
-  private native long GetBitDepth(long jAudioTrack);
-  private native long GetChannels(long jAudioTrack);
-  private native double GetSamplingRate(long jAudioTrack);
-  private native long Seek(long jAudioTrack, long time_ns, long[] jResult);
+  private static native long Seek(long jAudioTrack, long time_ns, long[] jResult);
 }

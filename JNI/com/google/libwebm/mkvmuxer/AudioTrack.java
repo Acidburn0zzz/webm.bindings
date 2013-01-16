@@ -2,10 +2,6 @@
 
 package com.google.libwebm.mkvmuxer;
 
-import com.google.libwebm.Common;
-import java.util.HashMap;
-import java.util.Map;
-
 public class AudioTrack extends Track {
 
   public AudioTrack(int seed) {
@@ -20,6 +16,7 @@ public class AudioTrack extends Track {
     return channels(nativePointer);
   }
 
+  @Override
   public long payloadSize() {
     return PayloadSize(nativePointer);
   }
@@ -40,6 +37,7 @@ public class AudioTrack extends Track {
     setSampleRate(nativePointer, sampleRate);
   }
 
+  @Override
   public boolean write(IMkvWriter writer) {
     return Write(nativePointer, writer.getNativePointer());
   }
@@ -48,18 +46,19 @@ public class AudioTrack extends Track {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteAudioTrack(nativePointer);
   }
 
-  private native long bitDepth(long jAudioTrack);
-  private native long channels(long jAudioTrack);
-  private native void deleteAudioTrack(long jAudioTrack);
-  private native long newAudioTrack(int jSeed);
-  private native long PayloadSize(long jAudioTrack);
-  private native double sampleRate(long jAudioTrack);
-  private native void setBitDepth(long jAudioTrack, long bit_depth);
-  private native void setChannels(long jAudioTrack, long channels);
-  private native void setSampleRate(long jAudioTrack, double sample_rate);
-  private native boolean Write(long jAudioTrack, long jWriter);
+  private static native long bitDepth(long jAudioTrack);
+  private static native long channels(long jAudioTrack);
+  private static native void deleteAudioTrack(long jAudioTrack);
+  private static native long newAudioTrack(int jSeed);
+  private static native long PayloadSize(long jAudioTrack);
+  private static native double sampleRate(long jAudioTrack);
+  private static native void setBitDepth(long jAudioTrack, long bit_depth);
+  private static native void setChannels(long jAudioTrack, long channels);
+  private static native void setSampleRate(long jAudioTrack, double sample_rate);
+  private static native boolean Write(long jAudioTrack, long jWriter);
 }

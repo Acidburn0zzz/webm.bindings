@@ -25,6 +25,7 @@ public class VideoTrack extends Track {
     return GetWidth(nativePointer);
   }
 
+  @Override
   public long seek(long time_ns, BlockEntry[] result) {
     long[] jResult = {0};
     long output = Seek(nativePointer, time_ns, jResult);
@@ -32,6 +33,7 @@ public class VideoTrack extends Track {
     return output;
   }
 
+  @Override
   public boolean vetEntry(BlockEntry blockEntry) {
     return VetEntry(nativePointer, blockEntry.getNativePointer());
   }
@@ -40,12 +42,11 @@ public class VideoTrack extends Track {
     super(nativePointer);
   }
 
+  private static native double GetFrameRate(long jVideoTrack);
+  private static native long GetHeight(long jVideoTrack);
+  private static native long GetWidth(long jVideoTrack);
   private static native long Parse(long jSegment, long jInfo, long element_start, long element_size,
       long[] jVideoTrack);
-
-  private native double GetFrameRate(long jVideoTrack);
-  private native long GetHeight(long jVideoTrack);
-  private native long GetWidth(long jVideoTrack);
-  private native long Seek(long jVideoTrack, long time_ns, long[] jResult);
-  private native boolean VetEntry(long jVideoTrack, long jBlockEntry);
+  private static native long Seek(long jVideoTrack, long time_ns, long[] jResult);
+  private static native boolean VetEntry(long jVideoTrack, long jBlockEntry);
 }

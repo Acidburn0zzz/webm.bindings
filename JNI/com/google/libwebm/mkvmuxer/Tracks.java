@@ -53,17 +53,18 @@ public class Tracks extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteTracks(nativePointer);
   }
 
-  private native boolean AddTrack(long jTracks, long jTrack, int number);
-  private native void deleteTracks(long jTracks);
-  private native long GetTrackByIndex(long jTracks, int idx);
-  private native long GetTrackByNumber(long jTracks, long track_number);
-  private native long newTracks();
-  private native int trackEntriesSize(long jTracks);
-  private native boolean TrackIsAudio(long jTracks, long track_number);
-  private native boolean TrackIsVideo(long jTracks, long track_number);
-  private native boolean Write(long jTracks, long jWriter);
+  private static native boolean AddTrack(long jTracks, long jTrack, int number);
+  private static native void deleteTracks(long jTracks);
+  private static native long GetTrackByIndex(long jTracks, int idx);
+  private static native long GetTrackByNumber(long jTracks, long track_number);
+  private static native long newTracks();
+  private static native int trackEntriesSize(long jTracks);
+  private static native boolean TrackIsAudio(long jTracks, long track_number);
+  private static native boolean TrackIsVideo(long jTracks, long track_number);
+  private static native boolean Write(long jTracks, long jWriter);
 }

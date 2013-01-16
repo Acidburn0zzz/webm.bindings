@@ -26,13 +26,14 @@ public class SeekHead extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteSeekHead(nativePointer);
   }
 
-  private native boolean AddSeekEntry(long jSeekHead, int id, long pos);
-  private native void deleteSeekHead(long jSeekHead);
-  private native boolean Finalize(long jSeekHead, long jWriter);
-  private native long newSeekHead();
-  private native boolean Write(long jSeekHead, long jWriter);
+  private static native boolean AddSeekEntry(long jSeekHead, int id, long pos);
+  private static native void deleteSeekHead(long jSeekHead);
+  private static native boolean Finalize(long jSeekHead, long jWriter);
+  private static native long newSeekHead();
+  private static native boolean Write(long jSeekHead, long jWriter);
 }

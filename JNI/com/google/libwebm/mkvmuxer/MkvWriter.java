@@ -12,6 +12,7 @@ public class MkvWriter extends IMkvWriter {
     Close(nativePointer);
   }
 
+  @Override
   public void elementStartNotify(long elementId, long position) {
     ElementStartNotify(nativePointer, elementId, position);
   }
@@ -20,18 +21,22 @@ public class MkvWriter extends IMkvWriter {
     return Open(nativePointer, fileName);
   }
 
+  @Override
   public long position() {
     return GetPosition(nativePointer);
   }
 
+  @Override
   public int position(long position) {
     return SetPosition(nativePointer, position);
   }
 
+  @Override
   public boolean seekable() {
     return Seekable(nativePointer);
   }
 
+  @Override
   public int write(byte[] buffer) {
     return Write(nativePointer, buffer, buffer.length);
   }
@@ -40,17 +45,18 @@ public class MkvWriter extends IMkvWriter {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteMkvWriter(nativePointer);
   }
 
-  private native void Close(long jMkvWriter);
-  private native void deleteMkvWriter(long jMkvWriter);
-  private native void ElementStartNotify(long jMkvWriter, long element_id, long position);
-  private native long GetPosition(long jMkvWriter);
-  private native long newMkvWriter();
-  private native boolean Open(long jMkvWriter, String jFilename);
-  private native boolean Seekable(long jMkvWriter);
-  private native int SetPosition(long jMkvWriter, long position);
-  private native int Write(long jMkvWriter, byte[] jBuffer, int length);
+  private static native void Close(long jMkvWriter);
+  private static native void deleteMkvWriter(long jMkvWriter);
+  private static native void ElementStartNotify(long jMkvWriter, long element_id, long position);
+  private static native long GetPosition(long jMkvWriter);
+  private static native long newMkvWriter();
+  private static native boolean Open(long jMkvWriter, String jFilename);
+  private static native boolean Seekable(long jMkvWriter);
+  private static native int SetPosition(long jMkvWriter, long position);
+  private static native int Write(long jMkvWriter, byte[] jBuffer, int length);
 }

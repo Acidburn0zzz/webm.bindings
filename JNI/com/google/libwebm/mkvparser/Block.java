@@ -71,22 +71,23 @@ public class Block extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteBlock(nativePointer);
   }
 
-  private native void deleteBlock(long jBlock);
-  private native long GetFrame(long jBlock, int frameIndex);
-  private native int GetFrameCount(long jBlock);
-  private native int GetLacing(long jBlock);
-  private native long getSize(long jBlock);
-  private native long getStart(long jBlock);
-  private native long GetTime(long jBlock, long jCluster);
-  private native long GetTimeCode(long jBlock, long jCluster);
-  private native long GetTrackNumber(long jBlock);
-  private native boolean IsInvisible(long jBlock);
-  private native boolean IsKey(long jBlock);
-  private native long newBlock();
-  private native long Parse(long jBlock, long jCluster);
-  private native void SetKey(long jBlock, boolean key);
+  private static native void deleteBlock(long jBlock);
+  private static native long GetFrame(long jBlock, int frameIndex);
+  private static native int GetFrameCount(long jBlock);
+  private static native int GetLacing(long jBlock);
+  private static native long getSize(long jBlock);
+  private static native long getStart(long jBlock);
+  private static native long GetTime(long jBlock, long jCluster);
+  private static native long GetTimeCode(long jBlock, long jCluster);
+  private static native long GetTrackNumber(long jBlock);
+  private static native boolean IsInvisible(long jBlock);
+  private static native boolean IsKey(long jBlock);
+  private static native long newBlock();
+  private static native long Parse(long jBlock, long jCluster);
+  private static native void SetKey(long jBlock, boolean key);
 }

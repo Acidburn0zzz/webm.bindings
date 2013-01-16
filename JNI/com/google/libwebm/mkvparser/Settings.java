@@ -30,14 +30,15 @@ public class Settings extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteSettings(nativePointer);
   }
 
-  private native void deleteSettings(long jSettings);
-  private native long getSize(long jSettings);
-  private native long getStart(long jSettings);
-  private native long newSettings();
-  private native void setSize(long jSettings, long size);
-  private native void setStart(long jSettings, long start);
+  private static native void deleteSettings(long jSettings);
+  private static native long getSize(long jSettings);
+  private static native long getStart(long jSettings);
+  private static native long newSettings();
+  private static native void setSize(long jSettings, long size);
+  private static native void setStart(long jSettings, long start);
 }

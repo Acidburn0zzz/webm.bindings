@@ -110,33 +110,33 @@ public class Cluster extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteCluster(nativePointer);
   }
 
   private static native long Create(long jSegment, long index, long offset);
+  private static native void deleteCluster(long jCluster);
+  private static native boolean EOS(long jCluster);
+  private static native long GetElementSize(long jCluster);
+  private static native long getElementStart(long jCluster);
+  private static native long GetEntryCount(long jCluster);
+  private static native long GetEntryCuePoint(long jCluster, long jCuePoint, long jTrackPosition);
+  private static native long GetEntryIndex(long jCluster, long index, long[] jBlockEntry);
+  private static native long GetEntryTrack(long jCluster, long jTrack, long ns);
+  private static native long GetFirst(long jCluster, long[] jBlockEntry);
+  private static native long GetFirstTime(long jCluster);
+  private static native long GetIndex(long jCluster);
+  private static native long GetLast(long jCluster, long[] jBlockEntry);
+  private static native long GetLastTime(long jCluster);
+  private static native long GetNext(long jCluster, long jCurrent, long[] jNext);
+  private static native long GetPosition(long jCluster);
+  private static native long getSegment(long jCluster);
+  private static native long GetTime(long jCluster);
+  private static native long GetTimeCode(long jCluster);
   private static native long HasBlockEntries(long jSegment, long offset, long[] jPosition,
       long[] jSize);
-
-  private native void deleteCluster(long jCluster);
-  private native boolean EOS(long jCluster);
-  private native long GetElementSize(long jCluster);
-  private native long getElementStart(long jCluster);
-  private native long GetEntryCount(long jCluster);
-  private native long GetEntryCuePoint(long jCluster, long jCuePoint, long jTrackPosition);
-  private native long GetEntryIndex(long jCluster, long index, long[] jBlockEntry);
-  private native long GetEntryTrack(long jCluster, long jTrack, long ns);
-  private native long GetFirst(long jCluster, long[] jBlockEntry);
-  private native long GetFirstTime(long jCluster);
-  private native long GetIndex(long jCluster);
-  private native long GetLast(long jCluster, long[] jBlockEntry);
-  private native long GetLastTime(long jCluster);
-  private native long GetNext(long jCluster, long jCurrent, long[] jNext);
-  private native long GetPosition(long jCluster);
-  private native long getSegment(long jCluster);
-  private native long GetTime(long jCluster);
-  private native long GetTimeCode(long jCluster);
-  private native long Load(long jCluster, long[] jPosition, long[] jSize);
-  private native long newCluster();
-  private native long Parse(long jCluster, long[] jPosition, long[] jSize);
+  private static native long Load(long jCluster, long[] jPosition, long[] jSize);
+  private static native long newCluster();
+  private static native long Parse(long jCluster, long[] jPosition, long[] jSize);
 }

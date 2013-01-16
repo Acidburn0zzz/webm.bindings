@@ -53,20 +53,21 @@ public class Tracks extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteTracks(nativePointer);
   }
 
-  private native void deleteTracks(long jTracks);
-  private native long getElementSize(long jTracks);
-  private native long getElementStart(long jTracks);
-  private native long getSegment(long jTracks);
-  private native long getSize(long jTracks);
-  private native long getStart(long jTracks);
-  private native long GetTrackByIndex(long jTracks, long idx);
-  private native long GetTrackByNumber(long jTracks, long tn);
-  private native long GetTracksCount(long jTracks);
-  private native long newTracks(long jSegment, long start, long size, long element_start,
+  private static native void deleteTracks(long jTracks);
+  private static native long getElementSize(long jTracks);
+  private static native long getElementStart(long jTracks);
+  private static native long getSegment(long jTracks);
+  private static native long getSize(long jTracks);
+  private static native long getStart(long jTracks);
+  private static native long GetTrackByIndex(long jTracks, long idx);
+  private static native long GetTrackByNumber(long jTracks, long tn);
+  private static native long GetTracksCount(long jTracks);
+  private static native long newTracks(long jSegment, long start, long size, long element_start,
       long element_size);
-  private native long Parse(long jTracks);
+  private static native long Parse(long jTracks);
 }

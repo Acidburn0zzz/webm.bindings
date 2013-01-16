@@ -10,6 +10,7 @@ public class BlockGroup extends BlockEntry {
         previous, next, duration);
   }
 
+  @Override
   public Block getBlock() {
     long pointer = GetBlock(nativePointer);
     return new Block(pointer);
@@ -19,6 +20,7 @@ public class BlockGroup extends BlockEntry {
     return GetDurationTimeCode(nativePointer);
   }
 
+  @Override
   public Kind getKind() {
     int ordinal = GetKind(nativePointer);
     return Kind.values()[ordinal];
@@ -40,17 +42,18 @@ public class BlockGroup extends BlockEntry {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteBlockGroup(nativePointer);
   }
 
-  private native void deleteBlockGroup(long jBlockGroup);
-  private native long GetBlock(long jBlockGroup);
-  private native long GetDurationTimeCode(long jBlockGroup);
-  private native int GetKind(long jBlockGroup);
-  private native long GetNextTimeCode(long jBlockGroup);
-  private native long GetPrevTimeCode(long jBlockGroup);
-  private native long newBlockGroup(long jCluster, long index, long blockStart, long blockSize,
-      long previous, long next, long duration);
-  private native long Parse(long jBlockGroup);
+  private static native void deleteBlockGroup(long jBlockGroup);
+  private static native long GetBlock(long jBlockGroup);
+  private static native long GetDurationTimeCode(long jBlockGroup);
+  private static native int GetKind(long jBlockGroup);
+  private static native long GetNextTimeCode(long jBlockGroup);
+  private static native long GetPrevTimeCode(long jBlockGroup);
+  private static native long newBlockGroup(long jCluster, long index, long blockStart,
+      long blockSize, long previous, long next, long duration);
+  private static native long Parse(long jBlockGroup);
 }

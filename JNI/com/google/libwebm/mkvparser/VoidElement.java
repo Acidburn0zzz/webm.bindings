@@ -30,14 +30,15 @@ public class VoidElement extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteVoidElement(nativePointer);
   }
 
-  private native void deleteVoidElement(long jVoidElement);
-  private native long getElementSize(long jVoidElement);
-  private native long getElementStart(long jVoidElement);
-  private native long newVoidElement();
-  private native void setElementSize(long jVoidElement, long element_size);
-  private native void setElementStart(long jVoidElement, long element_start);
+  private static native void deleteVoidElement(long jVoidElement);
+  private static native long getElementSize(long jVoidElement);
+  private static native long getElementStart(long jVoidElement);
+  private static native long newVoidElement();
+  private static native void setElementSize(long jVoidElement, long element_size);
+  private static native void setElementStart(long jVoidElement, long element_start);
 }

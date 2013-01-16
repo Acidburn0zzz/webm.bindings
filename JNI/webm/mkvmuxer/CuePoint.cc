@@ -12,13 +12,13 @@
 FUNCTION(jlong, blockNumber, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
-  cuePoint->block_number();
+  return cuePoint->block_number();
 }
 
 FUNCTION(jlong, clusterPos, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
-  cuePoint->cluster_pos();
+  return cuePoint->cluster_pos();
 }
 
 FUNCTION(void, deleteCuePoint, jlong jCuePoint) {
@@ -33,10 +33,10 @@ FUNCTION(jlong, newCuePoint) {
   return jCuePoint;
 }
 
-FUNCTION(jlong, outputBlockNumber, jlong jCuePoint) {
+FUNCTION(jboolean, outputBlockNumber, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
-  cuePoint->output_block_number();
+  return cuePoint->output_block_number();
 }
 
 FUNCTION(void, setBlockNumber, jlong jCuePoint, jlong block_number) {
@@ -52,7 +52,7 @@ FUNCTION(void, setClusterPos, jlong jCuePoint, jlong cluster_pos) {
 }
 
 FUNCTION(void, setOutputBlockNumber, jlong jCuePoint,
-                                     jlong output_block_number) {
+                                     jboolean output_block_number) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
   cuePoint->set_output_block_number(output_block_number);
@@ -79,13 +79,13 @@ FUNCTION(jlong, Size, jlong jCuePoint) {
 FUNCTION(jlong, time, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
-  cuePoint->time();
+  return cuePoint->time();
 }
 
 FUNCTION(jlong, track, jlong jCuePoint) {
   mkvmuxer::CuePoint* cuePoint =
       reinterpret_cast<mkvmuxer::CuePoint*>(jCuePoint);
-  cuePoint->track();
+  return cuePoint->track();
 }
 
 FUNCTION(jboolean, Write, jlong jCuePoint, jlong jWriter) {

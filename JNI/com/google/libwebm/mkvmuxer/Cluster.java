@@ -54,22 +54,23 @@ public class Cluster extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteCluster(nativePointer);
   }
 
-  private native boolean AddFrame(long jCluster, byte[] jFrame, long length, long track_number,
-      long timecode, boolean is_key);
-  private native boolean AddMetadata(long jCluster, byte[] jFrame, long length, long track_number,
-      long timecode, long duration);
-  private native void AddPayloadSize(long jCluster, long size);
-  private native int blocksAdded(long jCluster);
-  private native void deleteCluster(long jCluster);
-  private native boolean Finalize(long jCluster);
-  private native boolean Init(long jCluster, long jWriter);
-  private native long newCluster(long timecode, long cues_pos);
-  private native long payloadSize(long jCluster);
-  private native long positionForCues(long jCluster);
-  private native long Size(long jCluster);
-  private native long timecode(long jCluster);
+  private static native boolean AddFrame(long jCluster, byte[] jFrame, long length,
+      long track_number, long timecode, boolean is_key);
+  private static native boolean AddMetadata(long jCluster, byte[] jFrame, long length,
+      long track_number, long timecode, long duration);
+  private static native void AddPayloadSize(long jCluster, long size);
+  private static native int blocksAdded(long jCluster);
+  private static native void deleteCluster(long jCluster);
+  private static native boolean Finalize(long jCluster);
+  private static native boolean Init(long jCluster, long jWriter);
+  private static native long newCluster(long timecode, long cues_pos);
+  private static native long payloadSize(long jCluster);
+  private static native long positionForCues(long jCluster);
+  private static native long Size(long jCluster);
+  private static native long timecode(long jCluster);
 }

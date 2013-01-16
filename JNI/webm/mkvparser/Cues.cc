@@ -27,6 +27,14 @@ FUNCTION(jboolean, Find, jlong jCues, jlong time_ns, jlong jTrack,
   return result;
 }
 
+FUNCTION(jlong, GetBlock, jlong jCues, jlong jcp, jlong jtp) {
+  mkvparser::Cues* cues = reinterpret_cast<mkvparser::Cues*>(jCues);
+  mkvparser::CuePoint* cp = reinterpret_cast<mkvparser::CuePoint*>(jcp);
+  mkvparser::CuePoint::TrackPosition* tp =
+      reinterpret_cast<mkvparser::CuePoint::TrackPosition*>(jtp);
+  return reinterpret_cast<jlong>(cues->GetBlock(cp, tp));
+}
+
 FUNCTION(jlong, GetCount, jlong jCues) {
   mkvparser::Cues* cues = reinterpret_cast<mkvparser::Cues*>(jCues);
   return cues->GetCount();

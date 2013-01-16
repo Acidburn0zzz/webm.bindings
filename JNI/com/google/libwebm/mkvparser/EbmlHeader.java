@@ -78,26 +78,27 @@ public class EbmlHeader extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteEBMLHeader(nativePointer);
   }
 
-  private native void deleteEBMLHeader(long jEbmlHeader);
-  private native String getDocType(long jEbmlHeader);
-  private native long getDocTypeReadVersion(long jEbmlHeader);
-  private native long getDocTypeVersion(long jEbmlHeader);
-  private native long getMaxIdLength(long jEbmlHeader);
-  private native long getMaxSizeLength(long jEbmlHeader);
-  private native long getReadVersion(long jEbmlHeader);
-  private native long getVersion(long jEbmlHeader);
-  private native void Init(long jEbmlHeader);
-  private native long newEBMLHeader();
-  private native long Parse(long jEbmlHeader, long jMkvReader, long[] jPosition);
-  private native void setDocType(long jEbmlHeader, String jDocType);
-  private native void setDocTypeReadVersion(long jEbmlHeader, long docTypeReadVersion);
-  private native void setDocTypeVersion(long jEbmlHeader, long docTypeVersion);
-  private native void setMaxIdLength(long jEbmlHeader, long maxIdLength);
-  private native void setMaxSizeLength(long jEbmlHeader, long maxSizeLength);
-  private native void setReadVersion(long jEbmlHeader, long readVersion);
-  private native void setVersion(long jEbmlHeader, long version);
+  private static native void deleteEBMLHeader(long jEbmlHeader);
+  private static native String getDocType(long jEbmlHeader);
+  private static native long getDocTypeReadVersion(long jEbmlHeader);
+  private static native long getDocTypeVersion(long jEbmlHeader);
+  private static native long getMaxIdLength(long jEbmlHeader);
+  private static native long getMaxSizeLength(long jEbmlHeader);
+  private static native long getReadVersion(long jEbmlHeader);
+  private static native long getVersion(long jEbmlHeader);
+  private static native void Init(long jEbmlHeader);
+  private static native long newEBMLHeader();
+  private static native long Parse(long jEbmlHeader, long jMkvReader, long[] jPosition);
+  private static native void setDocType(long jEbmlHeader, String jDocType);
+  private static native void setDocTypeReadVersion(long jEbmlHeader, long docTypeReadVersion);
+  private static native void setDocTypeVersion(long jEbmlHeader, long docTypeVersion);
+  private static native void setMaxIdLength(long jEbmlHeader, long maxIdLength);
+  private static native void setMaxSizeLength(long jEbmlHeader, long maxSizeLength);
+  private static native void setReadVersion(long jEbmlHeader, long readVersion);
+  private static native void setVersion(long jEbmlHeader, long version);
 }

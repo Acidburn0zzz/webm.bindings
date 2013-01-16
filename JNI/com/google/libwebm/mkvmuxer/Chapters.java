@@ -27,13 +27,14 @@ public class Chapters extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteChapters(nativePointer);
   }
 
-  private native long AddChapter(long jChapters, int jSeed);
-  private native int Count(long jChapters);
-  private native void deleteChapters(long jChapters);
-  private native long newChapters();
-  private native boolean Write(long jChapters, long jWriter);
+  private static native long AddChapter(long jChapters, int jSeed);
+  private static native int Count(long jChapters);
+  private static native void deleteChapters(long jChapters);
+  private static native long newChapters();
+  private static native boolean Write(long jChapters, long jWriter);
 }

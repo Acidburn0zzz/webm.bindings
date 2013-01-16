@@ -27,6 +27,7 @@ public abstract class Common {
 
   protected abstract void deleteObject();
 
+  @Override
   protected void finalize() {
     if (ownMemory) {
       deleteObject();

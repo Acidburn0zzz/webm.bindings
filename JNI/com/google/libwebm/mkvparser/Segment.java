@@ -27,6 +27,11 @@ public class Segment extends Common {
     return new Cluster(pointer);
   }
 
+  public Chapters getChapters() {
+    long pointer = GetChapters(nativePointer);
+    return new Chapters(pointer);
+  }
+
   public long getCount() {
     return GetCount(nativePointer);
   }
@@ -127,36 +132,38 @@ public class Segment extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteSegment(nativePointer);
   }
 
   private static native long CreateInstance(long jMkvReader, long position, long[] jSegment);
-
-  private native void deleteSegment(long jSegment);
-  private native boolean DoneParsing(long jSegment);
-  private native long FindCluster(long jSegment, long time_nanoseconds);
-  private native long FindOrPreloadCluster(long jSegment, long position);
-  private native long GetCount(long jSegment);
-  private native long GetCues(long jSegment);
-  private native long GetDuration(long jSegment);
-  private native long getElementStart(long jSegment);
-  private native long getEos(long jSegment);
-  private native long GetFirst(long jSegment);
-  private native long GetInfo(long jSegment);
-  private native long GetLast(long jSegment);
-  private native long GetNext(long jSegment, long jCurrent);
-  private native long getReader(long jSegment);
-  private native long GetSeekHead(long jSegment);
-  private native long getSize(long jSegment);
-  private native long getStart(long jSegment);
-  private native long GetTracks(long jSegment);
-  private native long Load(long jSegment);
-  private native long LoadClusterAndPosition(long jSegment, long[] jPosition, long[] jSize);
-  private native long LoadClusterWithoutPosition(long jSegment);
-  private native long ParseCues(long jSegment, long cues_off, long[] jPosition, long[] jLength);
-  private native long ParseHeaders(long jSegment);
-  private native long ParseNext(long jSegment, long jCurrent, long[] jNext, long[] jPosition,
+  private static native void deleteSegment(long jSegment);
+  private static native boolean DoneParsing(long jSegment);
+  private static native long FindCluster(long jSegment, long time_nanoseconds);
+  private static native long FindOrPreloadCluster(long jSegment, long position);
+  private static native long GetChapters(long jSegment);
+  private static native long GetCount(long jSegment);
+  private static native long GetCues(long jSegment);
+  private static native long GetDuration(long jSegment);
+  private static native long getElementStart(long jSegment);
+  private static native long getEos(long jSegment);
+  private static native long GetFirst(long jSegment);
+  private static native long GetInfo(long jSegment);
+  private static native long GetLast(long jSegment);
+  private static native long GetNext(long jSegment, long jCurrent);
+  private static native long getReader(long jSegment);
+  private static native long GetSeekHead(long jSegment);
+  private static native long getSize(long jSegment);
+  private static native long getStart(long jSegment);
+  private static native long GetTracks(long jSegment);
+  private static native long Load(long jSegment);
+  private static native long LoadClusterAndPosition(long jSegment, long[] jPosition, long[] jSize);
+  private static native long LoadClusterWithoutPosition(long jSegment);
+  private static native long ParseCues(long jSegment, long cues_off, long[] jPosition,
+      long[] jLength);
+  private static native long ParseHeaders(long jSegment);
+  private static native long ParseNext(long jSegment, long jCurrent, long[] jNext, long[] jPosition,
       long[] jSize);
-  private native void setEos(long jSegment, long jEos);
+  private static native void setEos(long jSegment, long jEos);
 }

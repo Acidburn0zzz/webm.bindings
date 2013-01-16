@@ -2,7 +2,6 @@
 
 package com.google.libwebm.mkvmuxer;
 
-import com.google.libwebm.Common;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class VideoTrack extends Track {
     private StereoMode(int value) {
       this.value = value;
     }
-  };
+  }
 
   public VideoTrack(int seed) {
     nativePointer = newVideoTrack(seed);
@@ -58,6 +57,7 @@ public class VideoTrack extends Track {
     return height(nativePointer);
   }
 
+  @Override
   public long payloadSize() {
     return PayloadSize(nativePointer);
   }
@@ -94,6 +94,7 @@ public class VideoTrack extends Track {
     return width(nativePointer);
   }
 
+  @Override
   public boolean write(IMkvWriter writer) {
     return Write(nativePointer, writer.getNativePointer());
   }
@@ -102,24 +103,25 @@ public class VideoTrack extends Track {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteVideoTrack(nativePointer);
   }
 
-  private native void deleteVideoTrack(long jVideoTrack);
-  private native long displayHeight(long jVideoTrack);
-  private native long displayWidth(long jVideoTrack);
-  private native double frameRate(long jVideoTrack);
-  private native long height(long jVideoTrack);
-  private native long newVideoTrack(int jSeed);
-  private native long PayloadSize(long jVideoTrack);
-  private native void setDisplayHeight(long jVideoTrack, long height);
-  private native void setDisplayWidth(long jVideoTrack, long width);
-  private native void setFrameRate(long jVideoTrack, double frame_rate);
-  private native void setHeight(long jVideoTrack, long height);
-  private native void setWidth(long jVideoTrack, long width);
-  private native void SetStereoMode(long jVideoTrack, long stereo_mode);
-  private native long stereoMode(long jVideoTrack);
-  private native long width(long jVideoTrack);
-  private native boolean Write(long jVideoTrack, long jWriter);
+  private static native void deleteVideoTrack(long jVideoTrack);
+  private static native long displayHeight(long jVideoTrack);
+  private static native long displayWidth(long jVideoTrack);
+  private static native double frameRate(long jVideoTrack);
+  private static native long height(long jVideoTrack);
+  private static native long newVideoTrack(int jSeed);
+  private static native long PayloadSize(long jVideoTrack);
+  private static native void setDisplayHeight(long jVideoTrack, long height);
+  private static native void setDisplayWidth(long jVideoTrack, long width);
+  private static native void setFrameRate(long jVideoTrack, double frame_rate);
+  private static native void setHeight(long jVideoTrack, long height);
+  private static native void setWidth(long jVideoTrack, long width);
+  private static native void SetStereoMode(long jVideoTrack, long stereo_mode);
+  private static native long stereoMode(long jVideoTrack);
+  private static native long width(long jVideoTrack);
+  private static native boolean Write(long jVideoTrack, long jWriter);
 }

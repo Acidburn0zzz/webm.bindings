@@ -60,22 +60,23 @@ public class SegmentInfo extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteSegmentInfo(nativePointer);
   }
 
-  private native void deleteSegmentInfo(long jSegmentInfo);
-  private native long GetDuration(long jSegmentInfo);
-  private native long getElementSize(long jSegmentInfo);
-  private native long getElementStart(long jSegmentInfo);
-  private native String GetMuxingAppAsUTF8(long jSegmentInfo);
-  private native long getSegment(long jSegmentInfo);
-  private native long getSize(long jSegmentInfo);
-  private native long getStart(long jSegmentInfo);
-  private native long GetTimeCodeScale(long jSegmentInfo);
-  private native String GetTitleAsUTF8(long jSegmentInfo);
-  private native String GetWritingAppAsUTF8(long jSegmentInfo);
-  private native long newSegmentInfo(long jSegment, long start, long size, long element_start,
-      long element_size);
-  private native long Parse(long jSegmentInfo);
+  private static native void deleteSegmentInfo(long jSegmentInfo);
+  private static native long GetDuration(long jSegmentInfo);
+  private static native long getElementSize(long jSegmentInfo);
+  private static native long getElementStart(long jSegmentInfo);
+  private static native String GetMuxingAppAsUTF8(long jSegmentInfo);
+  private static native long getSegment(long jSegmentInfo);
+  private static native long getSize(long jSegmentInfo);
+  private static native long getStart(long jSegmentInfo);
+  private static native long GetTimeCodeScale(long jSegmentInfo);
+  private static native String GetTitleAsUTF8(long jSegmentInfo);
+  private static native String GetWritingAppAsUTF8(long jSegmentInfo);
+  private static native long newSegmentInfo(long jSegment, long start, long size,
+      long element_start, long element_size);
+  private static native long Parse(long jSegmentInfo);
 }

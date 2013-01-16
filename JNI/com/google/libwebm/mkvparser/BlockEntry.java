@@ -48,9 +48,8 @@ public abstract class BlockEntry extends Common {
     super(nativePointer);
   }
 
+  private static native boolean EOS(long jBlockEntry);
   private static native int getClassType(long jBlockEntry);
-
-  private native boolean EOS(long jBlockEntry);
-  private native long GetCluster(long jBlockEntry);
-  private native long GetIndex(long jBlockEntry);
+  private static native long GetCluster(long jBlockEntry);
+  private static native long GetIndex(long jBlockEntry);
 }

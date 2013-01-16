@@ -111,32 +111,32 @@ public class Track extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteTrack(nativePointer);
   }
 
+  private static native boolean AddContentEncoding(long jTrack);
+  private static native int contentEncodingEntriesSize(long jTrack);
+  private static native String codecId(long jTrack);
+  private static native byte[] codecPrivate(long jTrack);
+  private static native long codecPrivateLength(long jTrack);
+  private static native void deleteTrack(long jTrack);
   private static native int getClassType(long jTrack);
-
-  private native boolean AddContentEncoding(long jTrack);
-  private native int contentEncodingEntriesSize(long jTrack);
-  private native String codecId(long jTrack);
-  private native byte[] codecPrivate(long jTrack);
-  private native long codecPrivateLength(long jTrack);
-  private native void deleteTrack(long jTrack);
-  private native long GetContentEncodingByIndex(long jTrack, int index);
-  private native String language(long jTrack);
-  private native String name(long jTrack);
-  private native long newTrack(int jSeed);
-  private native long number(long jTrack);
-  private native long PayloadSize(long jTrack);
-  private native void setCodecId(long jTrack, String jCodecId);
-  private native void setLanguage(long jTrack, String jLanguage);
-  private native void setName(long jTrack, String jName);
-  private native void setNumber(long jTrack, long number);
-  private native void setType(long jTrack, long type);
-  private native boolean SetCodecPrivate(long jTrack, byte[] jCodecPrivate, long length);
-  private native long Size(long jTrack);
-  private native long type(long jTrack);
-  private native long uid(long jTrack);
-  private native boolean Write(long jTrack, long jWriter);
+  private static native long GetContentEncodingByIndex(long jTrack, int index);
+  private static native String language(long jTrack);
+  private static native String name(long jTrack);
+  private static native long newTrack(int jSeed);
+  private static native long number(long jTrack);
+  private static native long PayloadSize(long jTrack);
+  private static native void setCodecId(long jTrack, String jCodecId);
+  private static native void setLanguage(long jTrack, String jLanguage);
+  private static native void setName(long jTrack, String jName);
+  private static native void setNumber(long jTrack, long number);
+  private static native void setType(long jTrack, long type);
+  private static native boolean SetCodecPrivate(long jTrack, byte[] jCodecPrivate, long length);
+  private static native long Size(long jTrack);
+  private static native long type(long jTrack);
+  private static native long uid(long jTrack);
+  private static native boolean Write(long jTrack, long jWriter);
 }

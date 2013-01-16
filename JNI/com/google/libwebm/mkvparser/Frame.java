@@ -34,15 +34,16 @@ public class Frame extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteFrame(nativePointer);
   }
 
-  private native void deleteFrame(long jFrame);
-  private native long getLen(long jFrame);
-  private native long getPos(long jFrame);
-  private native long newFrame();
-  private native long Read(long jFrame, long jMkvReader, byte[][] jBuffer);
-  private native void setLen(long jFrame, long len);
-  private native void setPos(long jFrame, long pos);
+  private static native void deleteFrame(long jFrame);
+  private static native long getLen(long jFrame);
+  private static native long getPos(long jFrame);
+  private static native long newFrame();
+  private static native long Read(long jFrame, long jMkvReader, byte[][] jBuffer);
+  private static native void setLen(long jFrame, long len);
+  private static native void setPos(long jFrame, long pos);
 }

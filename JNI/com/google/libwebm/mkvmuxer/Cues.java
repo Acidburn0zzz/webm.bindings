@@ -39,16 +39,17 @@ public class Cues extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteCues(nativePointer);
   }
 
-  private native boolean AddCue(long jCues, long jCue);
-  private native int cueEntriesSize(long jCues);
-  private native long GetCueByIndex(long jCues, int index);
-  private native void deleteCues(long jCuePoint);
-  private native long newCues();
-  private native boolean outputBlockNumber(long jCues);
-  private native void setOutputBlockNumber(long jCues, boolean output_block_number);
-  private native boolean Write(long jCues, long jWriter);
+  private static native boolean AddCue(long jCues, long jCue);
+  private static native int cueEntriesSize(long jCues);
+  private static native long GetCueByIndex(long jCues, int index);
+  private static native void deleteCues(long jCuePoint);
+  private static native long newCues();
+  private static native boolean outputBlockNumber(long jCues);
+  private static native void setOutputBlockNumber(long jCues, boolean output_block_number);
+  private static native boolean Write(long jCues, long jWriter);
 }

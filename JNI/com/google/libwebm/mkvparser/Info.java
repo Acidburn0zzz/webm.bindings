@@ -91,29 +91,30 @@ public class Info extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteInfo(nativePointer);
   }
 
-  private native void Clear(long jInfo);
-  private native int Copy(long jInfo, long jDestination);
-  private native void deleteInfo(long jInfo);
-  private native String getCodecId(long jInfo);
-  private native String getCodecNameAsUTF8(long jInfo);
-  private native byte[] getCodecPrivate(long jInfo);
-  private native boolean getLacing(long jInfo);
-  private native String getNameAsUTF8(long jInfo);
-  private native long getNumber(long jInfo);
-  private native long getSettings(long jInfo);
-  private native long getType(long jInfo);
-  private native long newInfo();
-  private native void setCodecId(long jInfo, String jCodecId);
-  private native void setCodecNameAsUTF8(long jInfo, String jCodecNameAsUtf8);
-  private native void setCodecPrivate(long jInfo, String jCodecPrivate);
-  private native void setLacing(long jInfo, boolean lacing);
-  private native void setNameAsUTF8(long jInfo, String jNameAsUtf8);
-  private native void setNumber(long jInfo, long number);
-  private native void setSettings(long jInfo, long jSettings);
-  private native void setType(long jInfo, long type);
-  private native void setUid(long jInfo, long uid);
+  private static native void Clear(long jInfo);
+  private static native int Copy(long jInfo, long jDestination);
+  private static native void deleteInfo(long jInfo);
+  private static native String getCodecId(long jInfo);
+  private static native String getCodecNameAsUTF8(long jInfo);
+  private static native byte[] getCodecPrivate(long jInfo);
+  private static native boolean getLacing(long jInfo);
+  private static native String getNameAsUTF8(long jInfo);
+  private static native long getNumber(long jInfo);
+  private static native long getSettings(long jInfo);
+  private static native long getType(long jInfo);
+  private static native long newInfo();
+  private static native void setCodecId(long jInfo, String jCodecId);
+  private static native void setCodecNameAsUTF8(long jInfo, String jCodecNameAsUtf8);
+  private static native void setCodecPrivate(long jInfo, String jCodecPrivate);
+  private static native void setLacing(long jInfo, boolean lacing);
+  private static native void setNameAsUTF8(long jInfo, String jNameAsUtf8);
+  private static native void setNumber(long jInfo, long number);
+  private static native void setSettings(long jInfo, long jSettings);
+  private static native void setType(long jInfo, long type);
+  private static native void setUid(long jInfo, long uid);
 }

@@ -42,17 +42,18 @@ public class TrackPosition extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteTrackPosition(nativePointer);
   }
 
-  private native void deleteTrackPosition(long jTrackPosition);
-  private native long getBlock(long jTrackPosition);
-  private native long getPos(long jTrackPosition);
-  private native long getTrack(long jTrackPosition);
-  private native long newTrackPosition();
-  private native void Parse(long jTrackPosition, long jMkvReader, long start, long size);
-  private native void setBlock(long jTrackPosition, long block);
-  private native void setPos(long jTrackPosition, long pos);
-  private native void setTrack(long jTrackPosition, long track);
+  private static native void deleteTrackPosition(long jTrackPosition);
+  private static native long getBlock(long jTrackPosition);
+  private static native long getPos(long jTrackPosition);
+  private static native long getTrack(long jTrackPosition);
+  private static native long newTrackPosition();
+  private static native void Parse(long jTrackPosition, long jMkvReader, long start, long size);
+  private static native void setBlock(long jTrackPosition, long block);
+  private static native void setPos(long jTrackPosition, long pos);
+  private static native void setTrack(long jTrackPosition, long track);
 }

@@ -57,21 +57,22 @@ public class SeekHead extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteSeekHead(nativePointer);
   }
 
-  private native void deleteSeekHead(long jSeekHead);
-  private native int GetCount(long jSeekHead);
-  private native long getElementSize(long jSeekHead);
-  private native long getElementStart(long jSeekHead);
-  private native long GetEntry(long jSeekHead, int idx);
-  private native long getSegment(long jSeekHead);
-  private native long getSize(long jSeekHead);
-  private native long getStart(long jSeekHead);
-  private native long GetVoidElement(long jSeekHead, int idx);
-  private native int GetVoidElementCount(long jSeekHead);
-  private native long newSeekHead(long jSegment, long start, long size, long element_start,
+  private static native void deleteSeekHead(long jSeekHead);
+  private static native int GetCount(long jSeekHead);
+  private static native long getElementSize(long jSeekHead);
+  private static native long getElementStart(long jSeekHead);
+  private static native long GetEntry(long jSeekHead, int idx);
+  private static native long getSegment(long jSeekHead);
+  private static native long getSize(long jSeekHead);
+  private static native long getStart(long jSeekHead);
+  private static native long GetVoidElement(long jSeekHead, int idx);
+  private static native int GetVoidElementCount(long jSeekHead);
+  private static native long newSeekHead(long jSegment, long start, long size, long element_start,
       long element_size);
-  private native long Parse(long jSeekHead);
+  private static native long Parse(long jSeekHead);
 }

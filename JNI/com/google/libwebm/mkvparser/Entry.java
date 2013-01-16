@@ -46,18 +46,19 @@ public class Entry extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteEntry(nativePointer);
   }
 
-  private native void deleteEntry(long jEntry);
-  private native long getElementSize(long jEntry);
-  private native long getElementStart(long jEntry);
-  private native long getId(long jEntry);
-  private native long getPos(long jEntry);
-  private native long newEntry();
-  private native void setElementSize(long jEntry, long element_size);
-  private native void setElementStart(long jEntry, long element_start);
-  private native void setId(long jEntry, long id);
-  private native void setPos(long jEntry, long pos);
+  private static native void deleteEntry(long jEntry);
+  private static native long getElementSize(long jEntry);
+  private static native long getElementStart(long jEntry);
+  private static native long getId(long jEntry);
+  private static native long getPos(long jEntry);
+  private static native long newEntry();
+  private static native void setElementSize(long jEntry, long element_size);
+  private static native void setElementStart(long jEntry, long element_start);
+  private static native void setId(long jEntry, long id);
+  private static native void setPos(long jEntry, long pos);
 }

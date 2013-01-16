@@ -31,13 +31,14 @@ public class ContentEncAesSettings extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteContentEncAesSettings(nativePointer);
   }
 
-  private native long cipherMode(long jContentEncAesSettings);
-  private native void deleteContentEncAesSettings(long jContentEncAesSettings);
-  private native long newContentEncAesSettings();
-  private native long Size(long jContentEncAesSettings);
-  private native boolean Write(long jContentEncAesSettings, long jWriter);
+  private static native long cipherMode(long jContentEncAesSettings);
+  private static native void deleteContentEncAesSettings(long jContentEncAesSettings);
+  private static native long newContentEncAesSettings();
+  private static native long Size(long jContentEncAesSettings);
+  private static native boolean Write(long jContentEncAesSettings, long jWriter);
 }

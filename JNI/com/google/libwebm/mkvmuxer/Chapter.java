@@ -22,11 +22,13 @@ public class Chapter extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
   }
 
-  private native boolean addString(long jChapter, String jTitle, String jLanguage,
+  private static native boolean addString(long jChapter, String jTitle, String jLanguage,
       String jCountry);
-  private native boolean setId(long jChapter, String jId);
-  private native void setTime(long jChapter, long jSegment, long start_time_ns, long end_time_ns);
+  private static native boolean setId(long jChapter, String jId);
+  private static native void setTime(long jChapter, long jSegment, long start_time_ns,
+      long end_time_ns);
 }

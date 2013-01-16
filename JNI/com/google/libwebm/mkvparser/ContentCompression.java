@@ -22,12 +22,13 @@ public class ContentCompression extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteContentCompression(nativePointer);
   }
 
-  private native void deleteContentCompression(long jContentCompression);
-  private native long getAlgo(long jContentCompression);
-  private native long newContentCompression();
-  private native void setAlgo(long jContentCompression, long algo);
+  private static native void deleteContentCompression(long jContentCompression);
+  private static native long getAlgo(long jContentCompression);
+  private static native long newContentCompression();
+  private static native void setAlgo(long jContentCompression, long algo);
 }

@@ -71,24 +71,25 @@ public class ContentEncryption extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteContentEncrytpion(nativePointer);
   }
 
-  private native void deleteContentEncrytpion(long jContentEncrytpion);
-  private native long getAesSettings(long jContentEncrytpion);
-  private native long getAlgo(long jContentEncrytpion);
-  private native byte[] getKeyId(long jContentEncrytpion);
-  private native long getSigAlgo(long jContentEncrytpion);
-  private native long getSigHashAlgo(long jContentEncrytpion);
-  private native byte[] getSigKeyId(long jContentEncrytpion);
-  private native byte[] getSignature(long jContentEncrytpion);
-  private native long newContentEncrytpion();
-  private native void setAesSettings(long jContentEncrytpion, long aesSettings);
-  private native void setAlgo(long jContentEncrytpion, long algo);
-  private native void setKeyId(long jContentEncrytpion, byte[] jKeyId);
-  private native void setSigAlgo(long jContentEncrytpion, long sigAlgo);
-  private native void setSigHashAlgo(long jContentEncrytpion, long sigHashAlgo);
-  private native void setSigKeyId(long jContentEncrytpion, byte[] jSigKeyId);
-  private native void setSignature(long jContentEncrytpion, byte[] jSignature);
+  private static native void deleteContentEncrytpion(long jContentEncrytpion);
+  private static native long getAesSettings(long jContentEncrytpion);
+  private static native long getAlgo(long jContentEncrytpion);
+  private static native byte[] getKeyId(long jContentEncrytpion);
+  private static native long getSigAlgo(long jContentEncrytpion);
+  private static native long getSigHashAlgo(long jContentEncrytpion);
+  private static native byte[] getSigKeyId(long jContentEncrytpion);
+  private static native byte[] getSignature(long jContentEncrytpion);
+  private static native long newContentEncrytpion();
+  private static native void setAesSettings(long jContentEncrytpion, long aesSettings);
+  private static native void setAlgo(long jContentEncrytpion, long algo);
+  private static native void setKeyId(long jContentEncrytpion, byte[] jKeyId);
+  private static native void setSigAlgo(long jContentEncrytpion, long sigAlgo);
+  private static native void setSigHashAlgo(long jContentEncrytpion, long sigHashAlgo);
+  private static native void setSigKeyId(long jContentEncrytpion, byte[] jSigKeyId);
+  private static native void setSignature(long jContentEncrytpion, byte[] jSignature);
 }

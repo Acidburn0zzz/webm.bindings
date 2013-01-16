@@ -17,7 +17,13 @@ public class Cues extends Common {
     boolean result =
         Find(nativePointer, timeNs, track.getNativePointer(), jCuePoint, jTrackPosition);
     cuePoint[0] = new CuePoint(jCuePoint[0]);
+    trackPosition[0] = new TrackPosition(jTrackPosition[0]);
     return result;
+  }
+
+  public BlockEntry getBlock(CuePoint cp, TrackPosition tp) {
+    long pointer = GetBlock(nativePointer, cp.getNativePointer(), tp.getNativePointer());
+    return BlockEntry.newBlockEntry(pointer);
   }
 
   public long getCount() {
@@ -68,20 +74,22 @@ public class Cues extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
   }
 
-  private native boolean DoneParsing(long jCues);
-  private native boolean Find(long jCues, long time_ns, long jTrack, long[] jCuePoint,
+  private static native boolean DoneParsing(long jCues);
+  private static native boolean Find(long jCues, long time_ns, long jTrack, long[] jCuePoint,
       long[] jTrackPosition);
-  private native long GetCount(long jCues);
-  private native long getElementSize(long jCues);
-  private native long getElementStart(long jCues);
-  private native long GetFirst(long jCues);
-  private native long GetLast(long jCues);
-  private native long GetNext(long jCues, long jCurrent);
-  private native long getSegment(long jCues);
-  private native long getSize(long jCues);
-  private native long getStart(long jCues);
-  private native boolean LoadCuePoint(long jCues);
+  private static native long GetBlock(long jCues, long jcp, long jtp);
+  private static native long GetCount(long jCues);
+  private static native long getElementSize(long jCues);
+  private static native long getElementStart(long jCues);
+  private static native long GetFirst(long jCues);
+  private static native long GetLast(long jCues);
+  private static native long GetNext(long jCues, long jCurrent);
+  private static native long getSegment(long jCues);
+  private static native long getSize(long jCues);
+  private static native long getStart(long jCues);
+  private static native boolean LoadCuePoint(long jCues);
 }

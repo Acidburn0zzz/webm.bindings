@@ -23,12 +23,13 @@ public class ContentEncAesSettings extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteContentEncAesSettings(nativePointer);
   }
 
-  private native void deleteContentEncAesSettings(long jContentEncAesSettings);
-  private native long getCipherMode(long jContentEncAesSettings);
-  private native long newContentEncAesSettings();
-  private native void setCipherMode(long jContentEncAesSettings, long cipherMode);
+  private static native void deleteContentEncAesSettings(long jContentEncAesSettings);
+  private static native long getCipherMode(long jContentEncAesSettings);
+  private static native long newContentEncAesSettings();
+  private static native void setCipherMode(long jContentEncAesSettings, long cipherMode);
 }

@@ -10,7 +10,7 @@ public class Track extends Common {
     None,
     kVideo,
     kAudio
-  };
+  }
 
   public static long create(Segment segment, Info info, long element_start, long element_size,
       Track[] track) {
@@ -127,32 +127,32 @@ public class Track extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteTrack(nativePointer);
   }
 
   private static native long Create(long jSegment, long jInfo, long element_start,
       long element_size, long[] jTrack);
+  private static native void deleteTrack(long jTrack);
   private static native int getClassType(long jTrack);
-
-  private native void deleteTrack(long jTrack);
-  private native String GetCodecId(long jTrack);
-  private native String GetCodecNameAsUTF8(long jTrack);
-  private native byte[] GetCodecPrivate(long jTrack, long[] jSize);
-  private native long GetContentEncodingByIndex(long jTrack, long idx);
-  private native long GetContentEncodingCount(long jTrack);
-  private native long getElementSize(long jTrack);
-  private native long getElementStart(long jTrack);
-  private native long GetEOS(long jTrack);
-  private native long GetFirst(long jTrack, long[] jBlockEntry);
-  private native boolean GetLacing(long jTrack);
-  private native String GetNameAsUTF8(long jTrack);
-  private native long GetNext(long jTrack, long jCurrent, long[] jNext);
-  private native long GetNumber(long jTrack);
-  private native long getSegment(long jTrack);
-  private native long GetType(long jTrack);
-  private native long GetUid(long jTrack);
-  private native long ParseContentEncodingsEntry(long jTrack, long start, long size);
-  private native long Seek(long jTrack, long time_ns, long[] jResult);
-  private native boolean VetEntry(long jTrack, long jBlockEntry);
+  private static native String GetCodecId(long jTrack);
+  private static native String GetCodecNameAsUTF8(long jTrack);
+  private static native byte[] GetCodecPrivate(long jTrack, long[] jSize);
+  private static native long GetContentEncodingByIndex(long jTrack, long idx);
+  private static native long GetContentEncodingCount(long jTrack);
+  private static native long getElementSize(long jTrack);
+  private static native long getElementStart(long jTrack);
+  private static native long GetEOS(long jTrack);
+  private static native long GetFirst(long jTrack, long[] jBlockEntry);
+  private static native boolean GetLacing(long jTrack);
+  private static native String GetNameAsUTF8(long jTrack);
+  private static native long GetNext(long jTrack, long jCurrent, long[] jNext);
+  private static native long GetNumber(long jTrack);
+  private static native long getSegment(long jTrack);
+  private static native long GetType(long jTrack);
+  private static native long GetUid(long jTrack);
+  private static native long ParseContentEncodingsEntry(long jTrack, long start, long size);
+  private static native long Seek(long jTrack, long time_ns, long[] jResult);
+  private static native boolean VetEntry(long jTrack, long jBlockEntry);
 }

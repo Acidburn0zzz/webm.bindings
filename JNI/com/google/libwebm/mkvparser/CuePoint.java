@@ -43,15 +43,16 @@ public class CuePoint extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
   }
 
-  private native long Find(long jCuePoint, long jTrack);
-  private native long getElementSize(long jCuePoint);
-  private native long getElementStart(long jCuePoint);
-  private native long GetTime(long jCuePoint, long jSegment);
-  private native long GetTimeCode(long jCuePoint);
-  private native void Load(long jCuePoint, long jMkvReader);
-  private native void setElementSize(long jCuePoint, long element_size);
-  private native void setElementStart(long jCuePoint, long element_start);
+  private static native long Find(long jCuePoint, long jTrack);
+  private static native long getElementSize(long jCuePoint);
+  private static native long getElementStart(long jCuePoint);
+  private static native long GetTime(long jCuePoint, long jSegment);
+  private static native long GetTimeCode(long jCuePoint);
+  private static native void Load(long jCuePoint, long jMkvReader);
+  private static native void setElementSize(long jCuePoint, long element_size);
+  private static native void setElementStart(long jCuePoint, long element_start);
 }

@@ -45,7 +45,7 @@ FUNCTION(void, Parse, jlong jTrackPosition, jlong jMkvReader, jlong start,
       reinterpret_cast<mkvparser::CuePoint::TrackPosition*>(jTrackPosition);
   mkvparser::IMkvReader* mkvReader =
       reinterpret_cast<mkvparser::IMkvReader*>(jMkvReader);
-  return trackPosition->Parse(mkvReader, start, size);
+  trackPosition->Parse(mkvReader, start, size);
 }
 
 FUNCTION(void, setBlock, jlong jTrackPosition, jlong block) {

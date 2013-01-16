@@ -50,19 +50,20 @@ public class Frame extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteFrame(nativePointer);
   }
 
-  private native void deleteFrame(long jFrame);
-  private native byte[] frame(long jFrame);
-  private native boolean Init(long jFrame, byte[] jFrameBuffer, long length);
-  private native boolean isKey(long jFrame);
-  private native long length(long jFrame);
-  private native long newFrame();
-  private native void setIsKey(long jFrame, boolean key);
-  private native void setTimestamp(long jFrame, long timestamp);
-  private native void setTrackNumber(long jFrame, long track_number);
-  private native long timestamp(long jFrame);
-  private native long trackNumber(long jFrame);
+  private static native void deleteFrame(long jFrame);
+  private static native byte[] frame(long jFrame);
+  private static native boolean Init(long jFrame, byte[] jFrameBuffer, long length);
+  private static native boolean isKey(long jFrame);
+  private static native long length(long jFrame);
+  private static native long newFrame();
+  private static native void setIsKey(long jFrame, boolean key);
+  private static native void setTimestamp(long jFrame, long timestamp);
+  private static native void setTrackNumber(long jFrame, long track_number);
+  private static native long timestamp(long jFrame);
+  private static native long trackNumber(long jFrame);
 }

@@ -58,21 +58,22 @@ public class SegmentInfo extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteSegmentInfo(nativePointer);
   }
 
-  private native void deleteSegmentInfo(long jSegmentInfo);
-  private native double duration(long jSegmentInfo);
-  private native boolean Finalize(long jSegmentInfo, long jWriter);
-  private native boolean Init(long jSegmentInfo);
-  private native String muxingApp(long jSegmentInfo);
-  private native long newSegmentInfo();
-  private native void setDuration(long jSegmentInfo, double duration);
-  private native void setMuxingApp(long jSegmentInfo, String jApp);
-  private native void setTimecodeScale(long jSegmentInfo, long scale);
-  private native void setWritingApp(long jSegmentInfo, String jApp);
-  private native long timecodeScale(long jSegmentInfo);
-  private native boolean Write(long jSegmentInfo, long jWriter);
-  private native String writingApp(long jSegmentInfo);
+  private static native void deleteSegmentInfo(long jSegmentInfo);
+  private static native double duration(long jSegmentInfo);
+  private static native boolean Finalize(long jSegmentInfo, long jWriter);
+  private static native boolean Init(long jSegmentInfo);
+  private static native String muxingApp(long jSegmentInfo);
+  private static native long newSegmentInfo();
+  private static native void setDuration(long jSegmentInfo, double duration);
+  private static native void setMuxingApp(long jSegmentInfo, String jApp);
+  private static native void setTimecodeScale(long jSegmentInfo, long scale);
+  private static native void setWritingApp(long jSegmentInfo, String jApp);
+  private static native long timecodeScale(long jSegmentInfo);
+  private static native boolean Write(long jSegmentInfo, long jWriter);
+  private static native String writingApp(long jSegmentInfo);
 }

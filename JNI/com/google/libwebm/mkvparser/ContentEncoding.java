@@ -65,24 +65,24 @@ public class ContentEncoding extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteContentEncoding(nativePointer);
   }
 
-
-  private native void deleteContentEncoding(long jContentEncoding);
-  private native long encodingOrder(long jContentEncoding);
-  private native long encodingScope(long jContentEncoding);
-  private native long encodingType(long jContentEncoding);
-  private native long GetCompressionByIndex(long jContentEncoding, long idx);
-  private native long GetCompressionCount(long jContentEncoding);
-  private native long GetEncryptionByIndex(long jContentEncoding, long idx);
-  private native long GetEncryptionCount(long jContentEncoding);
-  private native long newContentEncoding();
-  private native long ParseContentEncAESSettingsEntry(long jContentEncoding, long start, long size,
-      long jMkvReader, long jContentEncAesSettings);
-  private native long ParseContentEncodingEntry(long jContentEncoding, long start, long size,
+  private static native void deleteContentEncoding(long jContentEncoding);
+  private static native long encodingOrder(long jContentEncoding);
+  private static native long encodingScope(long jContentEncoding);
+  private static native long encodingType(long jContentEncoding);
+  private static native long GetCompressionByIndex(long jContentEncoding, long idx);
+  private static native long GetCompressionCount(long jContentEncoding);
+  private static native long GetEncryptionByIndex(long jContentEncoding, long idx);
+  private static native long GetEncryptionCount(long jContentEncoding);
+  private static native long newContentEncoding();
+  private static native long ParseContentEncAESSettingsEntry(long jContentEncoding, long start,
+      long size, long jMkvReader, long jContentEncAesSettings);
+  private static native long ParseContentEncodingEntry(long jContentEncoding, long start, long size,
       long jMkvReader);
-  private native long ParseEncryptionEntry(long jContentEncoding, long start, long size,
+  private static native long ParseEncryptionEntry(long jContentEncoding, long start, long size,
       long jMkvReader, long jContentEncryption);
 }

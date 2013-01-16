@@ -18,7 +18,7 @@ public class CuePoint extends Common {
     return clusterPos(nativePointer);
   }
 
-  public long outputBlockNumber() {
+  public boolean outputBlockNumber() {
     return outputBlockNumber(nativePointer);
   }
 
@@ -30,7 +30,7 @@ public class CuePoint extends Common {
     setClusterPos(nativePointer, clusterPos);
   }
 
-  public void setOutputBlockNumber(long outputBlockNumber) {
+  public void setOutputBlockNumber(boolean outputBlockNumber) {
     setOutputBlockNumber(nativePointer, outputBlockNumber);
   }
 
@@ -62,22 +62,23 @@ public class CuePoint extends Common {
     super(nativePointer);
   }
 
+  @Override
   protected void deleteObject() {
     deleteCuePoint(nativePointer);
   }
 
-  private native long blockNumber(long jCuePoint);
-  private native long clusterPos(long jCuePoint);
-  private native void deleteCuePoint(long jCuePoint);
-  private native long newCuePoint();
-  private native long outputBlockNumber(long jCuePoint);
-  private native void setBlockNumber(long jCuePoint, long block_number);
-  private native void setClusterPos(long jCuePoint, long cluster_pos);
-  private native void setOutputBlockNumber(long jCuePoint, long output_block_number);
-  private native void setTime(long jCuePoint, long time);
-  private native void setTrack(long jCuePoint, long track);
-  private native long Size(long jCuePoint);
-  private native long time(long jCuePoint);
-  private native long track(long jCuePoint);
-  private native boolean Write(long jCuePoint, long jWriter);
+  private static native long blockNumber(long jCuePoint);
+  private static native long clusterPos(long jCuePoint);
+  private static native void deleteCuePoint(long jCuePoint);
+  private static native long newCuePoint();
+  private static native boolean outputBlockNumber(long jCuePoint);
+  private static native void setBlockNumber(long jCuePoint, long block_number);
+  private static native void setClusterPos(long jCuePoint, long cluster_pos);
+  private static native void setOutputBlockNumber(long jCuePoint, boolean output_block_number);
+  private static native void setTime(long jCuePoint, long time);
+  private static native void setTrack(long jCuePoint, long track);
+  private static native long Size(long jCuePoint);
+  private static native long time(long jCuePoint);
+  private static native long track(long jCuePoint);
+  private static native boolean Write(long jCuePoint, long jWriter);
 }
