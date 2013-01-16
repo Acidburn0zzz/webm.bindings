@@ -8,6 +8,11 @@ JAVAC := $(JAVA_HOME)/bin/javac
 JAVAC_COMPILERARGS := -d class
 LDFLAGS := -fPIC -shared
 
+ogg_c_sources := $(wildcard ogg/*.cc)
+ogg_c_objects := $(patsubst %.cc,obj/%.o,$(ogg_c_sources))
+ogg_java_sources := $(wildcard com/google/libogg/*.java)
+ogg_java_classes := $(patsubst %.java,class/%.class,$(ogg_java_sources))
+
 vorbis_c_sources := $(wildcard vorbis/*.cc)
 vorbis_c_objects := $(patsubst %.cc,obj/%.o,$(vorbis_c_sources))
 vorbis_java_sources := $(wildcard com/google/libvorbis/*.java)
@@ -24,8 +29,9 @@ webm_java_sources := $(shell find com/google/libwebm/ -name "*.java" -type f)
 webm_java_classes := $(patsubst %.java,class/%.class,$(webm_java_sources))
 ebml_writer := obj/libvpx/libmkv/EbmlWriter.o
 
-classes := $(vorbis_java_classes) $(vpx_java_classes) $(webm_java_classes)
-libraries := libvorbisJNI.so libvpxJNI.so libwebmJNI.so
+classes := $(ogg_java_classes) $(vorbis_java_classes) $(vpx_java_classes) \
+	$(webm_java_classes)
+libraries := liboggJNI.so libvorbisJNI.so libvpxJNI.so libwebmJNI.so
 deps := $(classes) $(libraries)
 
 export LD_LIBRARY_PATH += libwebm
@@ -57,6 +63,9 @@ Application: class/Application.class
 
 SampleMultiplexer: class/SampleMultiplexer.class
 
+liboggJNI.so: $(ogg_c_objects)
+	$(CXX) $(LDFLAGS) -logg -o $@ $(ogg_c_objects)
+
 libvorbisJNI.so: $(vorbis_c_objects)
 	$(CXX) $(LDFLAGS) -lvorbis -o $@ $(vorbis_c_objects)
 
@@ -65,6 +74,10 @@ libvpxJNI.so: $(vpx_c_objects) $(ebml_writer)
 
 libwebmJNI.so: $(webm_c_objects)
 	$(CXX) $(LDFLAGS) -lwebm -Llibwebm -o $@ $(webm_c_objects)
+
+$(ogg_c_objects): obj/%.o: %.cc
+	mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c -Ilibogg/include -o $@ $<
 
 $(vorbis_c_objects): obj/%.o: %.cc
 	mkdir -p $(dir $@)
