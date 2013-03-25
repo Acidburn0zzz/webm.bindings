@@ -64,16 +64,16 @@ Application: class/Application.class
 SampleMultiplexer: class/SampleMultiplexer.class
 
 liboggJNI.so: $(ogg_c_objects)
-	$(CXX) $(LDFLAGS) -logg -o $@ $(ogg_c_objects)
+	$(CXX) $(LDFLAGS) -o $@ $(ogg_c_objects) -logg
 
 libvorbisJNI.so: $(vorbis_c_objects)
-	$(CXX) $(LDFLAGS) -lvorbis -o $@ $(vorbis_c_objects)
+	$(CXX) $(LDFLAGS) -o $@ $(vorbis_c_objects) -lvorbis
 
 libvpxJNI.so: $(vpx_c_objects) $(ebml_writer)
-	$(CXX) $(LDFLAGS) -lvpx -o $@ $(vpx_c_objects) $(ebml_writer)
+	$(CXX) $(LDFLAGS) -o $@ $(vpx_c_objects) $(ebml_writer) -lvpx
 
 libwebmJNI.so: $(webm_c_objects)
-	$(CXX) $(LDFLAGS) -lwebm -Llibwebm -o $@ $(webm_c_objects)
+	$(CXX) $(LDFLAGS) -o $@ $(webm_c_objects) -lwebm -Llibwebm
 
 $(ogg_c_objects): obj/%.o: %.cc
 	mkdir -p $(dir $@)
