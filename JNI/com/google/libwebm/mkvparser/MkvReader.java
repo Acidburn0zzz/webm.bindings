@@ -12,10 +12,6 @@ public class MkvReader extends IMkvReader {
     Close(nativePointer);
   }
 
-  public boolean isOpen() {
-    return IsOpen(nativePointer);
-  }
-
   @Override
   public int length(long[] total, long[] available) {
     return Length(nativePointer, total, available);
@@ -41,7 +37,6 @@ public class MkvReader extends IMkvReader {
 
   private static native void Close(long jMkvReader);
   private static native void deleteMkvReader(long jMkvReader);
-  private static native boolean IsOpen(long jMkvReader);
   private static native int Length(long jMkvReader, long[] jTotal, long[] jAvailable);
   private static native long newMkvReader();
   private static native int Open(long jMkvReader, String jFileName);

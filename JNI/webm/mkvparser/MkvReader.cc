@@ -21,12 +21,6 @@ FUNCTION(void, deleteMkvReader, jlong jMkvReader) {
   delete mkvReader;
 }
 
-FUNCTION(jboolean, IsOpen, jlong jMkvReader) {
-  mkvparser::MkvReader* mkvReader =
-      reinterpret_cast<mkvparser::MkvReader*>(jMkvReader);
-  return mkvReader->IsOpen();
-}
-
 FUNCTION(jint, Length, jlong jMkvReader, jlongArray jTotal,
                        jlongArray jAvailable) {
   mkvparser::MkvReader* mkvReader =
