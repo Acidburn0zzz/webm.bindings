@@ -12,7 +12,7 @@
 #ifdef NDEBUG
 # define printf(fmt, ...)
 #else
-# ifdef ANDROID_NDK
+# ifdef __ANDROID__
 #  include <android/log.h>
 #  define printf(fmt, ...) \
    __android_log_print(ANDROID_LOG_DEBUG, "LIBVPX_ENC_CFG", fmt, ##__VA_ARGS__)
@@ -83,8 +83,8 @@ FUNC(jobject, vpxCodecEncGetTimebase, jlong jcfg) {
 
   jobject rationalNumber = env->NewObject(rational,
                                           rationalInitMethodId,
-                                          cfg->g_timebase.num,
-                                          cfg->g_timebase.den);
+                                          (jlong)cfg->g_timebase.num,
+                                          (jlong)cfg->g_timebase.den);
 
   return rationalNumber;
 }

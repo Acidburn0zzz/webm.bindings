@@ -141,7 +141,7 @@ void Ebml_Write(EbmlGlobal *glob, const void *buffer_in, uint64_t len) {
 #define WRITE_BUFFER(s) \
   for (i = len - 1; i >= 0; i--) { \
     x = *(const s *)buffer_in >> (i * CHAR_BIT); \
-    Ebml_Write(glob, &x, 1); \
+    Ebml_Write(glob, &x, 1ULL); \
   }
 void Ebml_Serialize(EbmlGlobal *glob, const void *buffer_in,
                     int buffer_size, uint64_t len) {
@@ -180,8 +180,8 @@ static void Ebml_SerializeUnsigned32(EbmlGlobal *glob,
                                      uint64_t class_id, uint64_t ui) {
   unsigned char sizeSerialized = 4 | 0x80;
   Ebml_WriteID(glob, class_id);
-  Ebml_Serialize(glob, &sizeSerialized, sizeof(sizeSerialized), 1);
-  Ebml_Serialize(glob, &ui, sizeof(ui), 4);
+  Ebml_Serialize(glob, &sizeSerialized, sizeof(sizeSerialized), 1ULL);
+  Ebml_Serialize(glob, &ui, sizeof(ui), 4ULL);
 }
 
 static void Ebml_StartSubElement(EbmlGlobal *glob, EbmlLoc *ebmlLoc,
@@ -192,7 +192,7 @@ static void Ebml_StartSubElement(EbmlGlobal *glob, EbmlLoc *ebmlLoc,
 
   Ebml_WriteID(glob, class_id);
   *ebmlLoc = ftello(glob->stream);
-  Ebml_Serialize(glob, &unknownLen, sizeof(unknownLen), 8);
+  Ebml_Serialize(glob, &unknownLen, sizeof(unknownLen), 8ULL);
 }
 
 static void Ebml_EndSubElement(EbmlGlobal *glob, EbmlLoc *ebmlLoc) {
@@ -208,7 +208,7 @@ static void Ebml_EndSubElement(EbmlGlobal *glob, EbmlLoc *ebmlLoc) {
 
   /* Seek back to the beginning of the element and write the new size */
   fseeko(glob->stream, *ebmlLoc, SEEK_SET);
-  Ebml_Serialize(glob, &size, sizeof(size), 8);
+  Ebml_Serialize(glob, &size, sizeof(size), 8ULL);
 
   /* Reset the stream pointer */
   fseeko(glob->stream, pos, SEEK_SET);
@@ -422,24 +422,24 @@ FUNC(void, vpxCodecWebmWriteWebmBlock, jlong jglob, jobject jpkt, jlong jpts) {
 
   block_length = frameSz + 4;
   block_length |= 0x10000000;
-  Ebml_Serialize(glob, &block_length, sizeof(block_length), 4);
+  Ebml_Serialize(glob, &block_length, sizeof(block_length), 4ULL);
 
   track_number = 1;
   track_number |= 0x80;
-  Ebml_Write(glob, &track_number, 1);
+  Ebml_Write(glob, &track_number, 1ULL);
 
-  Ebml_Serialize(glob, &block_timecode, sizeof(block_timecode), 2);
+  Ebml_Serialize(glob, &block_timecode, sizeof(block_timecode), 2ULL);
 
   flags = 0;
   if (is_keyframe)
     flags |= 0x80;
   if (frameFlags & VPX_FRAME_IS_INVISIBLE)
     flags |= 0x08;
-  Ebml_Write(glob, &flags, 1);
+  Ebml_Write(glob, &flags, 1ULL);
 
   jbyte *frameBuf = env->GetByteArrayElements((jbyteArray)jba, 0);
 
-  Ebml_Write(glob, frameBuf, frameSz);
+  Ebml_Write(glob, frameBuf, static_cast<uint64_t>(frameSz));
 
   env->ReleaseByteArrayElements((jbyteArray)jba, frameBuf, 0);
 }

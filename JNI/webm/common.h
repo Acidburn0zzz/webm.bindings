@@ -3,6 +3,7 @@
 #ifndef LIBWEBM_COMMON_H
 #define LIBWEBM_COMMON_H
 
+#include <cstddef>
 #include <jni.h>
 
 #define NAME(a, b, c) Java_com_google_libwebm_##a##_##b##_##c

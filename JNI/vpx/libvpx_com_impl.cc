@@ -9,7 +9,7 @@
 #ifdef NDEBUG
 # define printf(fmt, ...)
 #else
-# ifdef ANDROID_NDK
+# ifdef __ANDROID__
 #  include <android/log.h>
 #  define printf(fmt, ...) \
    __android_log_print(ANDROID_LOG_DEBUG, "LIBVPX_COM", fmt, ##__VA_ARGS__)

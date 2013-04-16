@@ -11,7 +11,7 @@
 #ifdef NDEBUG
 # define printf(fmt, ...)
 #else
-# ifdef ANDROID_NDK
+# ifdef __ANDROID__
 #  include <android/log.h>
 #  define printf(fmt, ...) \
    __android_log_print(ANDROID_LOG_DEBUG, "LIBVPX_ENC", fmt, ##__VA_ARGS__)
@@ -143,10 +143,10 @@ FUNC(jobject, vpxCodecEncGetCxData, jlong jctx) {
     if (pkt->kind == VPX_CODEC_CX_FRAME_PKT) {
       jobject cxPkt = env->NewObject(codecCxPkt,
                                      cxInitMethodId,
-                                     pkt->data.frame.sz);
+                                     (jlong)pkt->data.frame.sz);
 
-      env->SetIntField(cxPkt, ptsId, pkt->data.frame.pts);
-      env->SetIntField(cxPkt, durationId, pkt->data.frame.duration);
+      env->SetLongField(cxPkt, ptsId, pkt->data.frame.pts);
+      env->SetLongField(cxPkt, durationId, pkt->data.frame.duration);
       env->SetIntField(cxPkt, flagsId, pkt->data.frame.flags);
       env->SetIntField(cxPkt, partitionId, pkt->data.frame.partition_id);
 
