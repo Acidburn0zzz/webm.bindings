@@ -162,8 +162,12 @@ include $(BUILD_SHARED_LIBRARY)
 # Build libvpx.so
 include $(CLEAR_VARS)
 
-LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/
-include $(WORKING_DIR)/webm.bindings/JNI/libvpx/build/make/Android.mk
+# TODO(fgalligan): Change the build dir after libvpx can be built under JNI.
+# For now libvpx must be built under <project>/jni.
+#LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/
+#include $(WORKING_DIR)/webm.bindings/JNI/libvpx/build/make/Android.mk
+LOCAL_PATH := $(WORKING_DIR)
+include $(WORKING_DIR)/libvpx/build/make/Android.mk
 
 
 # Build libvpxJNI.so
@@ -174,8 +178,12 @@ LOCAL_MODULE    := vpxJNI
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_C_INCLUDES := webm.bindings/JNI/libvpx \
-                    webm.bindings/JNI/libvpx/vpx_ports \
+# TODO(fgalligan) Change the include dirs after libvpx can be built under JNI.
+#LOCAL_C_INCLUDES := webm.bindings/JNI/libvpx \
+#                    webm.bindings/JNI/libvpx/vpx_ports \
+#                    webm.bindings/JNI
+LOCAL_C_INCLUDES := libvpx \
+                    libvpx/vpx_ports \
                     webm.bindings/JNI
 
 LOCAL_SRC_FILES := webm.bindings/JNI/vpx/libvpx_com_impl.cc \
@@ -185,7 +193,6 @@ LOCAL_SRC_FILES := webm.bindings/JNI/vpx/libvpx_com_impl.cc \
                    #webm.bindings/JNI/vpx/libvpx_webm_muxer_impl.cc
 
 LOCAL_LDLIBS := -llog
-LOCAL_STATIC_LIBRARIES := libvpxWriter
 LOCAL_SHARED_LIBRARIES := libvpx
 
 include $(BUILD_SHARED_LIBRARY)
