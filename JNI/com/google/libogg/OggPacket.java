@@ -28,6 +28,10 @@ public class OggPacket extends Common {
     return getPacket(nativePointer);
   }
 
+  public byte[] getPacketData() {
+    return getPacketData(nativePointer);
+  }
+
   public long getPacketno() {
     return getPacketno(nativePointer);
   }
@@ -71,6 +75,7 @@ public class OggPacket extends Common {
   private static native long getEOS(long jOggPacket);
   private static native long getGranulepos(long jOggPacket);
   private static native long getPacket(long jOggPacket);
+  private static native byte[] getPacketData(long jOggPacket);
   private static native long getPacketno(long jOggPacket);
   private static native long newOggPacket();
   private static native void setBOS(long jOggPacket, long bOS);

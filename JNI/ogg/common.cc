@@ -11,3 +11,10 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
   }
   return JNI_VERSION_1_6;
 }
+
+jbyteArray newByteArray(JNIEnv* env, const void* source, size_t size) {
+  jbyteArray destination = env->NewByteArray(size);
+  env->SetByteArrayRegion(destination, 0, size,
+                          static_cast<const jbyte*>(source));
+  return destination;
+}

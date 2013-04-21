@@ -39,6 +39,11 @@ FUNCTION(jlong, getPacket, jlong jOggPacket) {
   return reinterpret_cast<jlong>(oggPacket->packet);
 }
 
+FUNCTION(jbyteArray, getPacketData, jlong jOggPacket) {
+  ogg_packet* oggPacket = reinterpret_cast<ogg_packet*>(jOggPacket);
+  return newByteArray(env, oggPacket->packet, oggPacket->bytes);
+}
+
 FUNCTION(jlong, getPacketno, jlong jOggPacket) {
   ogg_packet* oggPacket = reinterpret_cast<ogg_packet*>(jOggPacket);
   return oggPacket->packetno;
