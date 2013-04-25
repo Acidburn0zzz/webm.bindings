@@ -152,6 +152,7 @@ LOCAL_SRC_FILES := ../../vorbis/AllocChain.cc \
                    ../../vorbis/VorbisBlock.cc \
                    ../../vorbis/VorbisComment.cc \
                    ../../vorbis/VorbisDspState.cc \
+                   ../../vorbis/vorbisenc.cc \
                    ../../vorbis/VorbisInfo.cc
 
 LOCAL_STATIC_LIBRARIES := libvorbis
