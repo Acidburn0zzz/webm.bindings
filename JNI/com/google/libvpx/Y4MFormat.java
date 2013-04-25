@@ -21,9 +21,10 @@ public abstract class Y4MFormat {
     }
 
     public boolean is420() {
-      return type.equals("420");
+      return type.equals("420") || type.equals("420jpeg");
     }
 
+    @Override
     public String toString() {
       return type;
     }
@@ -51,6 +52,7 @@ public abstract class Y4MFormat {
       return interlaced;
     }
 
+    @Override
     public String toString() {
       if (isProgressive()) {
         return new String("progressive");

@@ -51,7 +51,9 @@ public class Y4MReader extends Y4MFormat {
   public void parseHeader(byte[] header) throws IOException {
     this.header = header;
 
-    if (!Arrays.equals(Arrays.copyOfRange(this.header, 0, 8), YUV4MPEG)) {
+    byte[] checkHeader = new byte[YUV4MPEG.length];
+    System.arraycopy(this.header, 0, checkHeader, 0, YUV4MPEG.length);
+    if (!Arrays.equals(checkHeader, YUV4MPEG)) {
       throw new IOException("Incomplete magic for YUV4MPEG file.");
     }
 
@@ -63,7 +65,7 @@ public class Y4MReader extends Y4MFormat {
     interlace = new Interlaced('?');
     par = new Rational(1, 1);
 
-    String tags = new String(Arrays.copyOfRange(this.header, 0, this.header.length));
+    String tags = new String(this.header.clone());
     StringTokenizer st = new StringTokenizer(tags.trim());
     while (st.hasMoreTokens()) {
       String token = st.nextToken();
@@ -109,7 +111,12 @@ public class Y4MReader extends Y4MFormat {
       throw new IOException("Loss of framing in Y4M input data.");
     }
 
-    byte[] frame = readBuffer(getFrameSize());
+    final int size = getFrameSize();
+    if (size == 0) {
+      throw new IOException("Frame size is 0.");
+    }
+
+    byte[] frame = readBuffer(size);
 
     return frame;
   }
