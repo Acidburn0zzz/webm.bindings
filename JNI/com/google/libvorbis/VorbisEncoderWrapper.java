@@ -11,7 +11,7 @@ import java.util.Queue;
 /**
  * This class wraps Vorbis and Ogg JNI
  */
-public class VorbisEncoder {
+public class VorbisEncoderWrapper {
   private VorbisDspState dsp_state_;
   private VorbisInfo info_;
   private VorbisBlock block_;
@@ -23,7 +23,7 @@ public class VorbisEncoder {
   private long lastGranulepos;
   private Queue<OggPacket> vorbisPackets;
 
-  public VorbisEncoder() {
+  public VorbisEncoderWrapper() {
       info_ = new VorbisInfo();
       dsp_state_ = new VorbisDspState();
       block_ = new VorbisBlock();

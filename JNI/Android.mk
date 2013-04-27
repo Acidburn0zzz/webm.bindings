@@ -1,17 +1,17 @@
 # Build libwebm.a
 include $(CLEAR_VARS)
 
-include $(WORKING_DIR)/webm.bindings/JNI/libwebm/Android.mk
+include $(BINDINGS_DIR)/libwebm/Android.mk
 
 #Build libwebmJNI.so
 include $(CLEAR_VARS)
-LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/webm
+LOCAL_PATH := $(BINDINGS_DIR)/webm
 LOCAL_MODULE    := webmJNI
 
-LOCAL_C_INCLUDES := $(WORKING_DIR)/webm.bindings/JNI/libwebm \
-                    $(WORKING_DIR)/webm.bindings/JNI/webm \
-                    $(WORKING_DIR)/webm.bindings/JNI/webm/mkvmuxer \
-                    $(WORKING_DIR)/webm.bindings/JNI/webm/mkvparser
+LOCAL_C_INCLUDES := $(BINDINGS_DIR)/libwebm \
+                    $(BINDINGS_DIR)/webm \
+                    $(BINDINGS_DIR)/webm/mkvmuxer \
+                    $(BINDINGS_DIR)/webm/mkvparser
 
 LOCAL_ARM_MODE := arm
 
@@ -74,9 +74,9 @@ include $(BUILD_SHARED_LIBRARY)
 
 # Build libogg.a
 include $(CLEAR_VARS)
-LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/libogg-1.3.0/src
+LOCAL_PATH := $(BINDINGS_DIR)/libogg-1.3.0/src
 LOCAL_MODULE    := libogg
-LOCAL_C_INCLUDES := $(WORKING_DIR)/webm.bindings/JNI/libogg-1.3.0/include
+LOCAL_C_INCLUDES := $(BINDINGS_DIR)/libogg-1.3.0/include
 LOCAL_CFLAGS := -DHAVE_CONFIG
 LOCAL_ARM_MODE := arm
 
@@ -87,15 +87,15 @@ include $(BUILD_STATIC_LIBRARY)
 
 # Build liboggJNI.so
 include $(CLEAR_VARS)
-LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/libogg-1.3.0/src
+LOCAL_PATH := $(BINDINGS_DIR)/ogg
 LOCAL_MODULE    := oggJNI
-LOCAL_C_INCLUDES := $(WORKING_DIR)/webm.bindings/JNI/libogg-1.3.0/include
+LOCAL_C_INCLUDES := $(BINDINGS_DIR)/libogg-1.3.0/include
 LOCAL_CFLAGS := -DHAVE_CONFIG
 LOCAL_ARM_MODE := arm
 
-LOCAL_SRC_FILES := ../../ogg/common.cc \
-                   ../../ogg/OggpackBuffer.cc \
-                   ../../ogg/OggPacket.cc
+LOCAL_SRC_FILES := common.cc \
+                   OggpackBuffer.cc \
+                   OggPacket.cc
 
 LOCAL_STATIC_LIBRARIES := libogg
 
@@ -103,10 +103,10 @@ include $(BUILD_SHARED_LIBRARY)
 
 # Build libvorbis.a
 include $(CLEAR_VARS)
-LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/libvorbis-1.3.3/lib
+LOCAL_PATH := $(BINDINGS_DIR)/libvorbis-1.3.3/lib
 LOCAL_MODULE    := libvorbis
-LOCAL_C_INCLUDES := $(WORKING_DIR)/webm.bindings/JNI/libvorbis-1.3.3/include \
-                    $(WORKING_DIR)/webm.bindings/JNI/libogg-1.3.0/include
+LOCAL_C_INCLUDES := $(BINDINGS_DIR)/libvorbis-1.3.3/include \
+                    $(BINDINGS_DIR)/libogg-1.3.0/include
 LOCAL_CFLAGS := -DHAVE_CONFIG
 LOCAL_ARM_MODE := arm
 
@@ -139,22 +139,26 @@ include $(BUILD_STATIC_LIBRARY)
 
 # Build libvorbisJNI.so
 include $(CLEAR_VARS)
-LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/libvorbis-1.3.3/lib
+LOCAL_PATH := $(BINDINGS_DIR)/vorbis
+
 LOCAL_MODULE    := vorbisJNI
-LOCAL_C_INCLUDES := $(WORKING_DIR)/webm.bindings/JNI/libvorbis-1.3.3/include \
-                    $(WORKING_DIR)/webm.bindings/JNI/libogg-1.3.0/include
+LOCAL_C_INCLUDES := $(BINDINGS_DIR)/libvorbis-1.3.3/include \
+                    $(BINDINGS_DIR)/libogg-1.3.0/include
 LOCAL_CFLAGS := -DHAVE_CONFIG
 LOCAL_ARM_MODE := arm
 
-LOCAL_SRC_FILES := ../../vorbis/AllocChain.cc \
-                   ../../vorbis/codec.cc \
-                   ../../vorbis/common.cc \
-                   ../../vorbis/VorbisBlock.cc \
-                   ../../vorbis/VorbisComment.cc \
-                   ../../vorbis/VorbisDspState.cc \
-                   ../../vorbis/vorbisenc.cc \
-                   ../../vorbis/VorbisInfo.cc
+LOCAL_SRC_FILES := AllocChain.cc \
+                   codec.cc \
+                   common.cc \
+                   vorbis_encoder.cc \
+                   VorbisBlock.cc \
+                   VorbisComment.cc \
+                   VorbisDspState.cc \
+                   vorbisenc.cc \
+                   VorbisEncoder.cc \
+                   VorbisInfo.cc
 
+LOCAL_LDLIBS := -llog
 LOCAL_STATIC_LIBRARIES := libvorbis
 
 include $(BUILD_SHARED_LIBRARY)
@@ -165,15 +169,15 @@ include $(CLEAR_VARS)
 
 # TODO(fgalligan): Change the build dir after libvpx can be built under JNI.
 # For now libvpx must be built under <project>/jni.
-#LOCAL_PATH := $(WORKING_DIR)/webm.bindings/JNI/
-#include $(WORKING_DIR)/webm.bindings/JNI/libvpx/build/make/Android.mk
+#LOCAL_PATH := $(BINDINGS_DIR)/
+#include $(BINDINGS_DIR)/libvpx/build/make/Android.mk
 LOCAL_PATH := $(WORKING_DIR)
 include $(WORKING_DIR)/libvpx/build/make/Android.mk
 
 
 # Build libvpxJNI.so
 include $(CLEAR_VARS)
-LOCAL_PATH := $(WORKING_DIR)
+LOCAL_PATH := $(BINDINGS_DIR)/vpx
 
 LOCAL_MODULE    := vpxJNI
 
@@ -183,14 +187,14 @@ LOCAL_ARM_MODE := arm
 #LOCAL_C_INCLUDES := webm.bindings/JNI/libvpx \
 #                    webm.bindings/JNI/libvpx/vpx_ports \
 #                    webm.bindings/JNI
-LOCAL_C_INCLUDES := libvpx \
-                    libvpx/vpx_ports \
-                    webm.bindings/JNI
+LOCAL_C_INCLUDES := $(WORKING_DIR)/libvpx \
+                    $(WORKING_DIR)/libvpx/vpx_ports \
+                    $(WORKING_DIR)
 
-LOCAL_SRC_FILES := webm.bindings/JNI/vpx/libvpx_com_impl.cc \
-                   webm.bindings/JNI/vpx/libvpx_dec_impl.cc \
-                   webm.bindings/JNI/vpx/libvpx_enc_config_impl.cc \
-                   webm.bindings/JNI/vpx/libvpx_enc_impl.cc
+LOCAL_SRC_FILES := libvpx_com_impl.cc \
+                   libvpx_dec_impl.cc \
+                   libvpx_enc_config_impl.cc \
+                   libvpx_enc_impl.cc
                    #webm.bindings/JNI/vpx/libvpx_webm_muxer_impl.cc
 
 LOCAL_LDLIBS := -llog

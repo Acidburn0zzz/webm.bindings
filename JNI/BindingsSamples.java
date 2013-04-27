@@ -4,8 +4,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import com.google.libvorbis.AudioFrame;
-import com.google.libvorbis.VorbisEncoder;
+import com.google.libvorbis.VorbisEncoderC;
 import com.google.libvorbis.VorbisEncoderConfig;
+import com.google.libvorbis.VorbisEncoderWrapper;
 import com.google.libvpx.LibVpxEnc;
 import com.google.libvpx.LibVpxEncConfig;
 import com.google.libvpx.LibVpxException;
@@ -377,9 +378,9 @@ public class BindingsSamples {
    * source audio must be a WAV file with raw PCM data. |webmOutputName| filename of the WebM
    * file to write to. Returns "Success!" on success, an error string otherwise.
    */
-  static public String audioEncodeSample(String wavInputName, String webmOutputName) {
+  static public String audioEncodeSampleJava(String wavInputName, String webmOutputName) {
     VorbisEncoderConfig vorbisConfig = null;
-    VorbisEncoder vorbisEncoder = null;
+    VorbisEncoderWrapper vorbisEncoder = null;
     MkvWriter mkvWriter = null;
 
     try {
@@ -398,7 +399,7 @@ public class BindingsSamples {
       vorbisConfig.block_align = wavReader.nBlockAlign();
       vorbisConfig.bits_per_sample = wavReader.wBitsPerSample();
 
-      vorbisEncoder = new VorbisEncoder();
+      vorbisEncoder = new VorbisEncoderWrapper();
       if (!vorbisEncoder.Init(vorbisConfig)) {
         return new String("Could not initialize Vorbis encoder.");
       }
@@ -470,6 +471,107 @@ public class BindingsSamples {
   }
 
   /*
+   * This function will encode an audio WebM file. |wavInputName| filename of the source audio. The
+   * source audio must be a WAV file with raw PCM data. |webmOutputName| filename of the WebM
+   * file to write to. Returns "Success!" on success, an error string otherwise.
+   */
+  static public String audioEncodeSample(String wavInputName, String webmOutputName) {
+    VorbisEncoderC vorbisEncoder = null;
+    MkvWriter mkvWriter = null;
+
+    try {
+      File pcmFile = new File(wavInputName);
+      WavReader wavReader = null;
+      try {
+        wavReader = new WavReader(pcmFile);
+      } catch (Exception e) {
+        return new String("Could not create wav reader.");
+      }
+
+      vorbisEncoder = new VorbisEncoderC();
+
+      // The input characteristics must be set before Init() is called.
+      int channels = wavReader.nChannels();
+      int sampleRate = wavReader.nSamplesPerSec();
+      vorbisEncoder.SetChannels(channels);
+      vorbisEncoder.SetSampleRate(sampleRate);
+      vorbisEncoder.SetBitsPerSample(wavReader.wBitsPerSample());
+
+      if (!vorbisEncoder.Init()) {
+        return new String("Could not initialize Vorbis encoder.");
+      }
+
+      mkvWriter = new MkvWriter();
+      if (!mkvWriter.open(webmOutputName)) {
+        return new String("WebM Output name is invalid or error while opening.");
+      }
+
+      Segment muxerSegment = new Segment();
+      if (!muxerSegment.init(mkvWriter)) {
+        return new String("Could not initialize muxer segment.");
+      }
+
+      SegmentInfo muxerSegmentInfo = muxerSegment.getSegmentInfo();
+      muxerSegmentInfo.setWritingApp("wavEncodeSample");
+
+      // Add Audio Track
+      long newAudioTrackNumber = muxerSegment.addAudioTrack(sampleRate, channels, 0);
+      if (newAudioTrackNumber == 0) {
+        return new String("Could not add audio track.");
+      }
+
+      AudioTrack muxerTrack = (AudioTrack) muxerSegment.getTrackByNumber(newAudioTrackNumber);
+      if (muxerTrack == null) {
+        return new String("Could not get audio track.");
+      }
+
+      byte[] buffer = vorbisEncoder.CodecPrivate();
+      if (buffer == null) {
+        return new String("Could not get audio private data.");
+      }
+      if (!muxerTrack.setCodecPrivate(buffer)) {
+        return new String("Could not add audio private data.");
+      }
+
+      final int maxSamplesToRead = 1000;
+      int samplesLeft = 0;
+      while ((samplesLeft = wavReader.samplesRemaining()) > 0) {
+        byte[] pcmArray = null;
+        int samplesToRead = Math.min(samplesLeft, maxSamplesToRead);
+        try {
+          pcmArray = wavReader.readSamples(samplesToRead);
+        } catch (Exception e) {
+          return new String("Could not read samples.");
+        }
+
+        if (!vorbisEncoder.Encode(pcmArray))
+          return new String("Error encoding samples.");
+
+        long[] timestamp = new long[2];
+
+        byte[] frame = null;
+        while ((frame = vorbisEncoder.ReadCompressedAudio(timestamp)) != null) {
+          if (!muxerSegment.addFrame(
+              frame, newAudioTrackNumber, timestamp[0] * 1000000, true)) {
+            return new String("Could not add audio frame.");
+          }
+        }
+      }
+
+      if (!muxerSegment.finalizeSegment()) {
+        return new String("Finalization of segment failed.");
+      }
+
+    } finally {
+      if (mkvWriter != null) {
+        mkvWriter.close();
+      }
+    }
+
+    return new String("Success!");
+  }
+
+  /*
    * This function will encode an audio and video WebM file. |y4mName| filename of the source video.
    * The source video must be a Y4M file with raw i420 frames. |wavName| filename of the source
    * audio. The source audio must be a WAV file with raw PCM data. |webmOutputName| filename of the
@@ -481,7 +583,7 @@ public class BindingsSamples {
     LibVpxEncConfig vpxConfig = null;
     LibVpxEnc vpxEncoder = null;
     VorbisEncoderConfig vorbisConfig = null;
-    VorbisEncoder vorbisEncoder = null;
+    VorbisEncoderWrapper vorbisEncoder = null;
     MkvWriter mkvWriter = null;
 
     try {
@@ -495,7 +597,6 @@ public class BindingsSamples {
 
       vpxConfig = new LibVpxEncConfig(y4mReader.getWidth(), y4mReader.getHeight());
       vpxEncoder = new LibVpxEnc(vpxConfig);
-      byte[] uncompressedFrame;
 
       // libwebm expects nanosecond units
       vpxConfig.setTimebase(1, 1000000000);
@@ -518,7 +619,7 @@ public class BindingsSamples {
       vorbisConfig.block_align = wavReader.nBlockAlign();
       vorbisConfig.bits_per_sample = wavReader.wBitsPerSample();
 
-      vorbisEncoder = new VorbisEncoder();
+      vorbisEncoder = new VorbisEncoderWrapper();
       if (!vorbisEncoder.Init(vorbisConfig)) {
         return new String("Could not initialize Vorbis encoder.");
       }
