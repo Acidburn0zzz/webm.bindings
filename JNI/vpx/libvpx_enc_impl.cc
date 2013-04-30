@@ -4,6 +4,11 @@
 #include <jni.h>
 #include <string.h>
 
+#ifdef HAVE_LIBYUV
+#include <cstdlib>
+#include "libyuv.h"
+#endif
+
 #include "vpx/vpx_encoder.h"
 #include "vpx/vp8cx.h"
 #include "vpx_ports/mem_ops.h"
@@ -19,6 +24,19 @@
 #  define printf(fmt, ...) \
    printf(fmt "\n", ##__VA_ARGS__)
 # endif
+#endif
+
+#ifdef HAVE_LIBYUV
+#define align_buffer_64(var, size) \
+  uint8* var; \
+  uint8* var##_mem; \
+  var##_mem = reinterpret_cast<uint8*>(malloc((size) + 63)); \
+  var = reinterpret_cast<uint8*> \
+        ((reinterpret_cast<intptr_t>(var##_mem) + 63) & ~63);
+
+#define free_aligned_buffer_64(var) \
+  free(var##_mem);  \
+  var = 0;
 #endif
 
 #define FUNC(RETURN_TYPE, NAME, ...) \
@@ -98,6 +116,75 @@ FUNC(jboolean, vpxCodecEncode, jlong jctx, jbyteArray jframe,
 
   return success;
 }
+
+#ifdef HAVE_LIBYUV
+FUNC(jboolean, vpxCodecHaveLibyuv) {
+  return true;
+}
+
+FUNC(jboolean, vpxCodecConvertEncode, jlong jctx, jbyteArray jframe,
+                                      jlong pts, jlong duration,
+                                      jlong flags, jlong deadline,
+                                      jlong fourcc, jint size) {
+  printf("vpxCodecConvertEncode");
+  jboolean success = true;
+
+  vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);
+  const int width = ctx->config.enc->g_w;
+  const int height = ctx->config.enc->g_h;
+  const int dst_y_stride = (width + 1) & ~1;
+  const int dst_uv_stride = (width + 1) / 2;
+  const int dst_uv_size = dst_uv_stride * ((height + 1) / 2);
+
+  align_buffer_64(dst_y, (dst_y_stride * height) + (2 * dst_uv_size));
+  uint8* dst_u = dst_y + (dst_y_stride * height);
+  uint8* dst_v = dst_u + dst_uv_size;
+
+  jbyte *frame = env->GetByteArrayElements(jframe, 0);
+  int rv = libyuv::ConvertToI420(reinterpret_cast<uint8*>(frame), size,
+                                 dst_y, dst_y_stride,
+                                 dst_u, dst_uv_stride,
+                                 dst_v, dst_uv_stride,
+                                 0, 0,
+                                 width, height,
+                                 dst_y_stride, height,
+                                 libyuv::kRotate0, fourcc);
+  env->ReleaseByteArrayElements(jframe, frame, 0);
+  if (rv != 0)
+    success = false;
+
+  if (success) {
+    vpx_image_t *img = vpx_img_wrap(NULL,
+                                    IMG_FMT_I420,
+                                    ctx->config.enc->g_w,
+                                    ctx->config.enc->g_h,
+                                    0,
+                                    dst_y);
+
+    if (img) {
+      vpx_codec_encode(ctx, img, pts, duration, flags, deadline);
+      vpx_img_free(img);
+    } else {
+      success = false;
+    }
+  }
+
+  free_aligned_buffer_64(dst_y);
+  return success;
+}
+#else
+FUNC(jboolean, vpxCodecHaveLibyuv) {
+  return false;
+}
+
+FUNC(jboolean, vpxCodecConvertEncode, jlong jctx, jbyteArray jframe,
+                                      jlong pts, jlong duration,
+                                      jlong flags, jlong deadline,
+                                      jlong fourcc, jint size) {
+  printf("vpxCodecConvertEncode Stub");
+  return false;
+}
+#endif
 
 FUNC(jobject, vpxCodecEncGetCxData, jlong jctx) {
   printf("vpxCodecEncGetCxData");

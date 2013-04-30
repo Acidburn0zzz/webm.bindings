@@ -8,6 +8,24 @@ import java.util.ArrayList;
  * libvpx JNI wrapper for encoding functions.
  */
 public class LibVpxEnc extends LibVpxCom {
+  // Enums from libyuv.
+  public static final long FOURCC_I420 = 0x30323449;
+  public static final long FOURCC_I422 = 0x32323449;
+  public static final long FOURCC_NV21 = 0x3132564E;
+  public static final long FOURCC_NV12 = 0x3231564E;
+  public static final long FOURCC_YUY2 = 0x32595559;
+  public static final long FOURCC_UYVY = 0x56595559;
+  public static final long FOURCC_ARGB = 0x42475241;
+  public static final long FOURCC_BGRA = 0x41524742;
+  public static final long FOURCC_ABGR = 0x52474241;
+  public static final long FOURCC_24BG = 0x47423432;  // rgb888
+  public static final long FOURCC_RGBA = 0x41424752;
+  public static final long FOURCC_RGBP = 0x50424752;  // bgr565.
+  public static final long FOURCC_RGBO = 0x4F424752;  // abgr1555.
+  public static final long FOURCC_R444 = 0x34343452;  // argb4444.
+  public static final long FOURCC_YV12 = 0x32315659;
+  public static final long FOURCC_YV16 = 0x36315659;
+
   private native void vpxCodecEncInit(long encoder, long cfg);
 
   private native int vpxCodecEncCtlSetCpuUsed(long ctx, int value);
@@ -26,6 +44,11 @@ public class LibVpxEnc extends LibVpxCom {
   private native boolean vpxCodecEncode(long ctx, byte[] frame,
                                         long pts, long duration,
                                         long flags, long deadline);
+  private native boolean vpxCodecConvertEncode(long ctx, byte[] frame,
+                                               long pts, long duration,
+                                               long flags, long deadline,
+                                               long fourcc, int size);
+  private static native boolean vpxCodecHaveLibyuv();
 
   private native ArrayList<VpxCodecCxPkt> vpxCodecEncGetCxData(long ctx);
 
@@ -61,6 +84,20 @@ public class LibVpxEnc extends LibVpxCom {
     }
     throwOnError();
     return vpxCodecEncGetCxData(vpxCodecIface);
+  }
+
+  public ArrayList<VpxCodecCxPkt> convertEncodeFrame(
+      byte[] frame, long frameStart, long frameDuration, long fourcc) throws LibVpxException {
+    if (!vpxCodecConvertEncode(vpxCodecIface, frame, frameStart, frameDuration, 0L, 0L,
+                               fourcc, frame.length)) {
+      throw new LibVpxException("Unable to allocate space to wrap image buffer");
+    }
+    throwOnError();
+    return vpxCodecEncGetCxData(vpxCodecIface);
+  }
+
+  public static boolean haveLibyuv() {
+    return vpxCodecHaveLibyuv();
   }
 
   public void close() {

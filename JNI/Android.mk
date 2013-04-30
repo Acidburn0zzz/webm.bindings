@@ -1,3 +1,8 @@
+# Build libyuv.a
+include $(CLEAR_VARS)
+
+include $(BINDINGS_DIR)/libyuv-read-only/Android.mk
+
 # Build libwebm.a
 include $(CLEAR_VARS)
 
@@ -191,6 +196,8 @@ LOCAL_C_INCLUDES := $(WORKING_DIR)/libvpx \
                     $(WORKING_DIR)/libvpx/vpx_ports \
                     $(WORKING_DIR)
 
+LOCAL_CFLAGS := -DHAVE_LIBYUV
+
 LOCAL_SRC_FILES := libvpx_com_impl.cc \
                    libvpx_dec_impl.cc \
                    libvpx_enc_config_impl.cc \
@@ -198,6 +205,7 @@ LOCAL_SRC_FILES := libvpx_com_impl.cc \
                    #webm.bindings/JNI/vpx/libvpx_webm_muxer_impl.cc
 
 LOCAL_LDLIBS := -llog
+LOCAL_STATIC_LIBRARIES := libyuv_static
 LOCAL_SHARED_LIBRARIES := libvpx
 
 include $(BUILD_SHARED_LIBRARY)

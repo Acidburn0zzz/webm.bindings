@@ -29,6 +29,15 @@ webm_java_sources := $(shell find com/google/libwebm/ -name "*.java" -type f)
 webm_java_classes := $(patsubst %.java,class/%.class,$(webm_java_sources))
 ebml_writer := obj/libvpx/libmkv/EbmlWriter.o
 
+yuv_lib :=
+
+ifeq ($(wildcard libyuv/trunk/out/Release/obj.target/libyuv.a),)
+else
+  CXXFLAGS := $(CXXFLAGS) -Ilibyuv/trunk/include -DHAVE_LIBYUV
+  yuv_lib := -L./libyuv/trunk/out/Release/obj.target -lyuv \
+             -L./libyuv/trunk/out/Release/obj.target/third_party/libjpeg_turbo -ljpeg_turbo
+endif
+
 classes := $(ogg_java_classes) $(vorbis_java_classes) $(vpx_java_classes) \
 	$(webm_java_classes)
 libraries := liboggJNI.so libvorbisJNI.so libvpxJNI.so libwebmJNI.so
@@ -59,7 +68,7 @@ play: output/foreman_cif_420p_352x288.ivf
 		output/foreman_cif_420p_352x288.ivf
 	mplayer output/foreman_cif_420p_352x288.y4m
 
-Application: class/Application.class
+Application: class/Application.class class/BindingsSamples.class
 
 SampleMultiplexer: class/SampleMultiplexer.class
 
@@ -70,7 +79,7 @@ libvorbisJNI.so: $(vorbis_c_objects)
 	$(CXX) $(LDFLAGS) -o $@ $(vorbis_c_objects) -lvorbis
 
 libvpxJNI.so: $(vpx_c_objects) $(ebml_writer)
-	$(CXX) $(LDFLAGS) -o $@ $(vpx_c_objects) $(ebml_writer) -lvpx
+	$(CXX) $(LDFLAGS) -o $@ $(vpx_c_objects) $(ebml_writer) -lvpx $(yuv_lib)
 
 libwebmJNI.so: $(webm_c_objects)
 	$(CXX) $(LDFLAGS) -o $@ $(webm_c_objects) -lwebm -Llibwebm

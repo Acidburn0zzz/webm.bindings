@@ -1,4 +1,6 @@
-This project requies the following shared libraries to be installed:
+See README.Android for Android build instructions.
+
+This project requires the following shared libraries to be installed:
 
 - libvpx
 Download from
@@ -21,6 +23,15 @@ Follow the README to install.
 From the JNI directory: git clone http://git.chromium.org/webm/libwebm.git
 cd libwebm
 make shared
+
+- libyuv [Optional: If you want libvpx to convert from different formats before encoding.]
+Install libyuv pre-requisites.
+From the JNI directory: mkdir libyuv
+cd libyuv
+gclient config http://libyuv.googlecode.com/svn/trunk
+gclient sync
+cd trunk
+make -j6 V=1 BUILDTYPE=Release
 
 
 

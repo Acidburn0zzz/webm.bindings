@@ -132,5 +132,31 @@ public class Application {
         y4mWriter.close();
       }
     }
+
+    if (LibVpxEnc.haveLibyuv()) {
+      final int width = 320;
+      final int height = 180;
+      final int rate = 24;
+      final int scale = 1;
+      final int framesToEncode = 200;
+      byte[] rgbFrame = new byte[width * height * 3];
+
+      // Create a green gradiant.
+      for (int y = 0; y < height; ++y) {
+        final byte green = (byte)y;
+        final int xStart = y * width * 3;
+        for (int x = 0; x < width; ++x) {
+          rgbFrame[xStart + (x * 3)] = 0;
+          rgbFrame[xStart + (x * 3) + 1] = green;
+          rgbFrame[xStart + (x * 3) + 2] = 0;
+        }
+      }
+
+      String outputWebM = "output/rgbframe.webm";
+      String outStr = BindingsSamples.testVideoConvertEncode(outputWebM,
+          rgbFrame, LibVpxEnc.FOURCC_24BG, width, height, rate, scale, framesToEncode);
+      if (outStr != "Success!")
+        System.err.println(outStr);
+    }
   }
 }
