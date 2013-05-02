@@ -11,7 +11,7 @@
 8. Create <project>/jni folder.
 
 # Get JNI bindings
-9. git clone https://code.google.com/p/webm.bindings/
+9. git clone http://git.chromium.org/webm/bindings.git
 
 # Get libvpx
 10. git clone http://git.chromium.org/webm/libvpx.git
@@ -55,7 +55,7 @@ include $(BINDINGS_DIR)/Android.mk
 23. ndk-build
 
 # Copy the java code.
-24. cp -R webm.bindings/JNI/com/google/ ../src/com/
+24. cp -R webm.bindings/JNI/com/google ../src/com/
 
 # Adding code to test the bindings.
 25. Add load library libvpx.so to your code. e.g.:
