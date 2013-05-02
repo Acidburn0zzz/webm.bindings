@@ -8,7 +8,7 @@ import java.nio.ByteOrder;
  * This class reads a PCM wav file.
  */
 public class WavReader {
-  public final int kWaveFormatSizePCM = 18;
+  public final int kWaveFormatExSizePCM = 18;
 
   private FileInputStream is = null;
   private int filesize;
@@ -115,7 +115,7 @@ public class WavReader {
         // Skip past "WAVE"
         is.skip(4);
       } else if (chunkID.equals("fmt ")) {
-        if (chunkDataSize != kWaveFormatSizePCM) {
+        if (chunkDataSize > kWaveFormatExSizePCM) {
           throw new IOException("Error only PCM format is supported.");
         }
 
