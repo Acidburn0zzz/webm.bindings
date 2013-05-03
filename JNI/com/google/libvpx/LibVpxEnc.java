@@ -44,10 +44,14 @@ public class LibVpxEnc extends LibVpxCom {
   private native boolean vpxCodecEncode(long ctx, byte[] frame,
                                         long pts, long duration,
                                         long flags, long deadline);
-  private native boolean vpxCodecConvertEncode(long ctx, byte[] frame,
-                                               long pts, long duration,
-                                               long flags, long deadline,
-                                               long fourcc, int size);
+  private native boolean vpxCodecConvertByteEncode(long ctx, byte[] frame,
+                                                   long pts, long duration,
+                                                   long flags, long deadline,
+                                                   long fourcc, int size);
+  private native boolean vpxCodecConvertIntEncode(long ctx, int[] frame,
+                                                  long pts, long duration,
+                                                  long flags, long deadline,
+                                                  long fourcc, int size);
   private static native boolean vpxCodecHaveLibyuv();
 
   private native ArrayList<VpxCodecCxPkt> vpxCodecEncGetCxData(long ctx);
@@ -75,22 +79,30 @@ public class LibVpxEnc extends LibVpxCom {
       throw new LibVpxException(vpxCodecErrorDetail(vpxCodecIface));
     }
   }
-
-  public ArrayList<VpxCodecCxPkt> encodeFrame(byte[] frame,
-                                              long frameStart,
-                                              long frameDuration) throws LibVpxException {
+  public ArrayList<VpxCodecCxPkt> encodeFrame(byte[] frame, long frameStart, long frameDuration)
+      throws LibVpxException {
     if (!vpxCodecEncode(vpxCodecIface, frame, frameStart, frameDuration, 0L, 0L)) {
-      throw new LibVpxException("Unable to allocate space to wrap image buffer");
+      throw new LibVpxException("Unable to encode frame");
     }
     throwOnError();
     return vpxCodecEncGetCxData(vpxCodecIface);
   }
 
-  public ArrayList<VpxCodecCxPkt> convertEncodeFrame(
+  public ArrayList<VpxCodecCxPkt> convertByteEncodeFrame(
       byte[] frame, long frameStart, long frameDuration, long fourcc) throws LibVpxException {
-    if (!vpxCodecConvertEncode(vpxCodecIface, frame, frameStart, frameDuration, 0L, 0L,
-                               fourcc, frame.length)) {
-      throw new LibVpxException("Unable to allocate space to wrap image buffer");
+    if (!vpxCodecConvertByteEncode(vpxCodecIface,
+        frame, frameStart, frameDuration, 0L, 0L, fourcc, frame.length)) {
+      throw new LibVpxException("Unable to convert and encode frame");
+    }
+    throwOnError();
+    return vpxCodecEncGetCxData(vpxCodecIface);
+  }
+
+  public ArrayList<VpxCodecCxPkt> convertIntEncodeFrame(
+      int[] frame, long frameStart, long frameDuration, long fourcc) throws LibVpxException {
+    if (!vpxCodecConvertIntEncode(vpxCodecIface,
+        frame, frameStart, frameDuration, 0L, 0L, fourcc, frame.length)) {
+      throw new LibVpxException("Unable to convert and encode frame");
     }
     throwOnError();
     return vpxCodecEncGetCxData(vpxCodecIface);

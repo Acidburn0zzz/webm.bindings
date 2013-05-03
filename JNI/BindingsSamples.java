@@ -757,7 +757,7 @@ public class BindingsSamples {
   }
 
   /*
-   * This function will encode a video WebM file. webmOutputName| filename of the
+   * This function will encode a byte array to a video WebM file. |webmOutputName| filename of the
    * WebM file to write to. |srcFrame| is source frame to convert and encode multiple times.
    * |fourcc| LibVpxEnc fourcc of the source. |width| width of the source. |height| height of the
    * source. |rate| fps numerator of the output WebM. |scale| fps denominator of the output WebM.
@@ -774,7 +774,6 @@ public class BindingsSamples {
     try {
       encoderConfig = new LibVpxEncConfig(width, height);
       encoder = new LibVpxEnc(encoderConfig);
-      byte[] uncompressedFrame;
 
       // libwebm expects nanosecond units
       encoderConfig.setTimebase(1, 1000000000);
@@ -806,6 +805,89 @@ public class BindingsSamples {
         long nextFrameStart = timeMultiplier.multiply(framesIn).toLong();
 
         ArrayList<VpxCodecCxPkt> encPkt = encoder.convertEncodeFrame(
+            srcFrame, frameStart, nextFrameStart - frameStart, fourcc);
+        for (int i = 0; i < encPkt.size(); i++) {
+          VpxCodecCxPkt pkt = encPkt.get(i);
+          final boolean isKey = (pkt.flags & 0x1) == 1;
+
+          if (!muxerSegment.addFrame(pkt.buffer, newVideoTrackNumber, pkt.pts, isKey)) {
+            return new String("Could not add frame.");
+          }
+        }
+
+        ++framesIn;
+      }
+
+      if (!muxerSegment.finalizeSegment()) {
+        return new String("Finalization of segment failed.");
+      }
+
+    } catch (LibVpxException e) {
+      return new String("Encoder error : " + e);
+    } finally {
+      if (encoder != null) {
+        encoder.close();
+      }
+      if (encoderConfig != null) {
+        encoderConfig.close();
+      }
+      if (mkvWriter != null) {
+        mkvWriter.close();
+      }
+    }
+
+    return new String("Success!");
+  }
+
+  /*
+   * This function will encode an int array to a video WebM file. |webmOutputName| filename of the
+   * WebM file to write to. |srcFrame| is source frame to convert and encode multiple times.
+   * |fourcc| LibVpxEnc fourcc of the source. |width| width of the source. |height| height of the
+   * source. |rate| fps numerator of the output WebM. |scale| fps denominator of the output WebM.
+   * |framesToEncode| is the number of video frames to encode before stopping. Returns "Success!"
+   * on success, an error string otherwise.
+   */
+  static public String testVideoConvertEncode(String webmOutputName,
+      int[] srcFrame, long fourcc, int width, int height, int rate, int scale,
+      int framesToEncode) {
+    LibVpxEncConfig encoderConfig = null;
+    LibVpxEnc encoder = null;
+    MkvWriter mkvWriter = null;
+
+    try {
+      encoderConfig = new LibVpxEncConfig(width, height);
+      encoder = new LibVpxEnc(encoderConfig);
+
+      // libwebm expects nanosecond units
+      encoderConfig.setTimebase(1, 1000000000);
+      Rational timeBase = encoderConfig.getTimebase();
+      Rational frameRate = new Rational(rate, scale);
+      Rational timeMultiplier = timeBase.multiply(frameRate).reciprocal();
+      int framesIn = 1;
+
+      mkvWriter = new MkvWriter();
+      if (!mkvWriter.open(webmOutputName)) {
+        return new String("WebM Output name is invalid or error while opening.");
+      }
+
+      Segment muxerSegment = new Segment();
+      if (!muxerSegment.init(mkvWriter)) {
+        return new String("Could not initialize muxer segment.");
+      }
+
+      SegmentInfo muxerSegmentInfo = muxerSegment.getSegmentInfo();
+      muxerSegmentInfo.setWritingApp("y4mEncodeSample");
+
+      long newVideoTrackNumber = muxerSegment.addVideoTrack(width, height, 0);
+      if (newVideoTrackNumber == 0) {
+        return new String("Could not add video track.");
+      }
+
+      while (framesIn < framesToEncode) {
+        long frameStart = timeMultiplier.multiply(framesIn - 1).toLong();
+        long nextFrameStart = timeMultiplier.multiply(framesIn).toLong();
+
+        ArrayList<VpxCodecCxPkt> encPkt = encoder.convertIntEncodeFrame(
             srcFrame, frameStart, nextFrameStart - frameStart, fourcc);
         for (int i = 0; i < encPkt.size(); i++) {
           VpxCodecCxPkt pkt = encPkt.get(i);
