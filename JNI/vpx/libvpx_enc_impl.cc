@@ -92,14 +92,15 @@ FUNC(void, vpxCodecEncInit, jlong jctx, jlong jcfg) {
 }
 
 FUNC(jboolean, vpxCodecEncode, jlong jctx, jbyteArray jframe,
-                               jlong pts, jlong duration,
+                               jint fmt, jlong pts, jlong duration,
                                jlong flags, jlong deadline) {
   printf("vpxCodecEncode");
   jboolean success = true;
   jbyte *frame = env->GetByteArrayElements(jframe, 0);
   vpx_codec_ctx_t *ctx = reinterpret_cast<vpx_codec_ctx_t *>(jctx);
+
   vpx_image_t *img = vpx_img_wrap(NULL,
-                                  IMG_FMT_I420,
+                                  (vpx_img_fmt)fmt,
                                   ctx->config.enc->g_w,
                                   ctx->config.enc->g_h,
                                   0,
@@ -151,7 +152,7 @@ bool convertEncode(vpx_codec_ctx_t *ctx, const uint8 *frame, int64_t pts,
 
   if (success) {
     vpx_image_t *img = vpx_img_wrap(NULL,
-                                    IMG_FMT_I420,
+                                    VPX_IMG_FMT_I420,
                                     ctx->config.enc->g_w,
                                     ctx->config.enc->g_h,
                                     0,

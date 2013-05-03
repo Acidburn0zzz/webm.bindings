@@ -71,7 +71,7 @@ public class Application {
         long nextFrameStart = timeMultiplier.multiply(framesIn).toLong();
 
         ArrayList<VpxCodecCxPkt> encPkt = encoder.encodeFrame(
-            uncompressedFrame, frameStart, nextFrameStart - frameStart);
+            uncompressedFrame, LibVpxEnc.VPX_IMG_FMT_I420, frameStart, nextFrameStart - frameStart);
 
         for (int i = 0; i < encPkt.size(); i++) {
           VpxCodecCxPkt pkt = encPkt.get(i);

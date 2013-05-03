@@ -336,7 +336,7 @@ public class BindingsSamples {
         long nextFrameStart = timeMultiplier.multiply(framesIn).toLong();
 
         ArrayList<VpxCodecCxPkt> encPkt =
-            encoder.encodeFrame(uncompressedFrame, frameStart, nextFrameStart - frameStart);
+            encoder.encodeFrame(uncompressedFrame, LibVpxEnc.VPX_IMG_FMT_I420, frameStart, nextFrameStart - frameStart);
 
         for (int i = 0; i < encPkt.size(); i++) {
           VpxCodecCxPkt pkt = encPkt.get(i);
@@ -704,7 +704,7 @@ public class BindingsSamples {
             long frameStart = timeMultiplier.multiply(framesIn - 1).toLong();
             long nextFrameStart = timeMultiplier.multiply(framesIn++).toLong();
 
-            encPkt = vpxEncoder.encodeFrame(rawVideoArray, frameStart, nextFrameStart - frameStart);
+            encPkt = vpxEncoder.encodeFrame(rawVideoArray, LibVpxEnc.VPX_IMG_FMT_I420, frameStart, nextFrameStart - frameStart);
 
             // Get the first vpx encoded frame.
             pktIndex = 0;

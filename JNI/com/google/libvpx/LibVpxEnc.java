@@ -26,6 +26,10 @@ public class LibVpxEnc extends LibVpxCom {
   public static final long FOURCC_YV12 = 0x32315659;
   public static final long FOURCC_YV16 = 0x36315659;
 
+  // Enums from libvpx.
+  public static final int VPX_IMG_FMT_YV12 = 0x301;
+  public static final int VPX_IMG_FMT_I420 = 0x102;
+
   private native void vpxCodecEncInit(long encoder, long cfg);
 
   private native int vpxCodecEncCtlSetCpuUsed(long ctx, int value);
@@ -42,7 +46,7 @@ public class LibVpxEnc extends LibVpxCom {
   private native int vpxCodecEncCtlSetMaxIntraBitratePct(long ctx, int value);
 
   private native boolean vpxCodecEncode(long ctx, byte[] frame,
-                                        long pts, long duration,
+                                        int fmt, long pts, long duration,
                                         long flags, long deadline);
   private native boolean vpxCodecConvertByteEncode(long ctx, byte[] frame,
                                                    long pts, long duration,
@@ -79,9 +83,10 @@ public class LibVpxEnc extends LibVpxCom {
       throw new LibVpxException(vpxCodecErrorDetail(vpxCodecIface));
     }
   }
-  public ArrayList<VpxCodecCxPkt> encodeFrame(byte[] frame, long frameStart, long frameDuration)
+
+  public ArrayList<VpxCodecCxPkt> encodeFrame(byte[] frame, int fmt, long frameStart, long frameDuration)
       throws LibVpxException {
-    if (!vpxCodecEncode(vpxCodecIface, frame, frameStart, frameDuration, 0L, 0L)) {
+    if (!vpxCodecEncode(vpxCodecIface, frame, fmt, frameStart, frameDuration, 0L, 0L)) {
       throw new LibVpxException("Unable to encode frame");
     }
     throwOnError();
