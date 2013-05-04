@@ -1,7 +1,7 @@
 # From Eclipse create a new Android project.
-1. Create new “Android Application Project”
-2. Fill Application Name with “Test WebM JNI”. Project Name will be “TestWebMJNI”. Package Name will be “com.example.testwebmjni”.
-3. [optional] You can change the Minimum required SDK to “API 3:Android 1.5 (Cupcake)”.
+1. Create new "Android Application Project"
+2. Fill Application Name with "Test WebM JNI". Project Name will be "TestWebMJNI". Package Name will be "com.example.testwebmjni".
+3. [optional] You can change the Minimum required SDK to "API 3:Android 1.5 (Cupcake)".
 4. Click Next button on the Configure Project screen.
 5. Click Next on the Icon screen.
 6. Click Next on the Create Activity screen.
@@ -26,14 +26,14 @@
 
 # Get libogg
 14. Download ogg code from http://downloads.xiph.org/releases/ogg/libogg-1.3.0.tar.gz
-15. extract to webm.bindings/JNI
+15. extract to bindings/JNI
 
 # We need to run configure to generate config_types.h.
 16. cd libogg-1.3.0 && ./configure && cd ..
 
 # Get libvorbis
 17. Download vorbis code from http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.3.tar.gz
-18. extract to webm.bindings/JNI
+18. extract to bindings/JNI
 
 # Get libyuv
 19. svn checkout http://libyuv.googlecode.com/svn/trunk/ libyuv-read-only
@@ -55,52 +55,48 @@ include $(BINDINGS_DIR)/Android.mk
 23. ndk-build
 
 # Copy the java code.
-24. cp -R webm.bindings/JNI/com/google ../src/com/
+24. cp -R bindings/JNI/com/google ../src/com/
 
 # Adding code to test the bindings.
 25. Add load library libvpx.so to your code. e.g.:
 static {
-  System.loadLibrary("vpx");
+  System.loadLibrary("vpx");
 }
 
 # Copy sample code.
 26. cp bindings/JNI/BindingsSamples.java ../src/com/example/testwebmjni/
-27. Add “package com.example.testwebmjni;” to the top of BindingsSamples.java
+27. cp bindings/JNI/WavReader.java ../src/com/example/testwebmjni/
+28. Add "package com.example.testwebmjni;" to the top of BindingsSamples.java and WavReader.java.
 
-28. Change MainActivity.java onCreate to:
-protected void onCreate(Bundle savedInstanceState) {    
-    super.onCreate(savedInstanceState);
-    String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
-    TextView  tv = new TextView(this);
-    tv.setText(outStr);
-    setContentView(tv);
-  }
+29. Change MainActivity.java onCreate to:
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
+  TextView tv = new TextView(this);
+  tv.setText(outStr);
+  setContentView(tv);
+}
 
-29. Run the app. You should see libwebm version output.
+30. Run the app. You should see libwebm version output.
 
 # Test encoding audio and video
-30. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
+31. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
 
-# Copy sample code.
-31. cp bindings/JNI/WavReader.java ../src/com/example/testwebmjni/
+32. Add "<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />" to AndroidManifest.xml.
 
-32. Add “package com.example.testwebmjni;” to the top of WavReader.java.
+33. Change MainActivity.java onCreate to:
+protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
+  String storageDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+  String inputVideo = storageDir + "io_320x180.y4m";
+  String inputAudio = storageDir + "io_44100.wav";
+  String outputWebM = storageDir + "/testjni.webm";
+  outStr += "\n" + BindingsSamples.audioVideoEncodeSample(inputVideo, inputAudio, outputWebM, 200);
+  TextView tv = new TextView(this);
+  tv.setText(outStr);
+  setContentView(tv);
+}
 
-33. Add “<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />” to AndroidManifest.xml.
-
-34. Change MainActivity.java onCreate to:
-protected void onCreate(Bundle savedInstanceState) {    
-    super.onCreate(savedInstanceState);
-    String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
-    String storageDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-    String inputVideo = storageDir + <yfm file>;
-    String inputAudio = storageDir + <wav file>;
-    String outputWebM = storageDir + "/testjni.webm";
-    outStr += "\n" + BindingsSamples.audioVideoEncodeSample(inputVideo, inputAudio, outputWebM, 200);
-    TextView  tv = new TextView(this);
-    tv.setText(outStr);
-    setContentView(tv);
-  }
-
-35. Run the app. You should see libwebm version output and “Success!”.
-36. Playback “testjni.webm” on the device.
+34. Run the app. You should see libwebm version output and "Success!".
+35. Playback "testjni.webm" on the device.

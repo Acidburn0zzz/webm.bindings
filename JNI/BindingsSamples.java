@@ -804,7 +804,7 @@ public class BindingsSamples {
         long frameStart = timeMultiplier.multiply(framesIn - 1).toLong();
         long nextFrameStart = timeMultiplier.multiply(framesIn).toLong();
 
-        ArrayList<VpxCodecCxPkt> encPkt = encoder.convertEncodeFrame(
+        ArrayList<VpxCodecCxPkt> encPkt = encoder.convertByteEncodeFrame(
             srcFrame, frameStart, nextFrameStart - frameStart, fourcc);
         for (int i = 0; i < encPkt.size(); i++) {
           VpxCodecCxPkt pkt = encPkt.get(i);
