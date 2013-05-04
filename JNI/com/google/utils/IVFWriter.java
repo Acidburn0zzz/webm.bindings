@@ -1,11 +1,14 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 // Author: frkoenig@google.com (Fritz Koenig)
-package com.google.libvpx;
+package com.google.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+
+import com.google.libvpx.Rational;
+import com.google.libvpx.VpxCodecCxPkt;
 
 /**
  * Write VpxCodecCxPkt to file in the ivf format.

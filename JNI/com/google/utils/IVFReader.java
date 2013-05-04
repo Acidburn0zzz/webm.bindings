@@ -1,15 +1,15 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 // Author: frkoenig@google.com (Fritz Koenig)
-package com.google.libvpx;
+package com.google.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
 import java.util.Arrays;
+
+import com.google.libvpx.Rational;
 
 /**
  * Return raw bitstream from IVF file.

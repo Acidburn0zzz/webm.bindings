@@ -1,8 +1,12 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 // Author: frkoenig@google.com (Fritz Koenig)
-package com.google.libvpx;
+package com.google.utils;
 
 import java.io.File;
+
+import com.google.libvpx.LibVpxException;
+import com.google.libvpx.Rational;
+import com.google.libvpx.VpxCodecCxPkt;
 
 /**
  *

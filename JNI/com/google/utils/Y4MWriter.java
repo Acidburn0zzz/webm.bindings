@@ -1,11 +1,13 @@
 // Copyright 2012 Google Inc. All Rights Reserved.
 // Author: frkoenig@google.com (Fritz Koenig)
-package com.google.libvpx;
+package com.google.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import com.google.libvpx.Rational;
 
 /**
  * Write uncompressed data to y4m file.
