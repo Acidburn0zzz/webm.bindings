@@ -58,17 +58,12 @@ include $(BINDINGS_DIR)/Android.mk
 24. cp -R bindings/JNI/com/google ../src/com/
 
 # Adding code to test the bindings.
-25. Add load library libvpx.so to your code. e.g.:
-static {
-  System.loadLibrary("vpx");
-}
-
 # Copy sample code.
-26. cp bindings/JNI/BindingsSamples.java ../src/com/example/testwebmjni/
-27. cp bindings/JNI/WavReader.java ../src/com/example/testwebmjni/
-28. Add "package com.example.testwebmjni;" to the top of BindingsSamples.java and WavReader.java.
+25. cp bindings/JNI/BindingsSamples.java ../src/com/example/testwebmjni/
+26. cp bindings/JNI/WavReader.java ../src/com/example/testwebmjni/
+27. Add "package com.example.testwebmjni;" to the top of BindingsSamples.java and WavReader.java.
 
-29. Change MainActivity.java onCreate to:
+28. Change MainActivity.java onCreate to:
 protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
@@ -77,14 +72,14 @@ protected void onCreate(Bundle savedInstanceState) {
   setContentView(tv);
 }
 
-30. Run the app. You should see libwebm version output.
+29. Run the app. You should see libwebm version output.
 
 # Test encoding audio and video
-31. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
+30. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
 
-32. Add "<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />" to AndroidManifest.xml.
+31. Add "<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />" to AndroidManifest.xml.
 
-33. Change MainActivity.java onCreate to:
+32. Change MainActivity.java onCreate to:
 protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
@@ -98,5 +93,5 @@ protected void onCreate(Bundle savedInstanceState) {
   setContentView(tv);
 }
 
-34. Run the app. You should see libwebm version output and "Success!".
-35. Playback "testjni.webm" on the device.
+33. Run the app. You should see libwebm version output and "Success!".
+34. Playback "testjni.webm" on the device.

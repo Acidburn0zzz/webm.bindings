@@ -8,6 +8,7 @@ package com.google.libvpx;
  */
 public class LibVpxCom {
   static {
+    System.loadLibrary("vpx");
     System.loadLibrary("vpxJNI");
   }
 
