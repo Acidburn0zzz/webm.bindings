@@ -60,10 +60,9 @@ include $(BINDINGS_DIR)/Android.mk
 # Adding code to test the bindings.
 # Copy sample code.
 25. cp bindings/JNI/BindingsSamples.java ../src/com/example/testwebmjni/
-26. cp bindings/JNI/WavReader.java ../src/com/example/testwebmjni/
-27. Add "package com.example.testwebmjni;" to the top of BindingsSamples.java and WavReader.java.
+26. Add "package com.example.testwebmjni;" to the top of BindingsSamples.java.
 
-28. Change MainActivity.java onCreate to:
+27. Change MainActivity.java onCreate to:
 protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
@@ -72,14 +71,14 @@ protected void onCreate(Bundle savedInstanceState) {
   setContentView(tv);
 }
 
-29. Run the app. You should see libwebm version output.
+28. Run the app. You should see libwebm version output.
 
 # Test encoding audio and video
-30. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
+29. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
 
-31. Add "<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />" to AndroidManifest.xml.
+30. Add "<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />" to AndroidManifest.xml.
 
-32. Change MainActivity.java onCreate to:
+31. Change MainActivity.java onCreate to:
 protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
@@ -93,5 +92,5 @@ protected void onCreate(Bundle savedInstanceState) {
   setContentView(tv);
 }
 
-33. Run the app. You should see libwebm version output and "Success!".
-34. Playback "testjni.webm" on the device.
+32. Run the app. You should see libwebm version output and "Success!".
+33. Playback "testjni.webm" on the device.
