@@ -69,7 +69,9 @@ public class IVFReader {
     ByteBuffer buf = ByteBuffer.wrap(headerBuffer);
     buf.order(ByteOrder.LITTLE_ENDIAN);
 
-    if (!Arrays.equals(Arrays.copyOfRange(headerBuffer, 0, 4), cDKIF)) {
+    byte[] checkHeader = new byte[cDKIF.length];
+    System.arraycopy(headerBuffer, 0, checkHeader, 0, cDKIF.length);
+    if (!Arrays.equals(checkHeader, cDKIF)) {
       throw new IOException("Incomplete magic for IVF file.");
     }
 
