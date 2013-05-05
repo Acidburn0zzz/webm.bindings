@@ -156,6 +156,8 @@ LOCAL_SRC_FILES := AllocChain.cc \
                    codec.cc \
                    common.cc \
                    vorbis_encoder.cc \
+                   vorbis_encoder_config.cc \
+                   vorbis_encoder_config_impl.cc \
                    VorbisBlock.cc \
                    VorbisComment.cc \
                    VorbisDspState.cc \

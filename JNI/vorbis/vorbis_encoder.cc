@@ -10,7 +10,7 @@
 # ifdef __ANDROID__
 #  include <android/log.h>
 #  define printf(fmt, ...) \
-   __android_log_print(ANDROID_LOG_DEBUG, "VORBIS_DEC", fmt, ##__VA_ARGS__)
+   __android_log_print(ANDROID_LOG_DEBUG, "VORBIS_ENC", fmt, ##__VA_ARGS__)
 # else
 #  define printf(fmt, ...) \
    printf(fmt "\n", ##__VA_ARGS__)
@@ -26,21 +26,6 @@ VorbisEncoder::VorbisEncoder()
       data_(NULL),
       data_size_(0),
       data_capacity_(2048) {
-  config_.format_tag = 1;
-  config_.channels = 2;
-  config_.sample_rate = 44100;
-  config_.bits_per_sample = 16;
-  config_.block_align = (config_.bits_per_sample / 8) * config_.channels;
-  config_.bytes_per_second = config_.sample_rate * config_.block_align;
-
-  config_.average_bitrate = 64000;
-  config_.minimum_bitrate = -1;
-  config_.maximum_bitrate = -1;
-
-  config_.bitrate_based_quality = true;
-  config_.impulse_block_bias = -7.5;
-  config_.lowpass_frequency = 50.0;
-
   memset(&ident_packet_, 0, sizeof(ident_packet_));
   memset(&comments_packet_, 0, sizeof(comments_packet_));
   memset(&setup_packet_, 0, sizeof(setup_packet_));
@@ -51,7 +36,9 @@ VorbisEncoder::~VorbisEncoder() {
   delete [] data_;
 }
 
-bool VorbisEncoder::Init() {
+bool VorbisEncoder::Init(const VorbisEncoderConfig& config) {
+  config_ = config;
+
   if (config_.channels <= 0 || config_.channels > 2)
     return false;
 
@@ -173,59 +160,6 @@ bool VorbisEncoder::ReadCompressedAudio(unsigned char** data, int* length,
   *length = data_size_;
   data_size_ = 0;
   return true;
-}
-
-int VorbisEncoder::GetChannels() const {
-  return config_.channels;
-}
-
-int VorbisEncoder::GetSampleRate() const {
-  return config_.sample_rate;
-}
-
-int VorbisEncoder::GetBitsPerSample() const {
-  return config_.bits_per_sample;
-}
-
-int VorbisEncoder::GetAverageBitrate() const {
-  return config_.average_bitrate;
-}
-
-int VorbisEncoder::GetMinimumBitrate() const {
-  return config_.minimum_bitrate;
-}
-
-int VorbisEncoder::GetMaximumBitrate() const {
-  return config_.maximum_bitrate;
-}
-
-void VorbisEncoder::SetChannels(int channels) {
-  config_.channels = channels;
-  config_.block_align = (config_.bits_per_sample / 8) * config_.channels;
-  config_.bytes_per_second = config_.sample_rate * config_.block_align;
-}
-
-void VorbisEncoder::SetSampleRate(int sample_rate) {
-  config_.sample_rate = sample_rate;
-  config_.bytes_per_second = config_.sample_rate * config_.block_align;
-}
-
-void VorbisEncoder::SetBitsPerSample(int bits_per_sample) {
-  config_.bits_per_sample = bits_per_sample;
-  config_.block_align = (config_.bits_per_sample / 8) * config_.channels;
-  config_.bytes_per_second = config_.sample_rate * config_.block_align;
-}
-
-void VorbisEncoder::SetAverageBitrate(int bitrate) {
-  config_.average_bitrate = bitrate;
-}
-
-void VorbisEncoder::SetMinimumBitrate(int bitrate) {
-  config_.minimum_bitrate = bitrate;
-}
-
-void VorbisEncoder::SetMaximumBitrate(int bitrate) {
-  config_.maximum_bitrate = bitrate;
 }
 
 bool VorbisEncoder::CodecControlSet(int control_id, int val) {

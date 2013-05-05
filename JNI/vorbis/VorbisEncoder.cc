@@ -44,10 +44,12 @@ FUNCTION(jlong, newVorbisEncoder) {
   return jVorbisEncoder;
 }
 
-FUNCTION(jboolean, Init, jlong jVorbisEncoder) {
+FUNCTION(jboolean, Init, jlong jVorbisEncoder, jlong jVorbisEncoderConfig) {
   vorbis::VorbisEncoder* encoder =
       reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->Init();
+  vorbis::VorbisEncoderConfig* config =
+        reinterpret_cast<vorbis::VorbisEncoderConfig*>(jVorbisEncoderConfig);
+  return encoder->Init(*config);
 }
 
 
@@ -85,76 +87,4 @@ FUNCTION(jbyteArray, CodecPrivate, jlong jVorbisEncoder) {
   const unsigned char* data = encoder->codec_private();
   const int length = encoder->codec_private_length();
   return newByteArray(env, data, length);
-}
-
-FUNCTION(jint, GetChannels, jlong jVorbisEncoder) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->GetChannels();
-}
-
-FUNCTION(jint, GetSampleRate, jlong jVorbisEncoder) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->GetSampleRate();
-}
-
-FUNCTION(jint, GetBitsPerSample, jlong jVorbisEncoder) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->GetBitsPerSample();
-}
-
-FUNCTION(jint, GetAverageBitrate, jlong jVorbisEncoder) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->GetAverageBitrate();
-}
-
-FUNCTION(jint, GetMinimumBitrate, jlong jVorbisEncoder) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->GetMinimumBitrate();
-}
-
-FUNCTION(jint, GetMaximumBitrate, jlong jVorbisEncoder) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->GetMaximumBitrate();
-}
-
-FUNCTION(void, SetChannels, jlong jVorbisEncoder, jint channels) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->SetChannels(channels);
-}
-
-FUNCTION(void, SetSampleRate, jlong jVorbisEncoder, jint sample_rate) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->SetSampleRate(sample_rate);
-}
-
-FUNCTION(void, SetBitsPerSample, jlong jVorbisEncoder, jint bits_per_sample) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->SetBitsPerSample(bits_per_sample);
-}
-
-FUNCTION(void, SetAverageBitrate, jlong jVorbisEncoder, jint bitrate) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->SetAverageBitrate(bitrate);
-}
-
-FUNCTION(void, SetMinimumBitrate, jlong jVorbisEncoder, jint bitrate) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->SetMinimumBitrate(bitrate);
-}
-
-FUNCTION(void, SetMaximumBitrate, jlong jVorbisEncoder, jint bitrate) {
-  vorbis::VorbisEncoder* encoder =
-      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
-  return encoder->SetMaximumBitrate(bitrate);
 }

@@ -5,8 +5,8 @@ public class VorbisEncoderC extends Common {
     nativePointer = newVorbisEncoder();
   }
 
-  public boolean Init() {
-    return Init(nativePointer);
+  public boolean Init(VorbisEncConfig cfg) {
+    return Init(nativePointer, cfg.handle());
   }
 
   public boolean Encode(byte[] jBuffer) {
@@ -76,7 +76,7 @@ public class VorbisEncoderC extends Common {
 
   private static native void deleteVorbisEncoder(long jVorbisEncoder);
   private static native long newVorbisEncoder();
-  private static native boolean Init(long jVorbisEncoder);
+  private static native boolean Init(long jVorbisEncoder, long jVorbisEncoderConfig);
   private static native boolean Encode(long jVorbisEncoder, byte[] jBuffer, int length);
   private static native byte[] ReadCompressedAudio(long jVorbisEncoder, long[] timestamp);
   private static native byte[] CodecPrivate(long jVorbisEncoder);

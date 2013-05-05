@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import com.google.libvorbis.AudioFrame;
+import com.google.libvorbis.VorbisEncConfig;
 import com.google.libvorbis.VorbisEncoderC;
 import com.google.libvorbis.VorbisEncoderConfig;
 import com.google.libvorbis.VorbisEncoderWrapper;
@@ -478,6 +479,7 @@ public class BindingsSamples {
    */
   static public String audioEncodeSample(String wavInputName, String webmOutputName) {
     VorbisEncoderC vorbisEncoder = null;
+    VorbisEncConfig vorbisConfig = null;
     MkvWriter mkvWriter = null;
 
     try {
@@ -489,16 +491,16 @@ public class BindingsSamples {
         return new String("Could not create wav reader.");
       }
 
-      vorbisEncoder = new VorbisEncoderC();
-
-      // The input characteristics must be set before Init() is called.
       int channels = wavReader.nChannels();
       int sampleRate = wavReader.nSamplesPerSec();
-      vorbisEncoder.SetChannels(channels);
-      vorbisEncoder.SetSampleRate(sampleRate);
-      vorbisEncoder.SetBitsPerSample(wavReader.wBitsPerSample());
 
-      if (!vorbisEncoder.Init()) {
+      vorbisConfig = new VorbisEncConfig();
+      vorbisConfig.setChannels((short)channels);
+      vorbisConfig.setSampleRate(sampleRate);
+      vorbisConfig.setBitsPerSample(wavReader.wBitsPerSample());
+
+      vorbisEncoder = new VorbisEncoderC();
+      if (!vorbisEncoder.Init(vorbisConfig)) {
         return new String("Could not initialize Vorbis encoder.");
       }
 
@@ -580,6 +582,198 @@ public class BindingsSamples {
    * stopping. Returns "Success!" on success, an error string otherwise.
    */
   static public String audioVideoEncodeSample(
+      String y4mName, String wavName, String webmOutputName, int framesToEncode) {
+    LibVpxEncConfig vpxConfig = null;
+    LibVpxEnc vpxEncoder = null;
+    VorbisEncoderC vorbisEncoder = null;
+    VorbisEncConfig vorbisConfig = null;
+    MkvWriter mkvWriter = null;
+
+    try {
+      File y4mFile = new File(y4mName);
+      Y4MReader y4mReader;
+      try {
+        y4mReader = new Y4MReader(y4mFile);
+      } catch (IOException e) {
+        return new String("Error creating y4m file:" + y4mName + " : " + e);
+      }
+
+      vpxConfig = new LibVpxEncConfig(y4mReader.getWidth(), y4mReader.getHeight());
+      vpxEncoder = new LibVpxEnc(vpxConfig);
+
+      // libwebm expects nanosecond units
+      vpxConfig.setTimebase(1, 1000000000);
+      Rational timeBase = vpxConfig.getTimebase();
+      Rational timeMultiplier = timeBase.multiply(y4mReader.getFrameRate()).reciprocal();
+      int framesIn = 1;
+
+      File pcmFile = new File(wavName);
+      WavReader wavReader = null;
+      try {
+        wavReader = new WavReader(pcmFile);
+      } catch (Exception e) {
+        return new String("Error creating wav file:" + wavName);
+      }
+
+      int channels = wavReader.nChannels();
+      int sampleRate = wavReader.nSamplesPerSec();
+
+      vorbisConfig = new VorbisEncConfig();
+      vorbisConfig.setChannels((short)channels);
+      vorbisConfig.setSampleRate(sampleRate);
+      vorbisConfig.setBitsPerSample(wavReader.wBitsPerSample());
+
+      vorbisEncoder = new VorbisEncoderC();
+      if (!vorbisEncoder.Init(vorbisConfig)) {
+        return new String("Could not initialize Vorbis encoder.");
+      }
+
+      mkvWriter = new MkvWriter();
+      if (!mkvWriter.open(webmOutputName)) {
+        return new String("WebM Output name is invalid or error while opening.");
+      }
+
+      Segment muxerSegment = new Segment();
+      if (!muxerSegment.init(mkvWriter)) {
+        return new String("Could not initialize muxer segment.");
+      }
+
+      SegmentInfo muxerSegmentInfo = muxerSegment.getSegmentInfo();
+      muxerSegmentInfo.setWritingApp("y4mwavEncodeSample");
+
+      // Add video Track
+      long newVideoTrackNumber =
+          muxerSegment.addVideoTrack(vpxConfig.getWidth(), vpxConfig.getHeight(), 0);
+      if (newVideoTrackNumber == 0) {
+        return new String("Could not add video track.");
+      }
+
+      // Add audio Track
+      long newAudioTrackNumber = muxerSegment.addAudioTrack(sampleRate, channels, 0);
+      if (newAudioTrackNumber == 0) {
+        return new String("Could not add audio track.");
+      }
+
+      AudioTrack muxerTrack = (AudioTrack) muxerSegment.getTrackByNumber(newAudioTrackNumber);
+      if (muxerTrack == null) {
+        return new String("Could not get audio track.");
+      }
+
+      byte[] buffer = vorbisEncoder.CodecPrivate();
+      if (buffer == null) {
+        return new String("Could not get audio private data.");
+      }
+      if (!muxerTrack.setCodecPrivate(buffer)) {
+        return new String("Could not add audio private data.");
+      }
+
+      final int maxSamplesToRead = 1000;
+      long[] returnTimestamp = new long[2];
+      long vorbisTimestamp = 0;
+      byte[] vorbisFrame = null;
+      ArrayList<VpxCodecCxPkt> encPkt = null;
+      VpxCodecCxPkt pkt = null;
+      int pktIndex = 0;
+      boolean audioDone = false;
+      boolean videoDone = false;
+      boolean encoding = true;
+      while (encoding) {
+        // Prime the audio encoder.
+        while (vorbisFrame == null) {
+          final int samplesLeft = wavReader.samplesRemaining();
+          final int samplesToRead = Math.min(samplesLeft, maxSamplesToRead);
+          if (samplesToRead > 0) {
+            // Read raw audio data.
+            byte[] pcmArray = null;
+            try {
+              pcmArray = wavReader.readSamples(samplesToRead);
+            } catch (Exception e) {
+              return new String("Could not read audio samples.");
+            }
+
+            if (!vorbisEncoder.Encode(pcmArray))
+              return new String("Error encoding audio samples.");
+
+            vorbisFrame = vorbisEncoder.ReadCompressedAudio(returnTimestamp);
+
+            // Matroska is in nanoseconds.
+            if (vorbisFrame != null) {
+              vorbisTimestamp = returnTimestamp[0] * 1000000;
+            }
+          } else {
+            audioDone = true;
+            break;
+          }
+        }
+
+        if (encPkt == null) {
+          // Read raw video data.
+          byte[] rawVideoArray = y4mReader.getUncompressedFrame();
+          if (rawVideoArray != null) {
+            long frameStart = timeMultiplier.multiply(framesIn - 1).toLong();
+            long nextFrameStart = timeMultiplier.multiply(framesIn++).toLong();
+
+            encPkt = vpxEncoder.encodeFrame(rawVideoArray, LibVpxEnc.VPX_IMG_FMT_I420, frameStart, nextFrameStart - frameStart);
+
+            // Get the first vpx encoded frame.
+            pktIndex = 0;
+            pkt = encPkt.get(pktIndex++);
+          } else {
+            videoDone = true;
+          }
+        }
+
+        if ((audioDone && videoDone) || framesIn >= framesToEncode) break;
+
+        if (!videoDone && (audioDone || pkt.pts <= vorbisTimestamp)) {
+          final boolean isKey = (pkt.flags & 0x1) == 1;
+          if (!muxerSegment.addFrame(pkt.buffer, newVideoTrackNumber, pkt.pts, isKey)) {
+            return new String("Could not add video frame.");
+          }
+
+          // Get the next vpx encoded frame.
+          if (pktIndex < encPkt.size()) {
+            pkt = encPkt.get(pktIndex++);
+          } else {
+            // Read the next raw video frame.
+            encPkt = null;
+          }
+        } else if (!audioDone) {
+          if (!muxerSegment.addFrame(vorbisFrame, newAudioTrackNumber, vorbisTimestamp, true)) {
+            return new String("Could not add audio frame.");
+          }
+
+          // Read the next compressed audio frame.
+          vorbisFrame = vorbisEncoder.ReadCompressedAudio(returnTimestamp);
+          if (vorbisFrame != null) {
+            vorbisTimestamp = returnTimestamp[0] * 1000000;
+          }
+        }
+      }
+
+      if (!muxerSegment.finalizeSegment()) {
+        return new String("Finalization of segment failed.");
+      }
+
+    } catch (Exception e) {
+      return new String("Caught error in main encode loop.");
+    } finally {
+      if (mkvWriter != null) {
+        mkvWriter.close();
+      }
+    }
+
+    return new String("Success!");
+  }
+
+  /*
+   * This function will encode an audio and video WebM file. |y4mName| filename of the source video.
+   * The source video must be a Y4M file with raw i420 frames. |wavName| filename of the source
+   * audio. The source audio must be a WAV file with raw PCM data. |webmOutputName| filename of the
+   * WebM file to write to. |framesToEncode| is the number of video frames to encode before
+   * stopping. Returns "Success!" on success, an error string otherwise.
+   */
+  static public String audioVideoEncodeSampleJava(
       String y4mName, String wavName, String webmOutputName, int framesToEncode) {
     LibVpxEncConfig vpxConfig = null;
     LibVpxEnc vpxEncoder = null;
