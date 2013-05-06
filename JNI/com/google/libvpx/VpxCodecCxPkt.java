@@ -7,7 +7,7 @@ package com.google.libvpx;
  */
 public class VpxCodecCxPkt {
   public byte[] buffer;       // compressed data buffer
-  long          sz;           // length of compressed data
+  public long   sz;           // length of compressed data
   public long   pts;          // time stamp to show frame (in timebase units)
   long          duration;     // duration to show frame (in timebase units)
   public int    flags;        // flags for this frame
