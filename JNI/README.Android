@@ -58,39 +58,51 @@ include $(BINDINGS_DIR)/Android.mk
 24. cp -R bindings/JNI/com/google ../src/com/
 
 # Adding code to test the bindings.
-# Copy sample code.
-25. cp bindings/JNI/BindingsSamples.java ../src/com/example/testwebmjni/
-26. Add "package com.example.testwebmjni;" to the top of BindingsSamples.java.
-
-27. Change MainActivity.java onCreate to:
+25. Change MainActivity.java onCreate to:
 protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
-  String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
+  int[] major = new int[2];
+  int[] minor = new int[2];
+  int[] build = new int[2];
+  int[] revision = new int[2];
+  MkvMuxer.getVersion(major, minor, build, revision);
+  String outStr = "libwebm:" + Integer.toString(major[0]) + "." +
+                  Integer.toString(minor[0]) + "." + Integer.toString(build[0]) + "." +
+                  Integer.toString(revision[0]);
   TextView tv = new TextView(this);
   tv.setText(outStr);
   setContentView(tv);
 }
 
-28. Run the app. You should see libwebm version output.
+26. Run the app. You should see libwebm version output.
 
 # Test encoding audio and video
-29. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
+27. Copy raw I420 y4m file and a Raw PCM Wav file to ExternalStorage on the device.
 
-30. Add "<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />" to AndroidManifest.xml.
+28. Add "<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />" to AndroidManifest.xml.
+
+# Copy example code.
+29. cp bindings/JNI/examples/EncodeY4mWavExample.java ../src/com/example/testwebmjni/
+30. Add "package com.example.testwebmjni;" to the top of EncodeY4mWavExample.java.
 
 31. Change MainActivity.java onCreate to:
 protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
-  String outStr = "libwebm:" + BindingsSamples.GetLibwebmVersionString();
   String storageDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-  String inputVideo = storageDir + "io_320x180.y4m";
-  String inputAudio = storageDir + "io_44100.wav";
+  String inputVideo = storageDir + "/<Y4M file>";
+  String inputAudio = storageDir + "/<WAV file>";
   String outputWebM = storageDir + "/testjni.webm";
-  outStr += "\n" + BindingsSamples.audioVideoEncodeSample(inputVideo, inputAudio, outputWebM, 200);
+  StringBuilder error = new StringBuilder();
+  String outStr = "\nencodeY4mWavExample(): ";
+  if (EncodeY4mWavExample.encodeY4mWavExample(inputVideo, inputAudio, outputWebM, 200, error)) {
+    outStr += " Success!";
+  } else {
+    outStr += " Error: " + error.toString();
+  }
   TextView tv = new TextView(this);
   tv.setText(outStr);
   setContentView(tv);
 }
 
-32. Run the app. You should see libwebm version output and "Success!".
+32. Run the app. You should see output of "Success!".
 33. Playback "testjni.webm" on the device.
