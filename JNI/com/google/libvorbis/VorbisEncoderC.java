@@ -13,8 +13,13 @@ public class VorbisEncoderC extends Common {
     return Encode(nativePointer, jBuffer, jBuffer.length);
   }
 
+  // Deprecated. Please use ReadCompressedFrame.
   public byte[] ReadCompressedAudio(long[] timestamp) {
     return ReadCompressedAudio(nativePointer, timestamp);
+  }
+
+  public AudioFrame ReadCompressedFrame() {
+    return ReadCompressedFrame(nativePointer);
   }
 
   public byte[] CodecPrivate() {
@@ -79,6 +84,7 @@ public class VorbisEncoderC extends Common {
   private static native boolean Init(long jVorbisEncoder, long jVorbisEncoderConfig);
   private static native boolean Encode(long jVorbisEncoder, byte[] jBuffer, int length);
   private static native byte[] ReadCompressedAudio(long jVorbisEncoder, long[] timestamp);
+  private static native AudioFrame ReadCompressedFrame(long jVorbisEncoder);
   private static native byte[] CodecPrivate(long jVorbisEncoder);
 
   private static native int GetChannels(long jVorbisEncoder);

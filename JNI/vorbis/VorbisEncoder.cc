@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <jni.h>
 #include <new>
 
@@ -79,6 +80,42 @@ FUNCTION(jbyteArray, ReadCompressedAudio, jlong jVorbisEncoder,
   jlong outputTimestamp = timestamp;
   env->SetLongArrayRegion(jTimestamp, 0, 1, &outputTimestamp);
   return newByteArray(env, data, length);
+}
+
+FUNCTION(jobject, ReadCompressedFrame, jlong jVorbisEncoder) {
+  vorbis::VorbisEncoder* encoder =
+      reinterpret_cast<vorbis::VorbisEncoder*>(jVorbisEncoder);
+
+  unsigned char* data;
+  int length;
+  int64_t timestamp;
+  if (!encoder->ReadCompressedAudio(&data, &length, &timestamp))
+    return false;
+
+  jclass audioFrame = env->FindClass("com/google/libvorbis/AudioFrame");
+  assert(audioFrame != NULL);
+
+  jmethodID afInitMethodId = env->GetMethodID(audioFrame, "<init>", "(J)V");
+  assert(afInitMethodId != NULL);
+
+  jfieldID bufferId = env->GetFieldID(audioFrame, "buffer", "[B");
+  assert(bufferId != NULL);
+
+  jfieldID ptsId = env->GetFieldID(audioFrame, "pts", "J");
+  assert(ptsId != NULL);
+
+  jobject frame = env->NewObject(audioFrame,
+                                 afInitMethodId,
+                                 (jlong)length);
+
+  jobject jba = env->GetObjectField(frame, bufferId);
+  assert(jba != NULL);
+
+  env->SetByteArrayRegion((jbyteArray)jba, 0,
+                          length, reinterpret_cast<jbyte *>(data));
+  env->SetLongField(frame, ptsId, timestamp);
+
+  return frame;
 }
 
 FUNCTION(jbyteArray, CodecPrivate, jlong jVorbisEncoder) {

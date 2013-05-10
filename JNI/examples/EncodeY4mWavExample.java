@@ -1,7 +1,5 @@
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
+import com.google.libvorbis.AudioFrame;
 import com.google.libvorbis.VorbisEncConfig;
 import com.google.libvorbis.VorbisEncoderC;
 import com.google.libvpx.LibVpxEnc;
@@ -14,6 +12,10 @@ import com.google.libwebm.mkvmuxer.Segment;
 import com.google.libwebm.mkvmuxer.SegmentInfo;
 import com.google.utils.WavReader;
 import com.google.utils.Y4MReader;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class EncodeY4mWavExample {
   /*
@@ -121,9 +123,7 @@ public class EncodeY4mWavExample {
       }
 
       final int maxSamplesToRead = 1000;
-      long[] returnTimestamp = new long[2];
-      long vorbisTimestamp = 0;
-      byte[] vorbisFrame = null;
+      AudioFrame vorbisFrame = null;
       ArrayList<VpxCodecCxPkt> encPkt = null;
       VpxCodecCxPkt pkt = null;
       int pktIndex = 0;
@@ -150,11 +150,11 @@ public class EncodeY4mWavExample {
               return false;
             }
 
-            vorbisFrame = vorbisEncoder.ReadCompressedAudio(returnTimestamp);
+            vorbisFrame = vorbisEncoder.ReadCompressedFrame();
 
             // Matroska is in nanoseconds.
             if (vorbisFrame != null) {
-              vorbisTimestamp = returnTimestamp[0] * 1000000;
+              vorbisFrame.pts *= 1000000;
             }
           } else {
             audioDone = true;
@@ -181,7 +181,7 @@ public class EncodeY4mWavExample {
 
         if ((audioDone && videoDone) || framesIn >= framesToEncode) break;
 
-        if (!videoDone && (audioDone || pkt.pts <= vorbisTimestamp)) {
+        if (!videoDone && (audioDone || pkt.pts <= vorbisFrame.pts)) {
           final boolean isKey = (pkt.flags & 0x1) == 1;
           if (!muxerSegment.addFrame(pkt.buffer, newVideoTrackNumber, pkt.pts, isKey)) {
             error.append("Could not add video frame.");
@@ -196,15 +196,15 @@ public class EncodeY4mWavExample {
             encPkt = null;
           }
         } else if (!audioDone) {
-          if (!muxerSegment.addFrame(vorbisFrame, newAudioTrackNumber, vorbisTimestamp, true)) {
+          if (!muxerSegment.addFrame(vorbisFrame.buffer, newAudioTrackNumber, vorbisFrame.pts,
+                                     true)) {
             error.append("Could not add audio frame.");
             return false;
           }
 
-          // Read the next compressed audio frame.
-          vorbisFrame = vorbisEncoder.ReadCompressedAudio(returnTimestamp);
+          vorbisFrame = vorbisEncoder.ReadCompressedFrame();
           if (vorbisFrame != null) {
-            vorbisTimestamp = returnTimestamp[0] * 1000000;
+            vorbisFrame.pts *= 1000000;
           }
         }
       }

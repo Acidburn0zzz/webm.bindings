@@ -1,5 +1,6 @@
 import java.io.File;
 
+import com.google.libvorbis.AudioFrame;
 import com.google.libvorbis.VorbisEncConfig;
 import com.google.libvorbis.VorbisEncoderC;
 import com.google.libwebm.mkvmuxer.AudioTrack;
@@ -7,6 +8,8 @@ import com.google.libwebm.mkvmuxer.MkvWriter;
 import com.google.libwebm.mkvmuxer.Segment;
 import com.google.libwebm.mkvmuxer.SegmentInfo;
 import com.google.utils.WavReader;
+
+import java.io.File;
 
 public class EncodeWavExample {
   /*
@@ -100,12 +103,10 @@ public class EncodeWavExample {
           return false;
         }
 
-        long[] timestamp = new long[2];
-
-        byte[] frame = null;
-        while ((frame = vorbisEncoder.ReadCompressedAudio(timestamp)) != null) {
+        AudioFrame frame = null;
+        while ((frame = vorbisEncoder.ReadCompressedFrame()) != null) {
           if (!muxerSegment.addFrame(
-              frame, newAudioTrackNumber, timestamp[0] * 1000000, true)) {
+              frame.buffer, newAudioTrackNumber, frame.pts * 1000000, true)) {
             error.append("Could not add audio frame.");
             return false;
           }
