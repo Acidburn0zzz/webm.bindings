@@ -1,6 +1,8 @@
 #ifndef LIBVORBIS_VORBIS_ENCODER_CONFIG_H_
 #define LIBVORBIS_VORBIS_ENCODER_CONFIG_H_
 
+#include <stdint.h>
+
 namespace vorbis {
 
 static const int kAudioFormatPcm = 1;
@@ -14,6 +16,11 @@ struct VorbisEncoderConfig {
   int bytes_per_second;        // Average bytes per second.
   short block_align;           // Atomic audio unit size in bytes.
   short bits_per_sample;       // Sample container size.
+
+  // Timebase of the encoded timestamps returned. -1 tells the encoder to use
+  // the default of sample rate.
+  int64_t timebase_numerator_;
+  int64_t timebase_denominator_;
 
   // Rate control values. Set the min and max values to -1 to
   // encode at an average bitrate. Use the same value for minimum, average, and
@@ -29,8 +36,8 @@ struct VorbisEncoderConfig {
   // http://xiph.org/vorbis/doc/vorbisenc/vorbis_encode_ctl.html
 
   // Selects a quality mode based on |average_bitrate|, and disables libvorbis
-  // rate control. In other words, this allows libvorbis to produce a (somewhat)
-  // variable bitrate.
+  // rate control. In other words, this allows libvorbis to produce a
+  // (somewhat) variable bitrate.
   // Note: The flag is ignored when minimum and maximum bitrates are not
   //       |kUseDefault| or -1.
   bool bitrate_based_quality;

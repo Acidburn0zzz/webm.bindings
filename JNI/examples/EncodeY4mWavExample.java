@@ -45,6 +45,9 @@ public class EncodeY4mWavExample {
       }
 
       vpxConfig = new LibVpxEncConfig(y4mReader.getWidth(), y4mReader.getHeight());
+
+      // Set bitrate to 1Mbps.
+      vpxConfig.setRCTargetBitrate(1000);
       vpxEncoder = new LibVpxEnc(vpxConfig);
 
       // libwebm expects nanosecond units
@@ -69,6 +72,7 @@ public class EncodeY4mWavExample {
       vorbisConfig.setChannels((short)channels);
       vorbisConfig.setSampleRate(sampleRate);
       vorbisConfig.setBitsPerSample(wavReader.wBitsPerSample());
+      vorbisConfig.setTimebase(1, 1000000000);
 
       vorbisEncoder = new VorbisEncoderC();
       if (!vorbisEncoder.Init(vorbisConfig)) {
@@ -151,11 +155,6 @@ public class EncodeY4mWavExample {
             }
 
             vorbisFrame = vorbisEncoder.ReadCompressedFrame();
-
-            // Matroska is in nanoseconds.
-            if (vorbisFrame != null) {
-              vorbisFrame.pts *= 1000000;
-            }
           } else {
             audioDone = true;
             break;
@@ -203,9 +202,6 @@ public class EncodeY4mWavExample {
           }
 
           vorbisFrame = vorbisEncoder.ReadCompressedFrame();
-          if (vorbisFrame != null) {
-            vorbisFrame.pts *= 1000000;
-          }
         }
       }
 

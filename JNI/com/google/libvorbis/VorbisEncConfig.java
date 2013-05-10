@@ -32,6 +32,10 @@ public class VorbisEncConfig extends Common {
     vorbisEncSetBitsPerSample(nativePointer, bits_per_sample);
   }
 
+  public void setTimebase(long numerator, long denominator) {
+    vorbisEncSetTimebase(nativePointer, numerator, denominator);
+  }
+
   public void setAverageBitrate(int average_bitrate) {
     vorbisEncSetAverageBitrate(nativePointer, average_bitrate);
   }
@@ -103,6 +107,8 @@ public class VorbisEncConfig extends Common {
   private native void vorbisEncSetChannels(long cfg, short channels);
   private native void vorbisEncSetSampleRate(long cfg, int sample_rate);
   private native void vorbisEncSetBitsPerSample(long cfg, short bits_per_sample);
+
+  private native void vorbisEncSetTimebase(long cfg, long numerator, long denominator);
 
   private native void vorbisEncSetAverageBitrate(long cfg, int average_bitrate);
   private native void vorbisEncSetMinimumBitrate(long cfg, int minimum_bitrate);

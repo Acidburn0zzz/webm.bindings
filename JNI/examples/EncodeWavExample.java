@@ -1,5 +1,3 @@
-import java.io.File;
-
 import com.google.libvorbis.AudioFrame;
 import com.google.libvorbis.VorbisEncConfig;
 import com.google.libvorbis.VorbisEncoderC;
@@ -41,6 +39,7 @@ public class EncodeWavExample {
       vorbisConfig.setChannels((short)channels);
       vorbisConfig.setSampleRate(sampleRate);
       vorbisConfig.setBitsPerSample(wavReader.wBitsPerSample());
+      vorbisConfig.setTimebase(1, 1000000000);
 
       vorbisEncoder = new VorbisEncoderC();
       if (!vorbisEncoder.Init(vorbisConfig)) {
@@ -106,7 +105,7 @@ public class EncodeWavExample {
         AudioFrame frame = null;
         while ((frame = vorbisEncoder.ReadCompressedFrame()) != null) {
           if (!muxerSegment.addFrame(
-              frame.buffer, newAudioTrackNumber, frame.pts * 1000000, true)) {
+              frame.buffer, newAudioTrackNumber, frame.pts, true)) {
             error.append("Could not add audio frame.");
             return false;
           }

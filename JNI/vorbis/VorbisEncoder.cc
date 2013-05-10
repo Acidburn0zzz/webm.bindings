@@ -66,6 +66,7 @@ FUNCTION(jboolean, Encode, jlong jVorbisEncoder, jbyteArray jBuffer,
   return result;
 }
 
+// Deprecated. Use ReadCompressedFrame.
 FUNCTION(jbyteArray, ReadCompressedAudio, jlong jVorbisEncoder,
          jlongArray jTimestamp) {
   vorbis::VorbisEncoder* encoder =
@@ -77,7 +78,8 @@ FUNCTION(jbyteArray, ReadCompressedAudio, jlong jVorbisEncoder,
   if (!encoder->ReadCompressedAudio(&data, &length, &timestamp))
     return false;
 
-  jlong outputTimestamp = timestamp;
+  jlong outputTimestamp = static_cast<jlong>(static_cast<double>(timestamp) *
+      encoder->timebase_numerator() / encoder->timebase_denominator() * 1000);
   env->SetLongArrayRegion(jTimestamp, 0, 1, &outputTimestamp);
   return newByteArray(env, data, length);
 }
@@ -114,7 +116,6 @@ FUNCTION(jobject, ReadCompressedFrame, jlong jVorbisEncoder) {
   env->SetByteArrayRegion((jbyteArray)jba, 0,
                           length, reinterpret_cast<jbyte *>(data));
   env->SetLongField(frame, ptsId, timestamp);
-
   return frame;
 }
 

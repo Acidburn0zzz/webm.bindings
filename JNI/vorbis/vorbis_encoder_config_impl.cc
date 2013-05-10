@@ -97,6 +97,14 @@ FUNC(jshort, vorbisEncGetBitsPerSample, jlong jcfg) {
   return cfg->bits_per_sample;
 }
 
+FUNC(void, vorbisEncSetTimebase, jlong jcfg,
+     jlong numerator, jlong denominator) {
+  vorbis::VorbisEncoderConfig *cfg =
+      reinterpret_cast<vorbis::VorbisEncoderConfig*>(jcfg);
+  cfg->timebase_numerator_ = numerator;
+  cfg->timebase_denominator_ = denominator;
+}
+
 CONFIG_FIELD(AverageBitrate, average_bitrate, int)
 CONFIG_FIELD(MinimumBitrate, minimum_bitrate, int)
 CONFIG_FIELD(MaximumBitrate, maximum_bitrate, int)

@@ -22,6 +22,9 @@ namespace vorbis {
 VorbisEncoder::VorbisEncoder()
     : codec_private_length_(0),
       codec_private_(NULL),
+      timebase_set_(false),
+      timebase_numerator_(-1),
+      timebase_denominator_(-1),
       last_granulepos_(0),
       data_(NULL),
       data_size_(0),
@@ -47,6 +50,15 @@ bool VorbisEncoder::Init(const VorbisEncoderConfig& config) {
 
   if (config_.format_tag == kAudioFormatPcm && config_.bits_per_sample != 16)
     return false;
+
+  if (config.timebase_numerator_ == -1 || config.timebase_denominator_ == -1) {
+    timebase_numerator_ = 1;
+    timebase_denominator_ = config_.sample_rate;
+  } else {
+    timebase_numerator_ = config.timebase_numerator_;
+    timebase_denominator_ = config.timebase_denominator_;
+    timebase_set_ = true;
+  }
 
   vorbis_info_init(&vi_);
   int status = vorbis_encode_setup_managed(&vi_, config_.channels,
@@ -119,7 +131,11 @@ bool VorbisEncoder::ReadCompressedAudio(unsigned char** data, int* length,
   if (!data || !length || !timestamp)
     return false;
 
-  *timestamp = SamplesToMilliseconds(last_granulepos_);
+  if (timebase_set_) {
+    *timestamp = SamplesToTimebase(last_granulepos_);
+  } else {
+    *timestamp = last_granulepos_;
+  }
 
   ogg_packet packet = { 0 };
   if (SamplesAvailable()) {
@@ -244,13 +260,13 @@ bool VorbisEncoder::SamplesAvailable() {
   return false;
 }
 
-int64_t VorbisEncoder::SamplesToMilliseconds(int64_t num_samples) const {
+int64_t VorbisEncoder::SamplesToTimebase(int64_t num_samples) const {
   const double sample_rate = config_.sample_rate;
   const double sample_count = static_cast<double>(num_samples);
   double seconds = 0;
   if (sample_rate != 0)
     seconds = sample_count / sample_rate;
-  return static_cast<int64_t>(seconds * 1000);
+  return static_cast<int64_t>(seconds / timebase_numerator_ * timebase_denominator_);
 }
 
 }  // namespace vorbis
