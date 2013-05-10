@@ -122,7 +122,7 @@ bool VorbisEncoder::ReadCompressedAudio(unsigned char** data, int* length,
   *timestamp = SamplesToMilliseconds(last_granulepos_);
 
   ogg_packet packet = { 0 };
-  while (SamplesAvailable()) {
+  if (SamplesAvailable()) {
     // There's a compressed block available-- give libvorbis a chance to
     // optimize distribution of data for the current encode settings.
     int status = vorbis_analysis(&block_, &packet);
