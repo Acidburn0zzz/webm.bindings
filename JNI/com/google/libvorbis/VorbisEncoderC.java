@@ -1,12 +1,15 @@
 package com.google.libvorbis;
 
 public class VorbisEncoderC extends Common {
-  public VorbisEncoderC() {
+  public VorbisEncoderC(VorbisEncConfig cfg) throws VorbisException {
     nativePointer = newVorbisEncoder();
-  }
+    if (nativePointer == 0) {
+      throw new VorbisException("Can not allocate JNI codec object");
+    }
 
-  public boolean Init(VorbisEncConfig cfg) {
-    return Init(nativePointer, cfg.handle());
+    if (!Init(nativePointer, cfg.handle())) {
+      throw new VorbisException("Can not initialize Vorbis encoder");
+    }
   }
 
   public boolean Encode(byte[] jBuffer) {

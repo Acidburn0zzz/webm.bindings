@@ -1,6 +1,7 @@
 import com.google.libvorbis.AudioFrame;
 import com.google.libvorbis.VorbisEncConfig;
 import com.google.libvorbis.VorbisEncoderC;
+import com.google.libvorbis.VorbisException;
 import com.google.libwebm.mkvmuxer.AudioTrack;
 import com.google.libwebm.mkvmuxer.MkvWriter;
 import com.google.libwebm.mkvmuxer.Segment;
@@ -32,18 +33,16 @@ public class EncodeWavExample {
         return false;
       }
 
-      int channels = wavReader.nChannels();
-      int sampleRate = wavReader.nSamplesPerSec();
+      final int channels = wavReader.nChannels();
+      final int sampleRate = wavReader.nSamplesPerSec();
 
-      vorbisConfig = new VorbisEncConfig();
-      vorbisConfig.setChannels((short)channels);
-      vorbisConfig.setSampleRate(sampleRate);
-      vorbisConfig.setBitsPerSample(wavReader.wBitsPerSample());
-      vorbisConfig.setTimebase(1, 1000000000);
+      try {
+        vorbisConfig = new VorbisEncConfig(channels, sampleRate, wavReader.wBitsPerSample());
+        vorbisConfig.setTimebase(1, 1000000000);
 
-      vorbisEncoder = new VorbisEncoderC();
-      if (!vorbisEncoder.Init(vorbisConfig)) {
-        error.append("Could not initialize Vorbis encoder.");
+        vorbisEncoder = new VorbisEncoderC(vorbisConfig);
+      } catch (VorbisException e) {
+        error.append("Error creating Vorbis encoder. e:" + e);
         return false;
       }
 

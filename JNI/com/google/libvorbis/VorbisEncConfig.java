@@ -1,5 +1,4 @@
-// Copyright 2012 Google Inc. All Rights Reserved.
-// Author: frkoenig@google.com (Fritz Koenig)
+// Copyright 2013 Google Inc. All Rights Reserved.
 package com.google.libvorbis;
 
 /**
@@ -7,8 +6,15 @@ package com.google.libvorbis;
  * the libvorbis encoder.
  */
 public class VorbisEncConfig extends Common {
-  public VorbisEncConfig() {
+  public VorbisEncConfig(int channels, int sampleRate, int bitsPerSample) throws VorbisException {
     nativePointer = vorbisEncAllocCfg();
+    if (nativePointer == 0) {
+      throw new VorbisException("Can not allocate JNI encoder configure object");
+    }
+
+    vorbisEncSetChannels(nativePointer, (short)channels);
+    vorbisEncSetSampleRate(nativePointer, sampleRate);
+    vorbisEncSetBitsPerSample(nativePointer, (short)bitsPerSample);
   }
 
   public void close() {

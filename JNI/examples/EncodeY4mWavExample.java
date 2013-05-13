@@ -2,8 +2,10 @@
 import com.google.libvorbis.AudioFrame;
 import com.google.libvorbis.VorbisEncConfig;
 import com.google.libvorbis.VorbisEncoderC;
+import com.google.libvorbis.VorbisException;
 import com.google.libvpx.LibVpxEnc;
 import com.google.libvpx.LibVpxEncConfig;
+import com.google.libvpx.LibVpxException;
 import com.google.libvpx.Rational;
 import com.google.libvpx.VpxCodecCxPkt;
 import com.google.libwebm.mkvmuxer.AudioTrack;
@@ -44,14 +46,20 @@ public class EncodeY4mWavExample {
         return false;
       }
 
-      vpxConfig = new LibVpxEncConfig(y4mReader.getWidth(), y4mReader.getHeight());
+      try {
+        vpxConfig = new LibVpxEncConfig(y4mReader.getWidth(), y4mReader.getHeight());
 
-      // Set bitrate to 1Mbps.
-      vpxConfig.setRCTargetBitrate(1000);
-      vpxEncoder = new LibVpxEnc(vpxConfig);
+        // Set bitrate to 1Mbps.
+        vpxConfig.setRCTargetBitrate(1000);
 
-      // libwebm expects nanosecond units
-      vpxConfig.setTimebase(1, 1000000000);
+        // libwebm expects nanosecond units
+        vpxConfig.setTimebase(1, 1000000000);
+        vpxEncoder = new LibVpxEnc(vpxConfig);
+      } catch (LibVpxException e) {
+        error.append("Error creating Libvpx encoder. e:" + e);
+        return false;
+      }
+
       Rational timeBase = vpxConfig.getTimebase();
       Rational timeMultiplier = timeBase.multiply(y4mReader.getFrameRate()).reciprocal();
       int framesIn = 1;
@@ -61,22 +69,20 @@ public class EncodeY4mWavExample {
       try {
         wavReader = new WavReader(pcmFile);
       } catch (Exception e) {
-        error.append("Error creating wav file:" + wavName);
+        error.append("Error opening wav file:" + wavName);
         return false;
       }
 
-      int channels = wavReader.nChannels();
-      int sampleRate = wavReader.nSamplesPerSec();
+      final int channels = wavReader.nChannels();
+      final int sampleRate = wavReader.nSamplesPerSec();
 
-      vorbisConfig = new VorbisEncConfig();
-      vorbisConfig.setChannels((short)channels);
-      vorbisConfig.setSampleRate(sampleRate);
-      vorbisConfig.setBitsPerSample(wavReader.wBitsPerSample());
-      vorbisConfig.setTimebase(1, 1000000000);
+      try {
+        vorbisConfig = new VorbisEncConfig(channels, sampleRate, wavReader.wBitsPerSample());
+        vorbisConfig.setTimebase(1, 1000000000);
 
-      vorbisEncoder = new VorbisEncoderC();
-      if (!vorbisEncoder.Init(vorbisConfig)) {
-        error.append("Could not initialize Vorbis encoder.");
+        vorbisEncoder = new VorbisEncoderC(vorbisConfig);
+      } catch (VorbisException e) {
+        error.append("Error creating Vorbis encoder. e:" + e);
         return false;
       }
 
