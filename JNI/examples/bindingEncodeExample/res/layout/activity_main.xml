@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+        </TableRow>
+
+        <TableRow android:gravity="center" >
+
+            <Button
+                android:id="@+id/videoSrcBtn"
+                style="@style/btn_bottommenu"
+                android:text="Video File Select(.y4m)" />
+
+            <TextView
+                android:id="@+id/videoSrcDisp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No Input"
+                android:textColor="@color/text_color" >
+            </TextView>
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/audioSrcBtn"
+                style="@style/btn_bottommenu"
+                android:text="Auido File Select(.wav)" />
+
+            <TextView
+                android:id="@+id/audioSrcDisp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No Input"
+                android:textColor="@color/text_color" >
+            </TextView>
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/outputDirBtn"
+                style="@style/btn_bottommenu"
+                android:text="File ouput name:" />
+
+            <TextView
+                android:id="@+id/fileOutputDisp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="/sdcard/media/out.webm"
+                android:textColor="@color/text_color" >
+            </TextView>
+        </TableRow>
+
+        <TableRow android:gravity="center" >
+
+            <Button
+                android:id="@+id/videoEncodeConfigBtn"
+                style="@style/btn_bottommenu"
+                android:text="Video Encode Config" />
+
+            <TextView
+                android:id="@+id/videoEncodeConfigDisp"
+                android:layout_width="352dip"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No Config"
+                android:textColor="@color/text_color" >
+            </TextView>
+        </TableRow>
+
+        <TableRow android:gravity="center" >
+
+            <Button
+                android:id="@+id/audioEncodeConfigBtn"
+                style="@style/btn_bottommenu"
+                android:text="Audio Encode Config" />
+
+            <TextView
+                android:id="@+id/audioEncodeConfigDisp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No Config"
+                android:textColor="@color/text_color" >
+            </TextView>
+        </TableRow>
+
+        <TableRow android:gravity="center" >
+
+            <Button
+                android:id="@+id/StartEncodeBtn"
+                style="@style/btn_bottommenu"
+                android:text="Start Encode" />
+
+            <TextView
+                android:id="@+id/EncodingStatsDisp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Ready to encode"
+                android:textColor="@color/text_color" >
+            </TextView>
+        </TableRow>
+
+        <TableRow android:gravity="center" >
+
+            <Button
+                android:id="@+id/PlayVideoBtn"
+                style="@style/btn_bottommenu"
+                android:text="Play Encoded Video" />
+
+            <TextView
+                android:id="@+id/PlayingStatsDisp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/text_color" >
+            </TextView>
+        </TableRow>
+
+        <SurfaceView
+            android:id="@+id/surface"
+            android:layout_width="352dip"
+            android:layout_height="288dip"
+            android:layout_below="@+id/PlayVideoBtn"
+            android:paddingTop="100dip" />
+    </TableLayout>
+
+</RelativeLayout>

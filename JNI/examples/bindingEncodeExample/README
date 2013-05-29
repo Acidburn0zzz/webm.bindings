@@ -1,0 +1,46 @@
+/*
+* This project is an Android application example showing how to use WebM jni bindings to encode video.
+* This app allows you choose video and audio source files, configure different video and audio encoding parameters.
+* You could set up your eclipse project following the below steps.
+*/
+
+# Add the JNI code.
+1. cd to jni folder.
+
+# Get JNI bindings
+2. git clone http://git.chromium.org/webm/bindings.git
+
+# Get libvpx
+3. git clone http://git.chromium.org/webm/libvpx.git
+
+# Configure libvpx for Android
+4. ./libvpx/configure --target=armv7-android-gcc --disable-examples --sdk-path=<full path to>/<NDK>/android-ndk-r8e/
+
+5. cd bindings/JNI
+
+# Get libwebm
+6. git clone http://git.chromium.org/webm/libwebm.git
+
+# Get libogg
+7. Download ogg code from http://downloads.xiph.org/releases/ogg/libogg-1.3.0.tar.gz
+8. extract to bindings/JNI
+
+# We need to run configure to generate config_types.h.
+9. cd libogg-1.3.0 && ./configure && cd ..
+
+# Get libvorbis
+10. Download vorbis code from http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.3.tar.gz
+11. extract to bindings/JNI
+
+# Get libyuv
+12. svn checkout http://libyuv.googlecode.com/svn/trunk/ libyuv-read-only
+
+13. cd ../..
+
+# Build the JNI code.
+14. ndk-build
+
+# Copy the java code.
+15. cp -R bindings/JNI/com/google ../src/com/
+
+16. Build the Android app now and run it on Android device.

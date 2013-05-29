@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:shrinkColumns="*"
+    android:stretchColumns="*" >
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <Button
+            android:id="@+id/threadNumsBtn"
+            style="@style/btn_bottommenu"
+            android:text="thread numbers(default 1, range 1–num of cores):" />
+
+        <TextView
+            android:id="@+id/threadNumsResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:text="1"
+            android:textColor="@color/text_color" >
+        </TextView>
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <Button
+            android:id="@+id/targetBitrateBtn"
+            style="@style/btn_bottommenu"
+            android:text="target bitrate (default 300kbps):" />
+
+        <TextView
+            android:id="@+id/targetBitrateResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="300"
+            android:textColor="@color/text_color" />
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <Button
+            android:id="@+id/minQuantizerBtn"
+            style="@style/btn_bottommenu"
+            android:text="minimum quantizer (default 4, range 0–63):" />
+
+        <TextView
+            android:id="@+id/minQuantizerResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="4"
+            android:textColor="@color/text_color" />
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <Button
+            android:id="@+id/maxQuantizerBtn"
+            style="@style/btn_bottommenu"
+            android:text="maximum quantizer (default 63, range qmin–63)" />
+
+        <TextView
+            android:id="@+id/maxQuantizerResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="63"
+            android:textColor="@color/text_color" />
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <Button
+            android:id="@+id/kfMinDistBtn"
+            style="@style/btn_bottommenu"
+            android:text="Minimum keyframe interval (frames):" />
+
+        <TextView
+            android:id="@+id/kfMinDistResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/text_color" />
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <Button
+            android:id="@+id/kfMaxDistBtn"
+            style="@style/btn_bottommenu"
+            android:text=" Maximum keyframe interval (frames):" />
+
+        <TextView
+            android:id="@+id/kfMaxDistResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="360"
+            android:textColor="@color/text_color" />
+    </TableRow>
+
+    <TableRow android:gravity="center" >
+
+        <Button
+            android:id="@+id/cpuUsedBtn"
+            style="@style/btn_bottommenu"
+            android:text="cpu used (default 0, range -16-16):" />
+
+        <TextView
+            android:id="@+id/cpuUsedResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/text_color" />
+    </TableRow>
+
+</TableLayout>
