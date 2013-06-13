@@ -187,6 +187,14 @@ public class LibVpxEncConfig extends LibVpxCom {
     vpxCodecEncSetRCBufOptimalSz(encCfgObj, value);
   }
 
+  public void setKFMinDist(int value) {
+    vpxCodecEncSetKFMinDist(encCfgObj, value);
+  }
+
+  public void setKFMaxDist(int value) {
+    vpxCodecEncSetKFMaxDist(encCfgObj, value);
+  }
+
   public int getThreads() {
     return vpxCodecEncGetThreads(encCfgObj);
   }

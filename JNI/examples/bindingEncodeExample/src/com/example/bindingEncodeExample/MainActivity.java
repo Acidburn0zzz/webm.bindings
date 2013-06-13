@@ -23,6 +23,7 @@ import com.google.libvorbis.VorbisEncoderC;
 import com.google.libvorbis.VorbisException;
 import com.google.libvpx.LibVpxEnc;
 import com.google.libvpx.LibVpxEncConfig;
+import com.google.libvpx.LibVpxException;
 import com.google.libvpx.Rational;
 import com.google.libvpx.VpxCodecCxPkt;
 import com.google.libwebm.mkvmuxer.AudioTrack;
@@ -295,7 +296,6 @@ implements OnVideoSizeChangedListener, OnCompletionListener {
 
                 vpxConfig = new LibVpxEncConfig(
                         y4mReader.getWidth(), y4mReader.getHeight());
-                vpxEncoder = new LibVpxEnc(vpxConfig);
 
                 // libwebm expects nanosecond units
                 vpxConfig.setTimebase(1, 1000000000);
@@ -305,9 +305,16 @@ implements OnVideoSizeChangedListener, OnCompletionListener {
                 vpxConfig.setRCTargetBitrate(VideoEncoderSetting.mTargetBitrate);
                 vpxConfig.setRCMinQuantizer(VideoEncoderSetting.mMinQuantizer);
                 vpxConfig.setRCMaxQuantizer(VideoEncoderSetting.mMaxQuantizer);
-                vpxConfig.setRCTargetBitrate(VideoEncoderSetting.mKfMinDist);
-                vpxConfig.setRCTargetBitrate(VideoEncoderSetting.mKfMaxDist);
-                vpxConfig.setRCTargetBitrate(VideoEncoderSetting.mCpuUsed);
+                vpxConfig.setKFMinDist(VideoEncoderSetting.mKfMinDist);
+                vpxConfig.setKFMaxDist(VideoEncoderSetting.mKfMaxDist);
+
+                try {
+                  vpxEncoder = new LibVpxEnc(vpxConfig);
+                } catch (LibVpxException e) {
+                  error.append("Fail to create VPX encoder");
+                  return error.toString();
+                }
+                vpxEncoder.setCpuUsed(VideoEncoderSetting.mCpuUsed);
 
                 Rational timeBase = vpxConfig.getTimebase();
                 Rational timeMultiplier = timeBase.multiply(y4mReader.getFrameRate()).reciprocal();
