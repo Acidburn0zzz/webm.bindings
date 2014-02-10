@@ -55,7 +55,7 @@ FUNCTION(jlong, newBlockGroup, jlong jCluster,
   mkvparser::Cluster* cluster = reinterpret_cast<mkvparser::Cluster*>(jCluster);
   jlong jBlockGroup =
       reinterpret_cast<jlong>(new (std::nothrow) mkvparser::BlockGroup(
-          cluster, index, blockStart, blockSize, previous, next, duration));
+          cluster, index, blockStart, blockSize, previous, next, duration, 0));
   return jBlockGroup;
 }
 

@@ -67,8 +67,8 @@ FUNCTION(jboolean, IsKey, jlong jBlock) {
 }
 
 FUNCTION(jlong, newBlock, jlong start, jlong size) {
-  jlong jBlock =
-      reinterpret_cast<jlong>(new (std::nothrow) mkvparser::Block(start, size));
+  jlong jBlock = reinterpret_cast<jlong>(
+      new (std::nothrow) mkvparser::Block(start, size, 0));
   return jBlock;
 }
 
