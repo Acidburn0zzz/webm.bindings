@@ -41,6 +41,8 @@ public class IVFReader {
       buf.order(ByteOrder.LITTLE_ENDIAN);
 
       int frameLength = buf.getInt();
+
+      @SuppressWarnings("unused")
       long pts = buf.getLong(4);
 
       currentFrame++;
@@ -49,6 +51,10 @@ public class IVFReader {
     } catch (IOException e) {
       return null;
     }
+  }
+
+  public int getFourcc() {
+    return fourcc;
   }
 
   public int getWidth() {
@@ -61,6 +67,14 @@ public class IVFReader {
 
   public Rational getFps() {
     return fps;
+  }
+
+  public int getFrameCount() {
+    return frameCount;
+  }
+
+  public int getCurrentFrame() {
+    return currentFrame;
   }
 
   private byte[] readHeader() throws IOException {

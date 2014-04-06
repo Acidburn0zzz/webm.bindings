@@ -54,6 +54,7 @@ public class Rational {
     return den;
   }
 
+  @Override
   public String toString() {
     if (den == 1) {
       return new String(num + "");
